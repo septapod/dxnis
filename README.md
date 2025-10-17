@@ -19,25 +19,44 @@
 
 ---
 
-## 🚀 Deployment Instructions
+## 🚀 Development & Deployment Workflow
 
-### Option 1: Netlify (Recommended - Easiest)
+### Recommended: GitHub + Vercel (Automated Deployments)
+
+This repository is set up for automatic deployment via Vercel whenever you push changes to GitHub.
+
+**Initial Setup (One-time):**
+
+1. Go to [vercel.com](https://vercel.com) and sign in with GitHub
+2. Click "New Project" and select the `septapod/dxnis` repository
+3. Framework: Select "Other" (static site)
+4. Root Directory: Leave as default (`.`)
+5. Build command: Leave empty (static site)
+6. Output directory: Leave empty
+7. Click "Deploy"
+8. Once deployed, configure custom domain in Vercel dashboard
+
+**Development Workflow:**
+
+1. Edit files locally with Claude Code
+2. Test changes by opening `index.html` in browser
+3. Commit changes: `git add -A && git commit -m "Update description"`
+4. Push to GitHub: `git push origin main`
+5. Vercel automatically deploys (~30 seconds)
+6. Check live site at [dxn.is](https://dxn.is)
+
+### Alternative Options
+
+**Option 1: Netlify (Easiest Alternative)**
 
 1. Go to [netlify.com](https://netlify.com)
-2. Drag and drop the `dxn-production-site` folder onto the Netlify dashboard
-3. Configure custom domain: `dxn.is`
-4. SSL certificate is automatic
-5. Done!
+2. Sign in with GitHub
+3. Click "New site from Git" and select `septapod/dxnis`
+4. Leave build settings empty (static site)
+5. Click "Deploy"
+6. Configure custom domain in Netlify dashboard
 
-### Option 2: Vercel
-
-1. Install Vercel CLI: `npm install -g vercel`
-2. Navigate to this folder: `cd dxn-production-site`
-3. Run: `vercel`
-4. Follow prompts to deploy
-5. Configure custom domain in Vercel dashboard
-
-### Option 3: AWS S3 + CloudFront
+**Option 2: AWS S3 + CloudFront**
 
 1. Create S3 bucket for static website hosting
 2. Upload all files maintaining folder structure
@@ -46,7 +65,7 @@
 5. Configure Route53 for `dxn.is` domain
 6. Set up SSL certificate via AWS Certificate Manager
 
-### Option 4: Traditional Hosting (cPanel, etc.)
+**Option 3: Traditional Hosting (cPanel, etc.)**
 
 1. Upload all files to public_html or web root via FTP/SFTP
 2. Maintain folder structure exactly as shown above
@@ -66,10 +85,11 @@
 ### Key Features
 - ✅ Custom cursor with trailing follower effect
 - ✅ Scroll-triggered section animations
-- ✅ Animated statistics counter
+- ✅ Mouse-reactive background in services section
 - ✅ Transparent navigation that darkens on scroll
 - ✅ Full viewport hero with custom background image
 - ✅ Responsive design (desktop, tablet, mobile)
+- ✅ Left-aligned hero section layout
 
 ### Accessibility & SEO
 - ✅ WCAG 2.1 AA compliant
