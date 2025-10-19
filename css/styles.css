@@ -558,37 +558,160 @@ a:focus, button:focus {
 .social-proof-header {
   grid-column: 1 / 13;
   text-align: center;
-  margin-bottom: var(--space-8);
+  margin-bottom: var(--space-4); /* Reduced from space-8 to space-4 */
 }
 
-.testimonial-container {
+/* Testimonial Carousel - Horizontal Layout */
+.testimonial-carousel {
   grid-column: 2 / 12; /* 10 columns centered, 1 column margin each side */
   position: relative;
+  overflow: hidden;
+  padding: var(--space-4) var(--space-4); /* Reduced top padding from space-8 to space-4 */
+}
+
+.testimonial-track {
+  display: flex;
+  transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+  position: relative;
+  padding: 0 var(--space-8); /* Add horizontal padding to create space from arrows */
+  width: 100%; /* Ensure track has full width */
+  transform: translateX(0); /* Set initial position explicitly */
+}
+
+.testimonial-slide {
+  min-width: 100%;
+  display: flex;
+  flex-direction: row; /* Horizontal layout */
+  align-items: center; /* Vertically center image and text */
+  gap: var(--space-6); /* Space between image and text */
+  opacity: 0;
+  transition: opacity 0.6s ease-in-out;
+  padding: var(--space-4);
+}
+
+.testimonial-slide.active {
+  opacity: 1;
+}
+
+.testimonial-image {
+  width: 150px;
+  height: 150px;
+  min-width: 150px; /* Prevent shrinking */
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--color-accent);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 .testimonial {
-  padding: var(--space-8) var(--space-4);
+  padding: 0;
   background: transparent;
+  text-align: left; /* Left-aligned text */
+  flex: 1; /* Take remaining space */
 }
 
 .testimonial p {
-  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
-  line-height: 1.6;
+  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  line-height: 1.7;
   font-weight: 300;
   color: var(--color-text);
   margin-bottom: var(--space-4);
-  text-align: center;
+  text-align: left; /* Left-aligned */
   font-style: italic;
 }
 
 .testimonial-author {
-  font-size: 0.9375rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Left-aligned */
+  gap: var(--space-1);
+  font-style: normal;
+}
+
+.testimonial-author strong {
+  font-size: 1.125rem;
   font-weight: 600;
   color: var(--color-accent);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  text-align: center;
+  letter-spacing: 0.02em;
+}
+
+.testimonial-author cite {
+  font-size: 0.9375rem;
+  font-weight: 400;
+  color: var(--color-muted);
   font-style: normal;
+  opacity: 0.8;
+}
+
+/* Carousel Navigation Buttons */
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(251, 226, 72, 0.1);
+  border: 1px solid rgba(251, 226, 72, 0.3);
+  color: var(--color-accent);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  backdrop-filter: blur(8px);
+}
+
+.carousel-btn:hover {
+  background: rgba(251, 226, 72, 0.2);
+  border-color: var(--color-accent);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-btn-prev {
+  left: var(--space-2); /* Visible inside container */
+}
+
+.carousel-btn-next {
+  right: var(--space-2); /* Visible inside container */
+}
+
+.carousel-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Carousel Indicators */
+.carousel-indicators {
+  display: flex;
+  justify-content: center; /* Centered dots */
+  gap: var(--space-2);
+  margin-top: var(--space-6);
+}
+
+.indicator-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.indicator-dot:hover {
+  background: rgba(251, 226, 72, 0.5);
+  border-color: var(--color-accent);
+  transform: scale(1.2);
+}
+
+.indicator-dot.active {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  width: 32px;
+  border-radius: 6px;
 }
 
 /* Stats - 12-Column Grid */
@@ -826,8 +949,36 @@ a:focus, button:focus {
     grid-column: 1 / 9;
   }
 
-  .testimonial-container {
+  .testimonial-carousel {
     grid-column: 1 / 9;
+    padding: var(--space-6) var(--space-2);
+  }
+
+  .testimonial-track {
+    padding: 0 var(--space-6);
+  }
+
+  .testimonial-slide {
+    gap: var(--space-4);
+  }
+
+  .testimonial-image {
+    width: 120px;
+    height: 120px;
+    min-width: 120px;
+  }
+
+  .carousel-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .carousel-btn-prev {
+    left: 0;
+  }
+
+  .carousel-btn-next {
+    right: 0;
   }
 
   .stat-1,
@@ -879,7 +1030,7 @@ a:focus, button:focus {
   .industry-card-1,
   .industry-card-2,
   .industry-card-3,
-  .testimonial-container,
+  .testimonial-carousel,
   .stat-1,
   .stat-2,
   .stat-3,
@@ -887,6 +1038,54 @@ a:focus, button:focus {
   .about-aside,
   .contact-content {
     grid-column: 1 / 5;
+  }
+
+  /* Switch to vertical layout on mobile */
+  .testimonial-track {
+    padding: 0 var(--space-4);
+  }
+
+  .testimonial-slide {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    text-align: center;
+  }
+
+  .testimonial-image {
+    width: 100px;
+    height: 100px;
+    min-width: 100px;
+  }
+
+  .testimonial {
+    text-align: center;
+  }
+
+  .testimonial p {
+    text-align: center;
+  }
+
+  .testimonial-author {
+    align-items: center;
+  }
+
+  .carousel-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .carousel-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .carousel-btn-prev {
+    left: var(--space-1);
+  }
+
+  .carousel-btn-next {
+    right: var(--space-1);
   }
 
   .about-aside {

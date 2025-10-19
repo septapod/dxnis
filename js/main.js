@@ -128,3 +128,184 @@ if (servicesSection) {
     servicesSection.style.setProperty('--mouse-y', '50%');
   });
 }
+
+/**
+ * Testimonial Carousel
+ * Auto-rotating carousel with manual controls
+ */
+(function() {
+  const carousel = document.querySelector('.testimonial-carousel');
+  if (!carousel) return;
+
+  const track = carousel.querySelector('.testimonial-track');
+  const slides = Array.from(carousel.querySelectorAll('.testimonial-slide'));
+  const prevBtn = carousel.querySelector('.carousel-btn-prev');
+  const nextBtn = carousel.querySelector('.carousel-btn-next');
+  const indicators = Array.from(carousel.querySelectorAll('.indicator-dot'));
+
+  let currentIndex = 0;
+  let autoRotateInterval;
+  const autoRotateDelay = 6000; // 6 seconds
+
+  // Update carousel position and active states
+  function updateCarousel(index, animate = true) {
+    // Ensure index is within bounds
+    if (index < 0) index = slides.length - 1;
+    if (index >= slides.length) index = 0;
+
+    currentIndex = index;
+
+    // Update slide positions with transform
+    const offset = -currentIndex * 100;
+    if (animate) {
+      track.style.transition = 'transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1)';
+    } else {
+      track.style.transition = 'none';
+    }
+    track.style.transform = `translateX(${offset}%)`;
+
+    // Update active states
+    slides.forEach((slide, i) => {
+      slide.classList.toggle('active', i === currentIndex);
+    });
+
+    indicators.forEach((dot, i) => {
+      dot.classList.toggle('active', i === currentIndex);
+    });
+  }
+
+  // Navigate to next slide
+  function nextSlide() {
+    updateCarousel(currentIndex + 1);
+  }
+
+  // Navigate to previous slide
+  function prevSlide() {
+    updateCarousel(currentIndex - 1);
+  }
+
+  // Navigate to specific slide
+  function goToSlide(index) {
+    updateCarousel(index);
+  }
+
+  // Start auto-rotation
+  function startAutoRotate() {
+    stopAutoRotate(); // Clear any existing interval
+    autoRotateInterval = setInterval(nextSlide, autoRotateDelay);
+  }
+
+  // Stop auto-rotation
+  function stopAutoRotate() {
+    if (autoRotateInterval) {
+      clearInterval(autoRotateInterval);
+      autoRotateInterval = null;
+    }
+  }
+
+  // Event listeners for navigation buttons
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      prevSlide();
+      stopAutoRotate();
+      startAutoRotate(); // Restart timer after manual interaction
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      nextSlide();
+      stopAutoRotate();
+      startAutoRotate(); // Restart timer after manual interaction
+    });
+  }
+
+  // Event listeners for indicator dots
+  indicators.forEach((dot, index) => {
+    dot.addEventListener('click', () => {
+      goToSlide(index);
+      stopAutoRotate();
+      startAutoRotate(); // Restart timer after manual interaction
+    });
+  });
+
+  // Pause auto-rotation on hover
+  carousel.addEventListener('mouseenter', stopAutoRotate);
+  carousel.addEventListener('mouseleave', startAutoRotate);
+
+  // Touch/swipe support for mobile
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  carousel.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    stopAutoRotate();
+  }, { passive: true });
+
+  carousel.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+    startAutoRotate();
+  }, { passive: true });
+
+  function handleSwipe() {
+    const swipeThreshold = 50;
+    const diff = touchStartX - touchEndX;
+
+    if (Math.abs(diff) > swipeThreshold) {
+      if (diff > 0) {
+        // Swiped left - go to next
+        nextSlide();
+      } else {
+        // Swiped right - go to previous
+        prevSlide();
+      }
+    }
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (!carousel.matches(':hover')) return;
+
+    if (e.key === 'ArrowLeft') {
+      prevSlide();
+      stopAutoRotate();
+      startAutoRotate();
+    } else if (e.key === 'ArrowRight') {
+      nextSlide();
+      stopAutoRotate();
+      startAutoRotate();
+    }
+  });
+
+  // Initialize carousel after ensuring DOM is fully laid out
+  function initCarousel() {
+    // Use requestAnimationFrame to ensure layout is complete
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        updateCarousel(0, false);
+        startAutoRotate();
+      });
+    });
+  }
+
+  // Wait for page to be fully loaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCarousel);
+  } else if (document.readyState === 'interactive') {
+    // DOM is ready but resources may still be loading
+    window.addEventListener('load', initCarousel);
+  } else {
+    // Document is already fully loaded
+    initCarousel();
+  }
+
+  // Pause when page is hidden
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      stopAutoRotate();
+    } else {
+      startAutoRotate();
+    }
+  });
+})();
