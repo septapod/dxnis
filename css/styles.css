@@ -573,7 +573,7 @@ a:focus, button:focus {
   display: flex;
   transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
   position: relative;
-  padding: 0 var(--space-8); /* Add horizontal padding to create space from arrows */
+  padding: 0; /* Remove padding to fix transform calculation */
   width: 100%; /* Ensure track has full width */
   transform: translateX(0); /* Set initial position explicitly */
 }
@@ -586,7 +586,8 @@ a:focus, button:focus {
   gap: var(--space-6); /* Space between image and text */
   opacity: 0;
   transition: opacity 0.6s ease-in-out;
-  padding: var(--space-4);
+  padding: var(--space-4) var(--space-10); /* Add horizontal padding here instead */
+  box-sizing: border-box; /* Include padding in width calculation */
 }
 
 .testimonial-slide.active {
@@ -601,6 +602,8 @@ a:focus, button:focus {
   object-fit: cover;
   border: 3px solid var(--color-accent);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  background: var(--color-surface); /* Fallback background */
+  display: block; /* Ensure image displays as block */
 }
 
 .testimonial {
@@ -670,11 +673,11 @@ a:focus, button:focus {
 }
 
 .carousel-btn-prev {
-  left: var(--space-2); /* Visible inside container */
+  left: var(--space-3); /* Adjust position for new padding structure */
 }
 
 .carousel-btn-next {
-  right: var(--space-2); /* Visible inside container */
+  right: var(--space-3); /* Adjust position for new padding structure */
 }
 
 .carousel-btn svg {
@@ -955,10 +958,11 @@ a:focus, button:focus {
   }
 
   .testimonial-track {
-    padding: 0 var(--space-6);
+    padding: 0; /* Keep padding at 0 */
   }
 
   .testimonial-slide {
+    padding: var(--space-4) var(--space-6); /* Adjust padding for tablet */
     gap: var(--space-4);
   }
 
@@ -1042,7 +1046,7 @@ a:focus, button:focus {
 
   /* Switch to vertical layout on mobile */
   .testimonial-track {
-    padding: 0 var(--space-4);
+    padding: 0; /* Keep at 0 for proper transform */
   }
 
   .testimonial-slide {
@@ -1050,6 +1054,7 @@ a:focus, button:focus {
     align-items: center;
     gap: var(--space-4);
     text-align: center;
+    padding: var(--space-4) var(--space-4); /* Smaller padding on mobile */
   }
 
   .testimonial-image {
