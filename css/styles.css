@@ -892,6 +892,90 @@ a:focus, button:focus {
   transform: translate(-50%, -50%) translateZ(0) scale(1.5);
 }
 
+/* Track Record Section */
+.track-record-header {
+  grid-column: 1 / -1;
+  margin-bottom: var(--space-6);
+  max-width: 60ch;
+}
+
+.track-record-intro {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: var(--color-text);
+  margin-bottom: var(--space-4);
+}
+
+.track-record-intro:last-of-type {
+  margin-bottom: 0;
+}
+
+.track-stat {
+  background: var(--color-bg);
+  padding: var(--space-6);
+  border-radius: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.track-stat-1 {
+  grid-column: 1 / 7;
+  grid-row: 2;
+}
+
+.track-stat-2 {
+  grid-column: 7 / 13;
+  grid-row: 2;
+}
+
+.track-stat-3 {
+  grid-column: 1 / 7;
+  grid-row: 3;
+}
+
+.track-stat-4 {
+  grid-column: 7 / 13;
+  grid-row: 3;
+}
+
+.track-stat-number {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 900;
+  color: var(--color-accent);
+  line-height: 1;
+}
+
+.track-stat-label {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--color-text);
+  margin-top: var(--space-2);
+}
+
+.track-stat-detail {
+  font-size: 0.875rem;
+  color: var(--color-muted);
+  line-height: 1.5;
+}
+
+.track-record-footer {
+  grid-column: 1 / -1;
+  margin-top: var(--space-6);
+  padding-top: var(--space-6);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  max-width: 60ch;
+}
+
+.track-record-footer p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--color-text);
+  font-style: italic;
+}
+
 /* Responsive - Maintaining Grid Precision */
 
 /* Tablet - 8 columns */
@@ -1002,6 +1086,29 @@ a:focus, button:focus {
   .contact-content {
     grid-column: 1 / 9;
   }
+
+  .track-stat-1,
+  .track-stat-2,
+  .track-stat-3,
+  .track-stat-4 {
+    grid-column: 1 / -1;
+  }
+
+  .track-stat-1 {
+    grid-row: 2;
+  }
+
+  .track-stat-2 {
+    grid-row: 3;
+  }
+
+  .track-stat-3 {
+    grid-row: 4;
+  }
+
+  .track-stat-4 {
+    grid-row: 5;
+  }
 }
 
 /* Mobile - 4 columns */
@@ -1098,6 +1205,15 @@ a:focus, button:focus {
     flex-direction: column;
     gap: var(--space-2);
     text-align: center;
+  }
+
+  .track-stat-number {
+    font-size: 2.5rem;
+  }
+
+  .track-record-header,
+  .track-record-footer {
+    max-width: 100%;
   }
 }
 
