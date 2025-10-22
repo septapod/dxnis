@@ -309,3 +309,74 @@ if (servicesSection) {
     }
   });
 })();
+
+/**
+ * Contact Form Handler
+ * Handles form submission with Web3Forms API
+ */
+(function() {
+  const form = document.getElementById('contactForm');
+  if (!form) return;
+
+  const submitButton = form.querySelector('.btn-submit');
+  const formMessage = document.getElementById('form-message');
+
+  // Handle form submission
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // Disable submit button and show loading state
+    submitButton.disabled = true;
+    submitButton.textContent = 'Sending...';
+    formMessage.className = 'form-message';
+    formMessage.textContent = '';
+
+    // Get form data
+    const formData = new FormData(form);
+
+    try {
+      // Submit to Web3Forms API
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        // Success
+        formMessage.className = 'form-message success';
+        formMessage.textContent = 'Thank you! Your message has been sent. I\'ll get back to you soon.';
+
+        // Reset form
+        form.reset();
+
+        // Scroll to success message
+        formMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        // Error from API
+        throw new Error(data.message || 'Something went wrong');
+      }
+    } catch (error) {
+      // Network or other error
+      formMessage.className = 'form-message error';
+      formMessage.textContent = 'Oops! There was a problem sending your message. Please try again or email me directly at brent@dxn.is';
+      console.error('Form submission error:', error);
+    } finally {
+      // Re-enable submit button
+      submitButton.disabled = false;
+      submitButton.textContent = 'Send Message';
+    }
+  });
+
+  // Clear error/success message when user starts typing again
+  const inputs = form.querySelectorAll('input, textarea');
+  inputs.forEach(input => {
+    input.addEventListener('input', () => {
+      if (formMessage.classList.contains('error') || formMessage.classList.contains('success')) {
+        formMessage.className = 'form-message';
+        formMessage.textContent = '';
+      }
+    });
+  });
+})();

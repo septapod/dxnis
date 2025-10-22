@@ -524,13 +524,65 @@
   <!-- Contact -->
   <section id="contact" class="section contact" aria-labelledby="contact-heading">
     <div class="grid-12">
-      <div class="contact-content">
+      <div class="contact-header">
         <h2 id="contact-heading">Ready to Get Started?</h2>
-        <a href="mailto:brent@dxn.is" class="contact-email" aria-label="Email Brent Dixon">brent@dxn.is</a>
         <p>Let's discuss how strategic process design can help your organization achieve its next breakthrough.</p>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="contact-form-container">
+        <h3>Send Me a Message</h3>
+        <form action="https://api.web3forms.com/submit" method="POST" class="contact-form" id="contactForm">
+          <!-- Web3Forms Access Key -->
+          <input type="hidden" name="access_key" value="95cceffa-e415-49fa-91cb-fd290e667599">
+
+          <!-- Honeypot Spam Protection -->
+          <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+
+          <!-- Success/Error Messages -->
+          <div id="form-message" class="form-message" role="alert" aria-live="polite"></div>
+
+          <!-- Name Field -->
+          <div class="form-group">
+            <label for="name">Your Name <span class="required">*</span></label>
+            <input type="text" id="name" name="name" required aria-required="true">
+          </div>
+
+          <!-- Email Field -->
+          <div class="form-group">
+            <label for="email">Email Address <span class="required">*</span></label>
+            <input type="email" id="email" name="email" required aria-required="true">
+          </div>
+
+          <!-- Organization Field -->
+          <div class="form-group">
+            <label for="organization">Organization</label>
+            <input type="text" id="organization" name="organization">
+          </div>
+
+          <!-- Message Field -->
+          <div class="form-group">
+            <label for="message">How can I help? <span class="required">*</span></label>
+            <textarea id="message" name="message" rows="5" required aria-required="true"></textarea>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="btn btn-primary btn-submit">Send Message</button>
+        </form>
+      </div>
+
+      <!-- Calendly Section -->
+      <div class="calendly-container">
+        <h3>Or Book a Call</h3>
+        <p class="calendly-intro">Prefer to schedule a time to talk? Book a 30-minute discovery call directly.</p>
+        <button class="btn btn-calendly" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/hellobrent'});return false;">Schedule a Call</button>
       </div>
     </div>
   </section>
+
+  <!-- Calendly Widget Script -->
+  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+  <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
 
 </main>
 
