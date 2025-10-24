@@ -380,3 +380,125 @@ if (servicesSection) {
     });
   });
 })();
+
+/**
+ * Client Logos Randomization
+ * Randomizes logo order on each page load for visual variety
+ */
+(function() {
+  const logoTrack = document.querySelector('.logo-track');
+  if (!logoTrack) return;
+
+  // Define all client logos with sector tags
+  // 'fin' = Financial Institutions (Credit Unions, Banks, CDFIs)
+  // 'soc' = Social Impact (Nonprofits, Foundations, Civic, Government, Humanitarian)
+  const logos = [
+    // Financial Institutions (23)
+    { src: 'assets/clients/cues_logo.png', alt: 'CUES', sector: 'fin' },
+    { src: 'assets/clients/ncuf_logo.png', alt: 'National Credit Union Foundation', sector: 'fin' },
+    { src: 'assets/clients/filene_logo.png', alt: 'Filene Research Institute', sector: 'fin' },
+    { src: 'assets/clients/americascreditunions_logo.png', alt: 'America\'s Credit Unions', sector: 'fin' },
+    { src: 'assets/clients/aboundcu_logo.png', alt: 'Abound Credit Union', sector: 'fin' },
+    { src: 'assets/clients/fecu_logo.png', alt: 'First Entertainment Credit Union', sector: 'fin' },
+    { src: 'assets/clients/sidneyfcu_logo.png', alt: 'Sidney Federal Credit Union', sector: 'fin' },
+    { src: 'assets/clients/langleycu_logo.png', alt: 'Langley Federal Credit Union', sector: 'fin' },
+    { src: 'assets/clients/trabian_logo.png', alt: 'Trabian', sector: 'fin' },
+    { src: 'assets/clients/central1_logo.png', alt: 'Central 1', sector: 'fin' },
+    { src: 'assets/clients/expresscu_logo.png', alt: 'Express Credit Union', sector: 'fin' },
+    { src: 'assets/clients/ncua_logo.png', alt: 'NCUA', sector: 'fin' },
+    { src: 'assets/clients/afcu_logo.png', alt: 'America First Credit Union', sector: 'fin' },
+    { src: 'assets/clients/cofed_logo.png', alt: 'CO-FED Credit Union', sector: 'fin' },
+    { src: 'assets/clients/dlfcu_logo.png', alt: 'Digital Federal Credit Union', sector: 'fin' },
+    { src: 'assets/clients/wrightpattcu_logo.png', alt: 'Wright-Patt Credit Union', sector: 'fin' },
+    { src: 'assets/clients/custudentchoice.png', alt: 'CU Student Choice', sector: 'fin' },
+    { src: 'assets/clients/r1cu_logo.png', alt: 'R1 Credit Union', sector: 'fin' },
+    { src: 'assets/clients/toplinecu_logo.png', alt: 'Topline Federal Credit Union', sector: 'fin' },
+    { src: 'assets/clients/communitere_logo.png', alt: 'CommunitERE', sector: 'fin' },
+    { src: 'assets/clients/lendgistics_logo.png', alt: 'Lendgistics', sector: 'fin' },
+    { src: 'assets/clients/secunm_logo.png', alt: 'Sandia Laboratory Federal Credit Union', sector: 'fin' },
+    { src: 'assets/clients/vantagewestcu_logo.png', alt: 'Vantage West Credit Union', sector: 'fin' },
+
+    // Social Impact Organizations (11)
+    { src: 'assets/clients/un_logo.png', alt: 'United Nations', sector: 'soc' },
+    { src: 'assets/clients/thinkery_logo.png', alt: 'Thinkery', sector: 'soc' },
+    { src: 'assets/clients/be_logo.png', alt: 'BE', sector: 'soc' },
+    { src: 'assets/clients/coopimpactlab_logo.png', alt: 'Co-op Impact Lab', sector: 'soc' },
+    { src: 'assets/clients/ocha_logo.png', alt: 'UN OCHA', sector: 'soc' },
+    { src: 'assets/clients/readingcoop_logo.png', alt: 'Reading Cooperative', sector: 'soc' },
+    { src: 'assets/clients/globalpulse_logo.png', alt: 'UN Global Pulse', sector: 'soc' },
+    { src: 'assets/clients/wpe_logo.png', alt: 'Whole Person Economy', sector: 'soc' },
+    { src: 'assets/clients/globalinnovationgathering_logo.png', alt: 'Global Innovation Gathering', sector: 'soc' },
+    { src: 'assets/clients/moeda_logo.png', alt: 'Moeda', sector: 'soc' },
+    { src: 'assets/clients/bfi_logo.png', alt: 'Buckminster Fuller Institute', sector: 'soc' }
+  ];
+
+  /**
+   * Fisher-Yates shuffle algorithm for true randomization
+   * @param {Array} array - Array to shuffle
+   * @returns {Array} - Shuffled array
+   */
+  function shuffleArray(array) {
+    const shuffled = [...array]; // Create copy to avoid mutating original
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  }
+
+  /**
+   * Stratified shuffle with sector-based distribution
+   * Ensures balanced mix of financial and social impact logos
+   * Uses 3:1 ratio (3 financial, 1 social impact)
+   * @param {Array} logos - Array of logo objects with sector tags
+   * @returns {Array} - Distributed array
+   */
+  function distributedShuffle(logos) {
+    // Separate by sector and shuffle each independently
+    const fin = shuffleArray(logos.filter(l => l.sector === 'fin'));
+    const soc = shuffleArray(logos.filter(l => l.sector === 'soc'));
+
+    // If no social impact logos, just return shuffled financial
+    if (soc.length === 0) return fin;
+
+    // Interleave with 3:1 ratio (3 financial, 1 social impact)
+    const result = [];
+    let fIndex = 0, sIndex = 0;
+
+    while (fIndex < fin.length || sIndex < soc.length) {
+      // Add 3 financial logos
+      for (let i = 0; i < 3 && fIndex < fin.length; i++) {
+        result.push(fin[fIndex++]);
+      }
+
+      // Add 1 social impact logo
+      if (sIndex < soc.length) {
+        result.push(soc[sIndex++]);
+      }
+    }
+
+    return result;
+  }
+
+  /**
+   * Generate logo HTML elements
+   * @param {Array} logoData - Array of logo objects
+   * @returns {string} - HTML string
+   */
+  function generateLogoHTML(logoData) {
+    return logoData.map(logo => `
+      <div class="logo-item">
+        <img src="${logo.src}" alt="${logo.alt}" height="48">
+      </div>
+    `).join('');
+  }
+
+  // Apply stratified distribution (3:1 fin:soc ratio)
+  const distributedLogos = distributedShuffle(logos);
+
+  // Create 3 duplicate sets for seamless infinite loop
+  const tripleLogos = [...distributedLogos, ...distributedLogos, ...distributedLogos];
+
+  // Generate and inject HTML
+  logoTrack.innerHTML = generateLogoHTML(tripleLogos);
+})();
