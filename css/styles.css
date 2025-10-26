@@ -338,6 +338,10 @@ a:focus, button:focus {
   margin-right: 0;
 }
 
+.hero p strong {
+  font-weight: 800;
+}
+
 /* Section Spacing */
 .section {
   padding: var(--space-16) 0;
