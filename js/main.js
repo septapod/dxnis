@@ -501,4 +501,86 @@ if (servicesSection) {
 
   // Generate and inject HTML
   logoTrack.innerHTML = generateLogoHTML(tripleLogos);
+
+  /**
+   * Measure and set pixel-perfect animation
+   * Waits for images to load, then calculates exact width of one logo set
+   */
+  function setupPixelPerfectAnimation() {
+    // Wait for layout and images to be ready
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        // Get all logo items
+        const logoItems = logoTrack.querySelectorAll('.logo-item');
+
+        if (logoItems.length === 0) return;
+
+        // Calculate width of one set (first N logos where N = distributedLogos.length)
+        const logosPerSet = distributedLogos.length;
+
+        // Measure actual rendered distance with sub-pixel precision
+        // Get bounding rectangle of first logo in first set
+        const firstLogoRect = logoItems[0].getBoundingClientRect();
+        // Get bounding rectangle of first logo in second set
+        const firstLogoNextSetRect = logoItems[logosPerSet].getBoundingClientRect();
+        // Calculate exact pixel distance (includes all logos + gaps with sub-pixel precision)
+        // Round to 2 decimal places for CSS compatibility
+        const setWidth = Math.round((firstLogoNextSetRect.left - firstLogoRect.left) * 100) / 100;
+
+        // Create dynamic keyframe animation with exact pixel measurement
+        const styleId = 'marquee-dynamic-animation';
+        let styleEl = document.getElementById(styleId);
+
+        if (!styleEl) {
+          styleEl = document.createElement('style');
+          styleEl.id = styleId;
+          document.head.appendChild(styleEl);
+        }
+
+        // Generate the animation with exact pixel value
+        styleEl.textContent = `
+          @keyframes marquee-dynamic {
+            0% {
+              transform: translateX(0);
+            }
+            100% {
+              transform: translateX(-${setWidth}px);
+            }
+          }
+
+          .logo-track {
+            animation: marquee-dynamic 60s linear infinite;
+          }
+
+          @media (max-width: 1024px) {
+            .logo-track {
+              animation: marquee-dynamic 48s linear infinite;
+            }
+          }
+
+          @media (max-width: 768px) {
+            .logo-track {
+              animation: marquee-dynamic 40s linear infinite;
+            }
+          }
+        `;
+      });
+    });
+  }
+
+  // Wait for all logo images to load before measuring
+  const logoImages = logoTrack.querySelectorAll('img');
+  const imagePromises = Array.from(logoImages).map(img => {
+    if (img.complete) {
+      return Promise.resolve();
+    }
+    return new Promise((resolve) => {
+      img.addEventListener('load', resolve);
+      img.addEventListener('error', resolve); // Resolve even on error to not block
+    });
+  });
+
+  Promise.all(imagePromises).then(() => {
+    setupPixelPerfectAnimation();
+  });
 })();

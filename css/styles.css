@@ -102,6 +102,18 @@ h2 {
   margin-bottom: var(--space-4);
 }
 
+/* Section headings - All caps, reduced size and weight */
+.services-header h2,
+.industries-header h2,
+.outcomes-header h2,
+.about-content h2,
+.contact-header h2 {
+  text-transform: uppercase;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+
 h3 {
   font-size: clamp(1.5rem, 2.5vw, 2rem);
   font-weight: 600;
@@ -357,6 +369,13 @@ a:focus, button:focus {
   font-size: 1.5rem;
 }
 
+/* Outcomes Section Header */
+.outcomes-header {
+  grid-column: 1 / 13;
+  text-align: center;
+  margin-bottom: var(--space-8);
+}
+
 /* Cards span different column combinations */
 .value-card-1 {
   grid-column: 1 / 5; /* 4 columns */
@@ -516,6 +535,15 @@ a:focus, button:focus {
   margin-bottom: var(--space-8);
 }
 
+.industries-intro {
+  font-size: 1.25rem;
+  color: var(--color-muted);
+  max-width: 800px;
+  margin: var(--space-4) auto 0;
+  line-height: 1.6;
+  text-align: left;
+}
+
 .industry-card-1 {
   grid-column: 1 / 5; /* 4 columns */
 }
@@ -604,7 +632,7 @@ a:focus, button:focus {
 .logo-track {
   display: flex;
   gap: 80px; /* 10 baseline units */
-  animation: marquee 13s linear infinite;
+  /* Animation set dynamically by JavaScript for pixel-perfect looping */
   will-change: transform;
 }
 
@@ -630,16 +658,7 @@ a:focus, button:focus {
 }
 
 /* Marquee Animation - Continuous Scroll */
-@keyframes marquee {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    /* Move exactly one-third of the track (4 logos + gaps) */
-    /* 4 logos at ~200px avg width + 3 gaps at 80px = ~1040px */
-    transform: translateX(calc(-100% / 3));
-  }
-}
+/* Static animation removed - now dynamically calculated by JavaScript for pixel-perfect alignment */
 
 /* Social Proof - 12-Column Grid */
 .social-proof-header {
@@ -731,6 +750,16 @@ a:focus, button:focus {
   color: var(--color-muted);
   font-style: normal;
   opacity: 0.8;
+}
+
+.testimonial-year {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 300;
+  color: var(--color-muted);
+  opacity: 0.5;
+  margin-top: var(--space-1);
+  font-style: normal;
 }
 
 /* Carousel Navigation Buttons */
@@ -874,6 +903,96 @@ a:focus, button:focus {
   font-style: italic;
   color: var(--color-text);
   line-height: 1.6;
+}
+
+/* ======================================================================
+   Photo Hero Section - Split Layout
+   ====================================================================== */
+
+.photo-hero-section {
+  width: 100%;
+  background: var(--color-bg);
+}
+
+.photo-hero-split {
+  display: flex;
+  min-height: 600px;
+}
+
+.photo-hero-image {
+  flex: 0 0 58.333%; /* 7 columns of 12 */
+  background-image: url('../assets/brentdixon-headshot-books.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /* Desaturate and increase contrast for Swiss aesthetic */
+  filter: grayscale(70%) contrast(110%);
+}
+
+.photo-hero-content {
+  flex: 0 0 41.667%; /* 5 columns of 12 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--space-12) var(--site-gutter);
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.photo-hero-content h2 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: var(--space-4);
+  letter-spacing: -0.02em;
+}
+
+.photo-hero-content p {
+  font-size: clamp(1.125rem, 2vw, 1.5rem);
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  max-width: 500px;
+}
+
+/* ======================================================================
+   Bold Statement Quote Section - End of Page
+   ====================================================================== */
+
+.statement-quote-section {
+  background: #000000;
+  padding: var(--space-16) var(--site-gutter);
+  text-align: center;
+}
+
+.statement-quote-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.statement-quote {
+  margin: 0;
+  padding: 0;
+}
+
+.statement-quote p {
+  font-size: clamp(2.5rem, 6vw, 6rem);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--color-text);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.statement-quote-attribution {
+  display: block;
+  margin-top: var(--space-6);
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--color-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-style: normal;
 }
 
 /* Contact - 12-Column Grid */
@@ -1302,7 +1421,7 @@ a:focus, button:focus {
   /* Client logos - tablet adjustments */
   .logo-track {
     gap: 64px; /* Slightly reduced gap on tablet */
-    animation: marquee 11s linear infinite; /* Slightly faster on tablet */
+    /* Animation timing set dynamically by JavaScript */
   }
 
   .logo-item img {
@@ -1376,6 +1495,29 @@ a:focus, button:focus {
 
   .track-stat-4 {
     grid-row: 5;
+  }
+
+  /* Photo hero - tablet adjustments */
+  .photo-hero-split {
+    flex-direction: column;
+    min-height: auto;
+  }
+
+  .photo-hero-image {
+    flex: none;
+    width: 100%;
+    min-height: 400px;
+  }
+
+  .photo-hero-content {
+    flex: none;
+    width: 100%;
+    padding: var(--space-8) var(--site-gutter);
+  }
+
+  /* Bold quote - tablet adjustments */
+  .statement-quote p {
+    font-size: clamp(2rem, 6vw, 4rem);
   }
 }
 
@@ -1470,7 +1612,7 @@ a:focus, button:focus {
   /* Client logos - mobile adjustments */
   .logo-track {
     gap: 48px; /* Reduced gap on mobile */
-    animation: marquee 9s linear infinite; /* Faster on mobile */
+    /* Animation timing set dynamically by JavaScript */
   }
 
   .logo-item img {
@@ -1511,6 +1653,37 @@ a:focus, button:focus {
   .track-record-header,
   .track-record-footer {
     max-width: 100%;
+  }
+
+  /* Photo hero - mobile adjustments */
+  .photo-hero-image {
+    min-height: 350px;
+  }
+
+  .photo-hero-content {
+    padding: var(--space-6) var(--site-gutter);
+  }
+
+  .photo-hero-content h2 {
+    font-size: clamp(2rem, 8vw, 3rem);
+  }
+
+  .photo-hero-content p {
+    font-size: clamp(1rem, 3vw, 1.25rem);
+  }
+
+  /* Bold quote - mobile adjustments */
+  .statement-quote-section {
+    padding: var(--space-12) var(--site-gutter);
+  }
+
+  .statement-quote p {
+    font-size: clamp(1.5rem, 6vw, 2.5rem);
+  }
+
+  .statement-quote-attribution {
+    font-size: 1rem;
+    margin-top: var(--space-4);
   }
 }
 
