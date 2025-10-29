@@ -284,6 +284,18 @@
   color: var(--color-accent);
 }
 
+[data-theme="light"] .statement-quote-section {
+  background: #FFFFFF;
+}
+
+[data-theme="light"] .statement-quote p {
+  color: #0A0A0A;
+}
+
+[data-theme="light"] .statement-quote-attribution {
+  color: #5A5A5A;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -1458,7 +1470,7 @@ a:focus, button:focus {
    ====================================================================== */
 
 .statement-quote-section {
-  background: #000000;
+  background: var(--color-bg);
   padding: var(--space-16) var(--site-gutter);
   text-align: center;
   position: relative;
