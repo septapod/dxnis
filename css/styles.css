@@ -134,10 +134,12 @@
 [data-theme="light"] .logo-item img {
   opacity: 0.6;
   transition: opacity 0.3s ease;
+  filter: invert(1) brightness(0.15);
 }
 
 [data-theme="light"] .logo-item img:hover {
   opacity: 1;
+  filter: invert(1) brightness(0.15);
 }
 
 [data-theme="light"] .photo-hero-image {
@@ -436,11 +438,11 @@ a:focus, button:focus {
 }
 
 [data-theme="light"] .logo img {
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15));
+  filter: invert(1) drop-shadow(0 1px 2px rgba(255, 255, 255, 0.3));
 }
 
 [data-theme="light"] .site-header.scrolled .logo img {
-  filter: none;
+  filter: invert(1);
 }
 
 .logo:hover img {
