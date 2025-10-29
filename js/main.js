@@ -584,3 +584,62 @@ if (servicesSection) {
     setupPixelPerfectAnimation();
   });
 })();
+
+// Theme Toggle Implementation
+(function() {
+  const themeToggle = document.querySelector('.theme-toggle');
+  const sunIcon = document.querySelector('.theme-icon-sun');
+  const moonIcon = document.querySelector('.theme-icon-moon');
+  const html = document.documentElement;
+
+  // Get saved theme from localStorage or default to 'dark'
+  const getSavedTheme = () => {
+    const saved = localStorage.getItem('theme-preference');
+    if (saved) return saved;
+
+    // Check system preference
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark';
+    }
+    return 'dark'; // Default to dark
+  };
+
+  // Set theme
+  const setTheme = (theme) => {
+    html.setAttribute('data-theme', theme);
+    localStorage.setItem('theme-preference', theme);
+    updateIcons(theme);
+  };
+
+  // Update icon visibility
+  const updateIcons = (theme) => {
+    if (theme === 'dark') {
+      sunIcon.style.display = 'block';
+      moonIcon.style.display = 'none';
+    } else {
+      sunIcon.style.display = 'none';
+      moonIcon.style.display = 'block';
+    }
+  };
+
+  // Initialize theme
+  const initialTheme = getSavedTheme();
+  setTheme(initialTheme);
+
+  // Toggle theme on button click
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = html.getAttribute('data-theme') || 'dark';
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      setTheme(newTheme);
+    });
+  }
+
+  // Listen for system theme changes
+  if (window.matchMedia) {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      const newTheme = e.matches ? 'dark' : 'light';
+      setTheme(newTheme);
+    });
+  }
+})();
