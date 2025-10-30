@@ -1472,7 +1472,7 @@ a:focus, button:focus {
 .statement-quote-section {
   background: var(--color-bg);
   padding: var(--space-16) var(--site-gutter);
-  text-align: center;
+  text-align: left;
   position: relative;
   overflow: hidden;
 }
