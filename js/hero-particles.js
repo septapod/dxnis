@@ -36,9 +36,9 @@ const heroParticles = (p) => {
       this.y = p.random(p.height);
       this.prevX = this.x;
       this.prevY = this.y;
-      this.vx = p.random(-1, 1);
-      this.vy = p.random(-1, 1);
-      this.baseMaxSpeed = p.random(1.5, 2.5);
+      this.vx = p.random(-2, 2);
+      this.vy = p.random(-2, 2);
+      this.baseMaxSpeed = p.random(2, 3.5);
       this.maxSpeed = this.baseMaxSpeed;
       this.life = p.random(150, 300);
       this.age = 0;
@@ -47,14 +47,14 @@ const heroParticles = (p) => {
 
     // Chaotic movement - random, conflicting directions
     moveChaoticly() {
-      // Brownian motion - small random velocity changes
-      this.vx += p.random(-0.15, 0.15);
-      this.vy += p.random(-0.15, 0.15);
+      // Brownian motion - random velocity changes
+      this.vx += p.random(-0.25, 0.25);
+      this.vy += p.random(-0.25, 0.25);
 
-      // Occasional larger direction changes for visible chaos
-      if (p.random() < 0.02) {
-        this.vx += p.random(-0.5, 0.5);
-        this.vy += p.random(-0.5, 0.5);
+      // Frequent direction changes for visible chaos
+      if (p.random() < 0.05) {
+        this.vx += p.random(-1, 1);
+        this.vy += p.random(-1, 1);
       }
     }
 
@@ -123,9 +123,9 @@ const heroParticles = (p) => {
       this.x += this.vx;
       this.y += this.vy;
 
-      // Friction
-      this.vx *= 0.99;
-      this.vy *= 0.99;
+      // Friction (lower = more momentum retained)
+      this.vx *= 0.985;
+      this.vy *= 0.985;
 
       // Age
       this.age++;
@@ -151,7 +151,7 @@ const heroParticles = (p) => {
       const color = isDarkMode ? cyanColor : darkCyan;
 
       // Base alpha with age fade
-      let baseAlpha = isDarkMode ? 25 : 45;
+      let baseAlpha = isDarkMode ? 40 : 60;
       const fadeIn = 15;
       const fadeOut = 40;
 
@@ -166,8 +166,8 @@ const heroParticles = (p) => {
       const alpha = Math.min(baseAlpha * alignmentBoost, isDarkMode ? 80 : 120);
 
       // Stroke weight varies with alignment
-      const baseWeight = 0.8;
-      const weight = baseWeight + this.alignment * 0.8;
+      const baseWeight = 1.0;
+      const weight = baseWeight + this.alignment * 0.6;
 
       p.stroke(color.r, color.g, color.b, alpha);
       p.strokeWeight(weight);
