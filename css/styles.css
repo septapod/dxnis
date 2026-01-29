@@ -655,6 +655,7 @@ a:focus, button:focus {
 .hero-content {
   grid-column: 1 / 9; /* Spans 8 columns - left-aligned, 4 columns white space right */
   text-align: left;
+  padding-top: var(--space-8);
 }
 
 .hero h1 {
