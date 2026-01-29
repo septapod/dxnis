@@ -11,7 +11,7 @@
 const heroParticles = (p) => {
   let particles = [];
   let flowField;
-  let particleCount = 3000;
+  let particleCount = 1200; // Fewer particles for cleaner look
   let canvas;
   let heroSection;
   let canvasContainer;
@@ -23,9 +23,9 @@ const heroParticles = (p) => {
   let lastMouseY = 0;
   let mouseVelocity = 0;
 
-  // Brand colors - optimized for contrast
-  const goldColor = { r: 251, g: 226, b: 72 }; // #FBE248 for dark mode
-  const darkAmber = { r: 120, g: 90, b: 20 }; // Much darker for light mode visibility
+  // Sleek cyan accent - futuristic aesthetic
+  const cyanColor = { r: 0, g: 200, b: 255 }; // Bright cyan for dark mode
+  const darkCyan = { r: 0, g: 120, b: 150 }; // Darker teal for light mode visibility
 
   // Flow field settings
   const flowResolution = 20;
@@ -47,11 +47,11 @@ const heroParticles = (p) => {
       this.prevY = this.y;
       this.vx = 0;
       this.vy = 0;
-      this.baseMaxSpeed = p.random(1.5, 3.5);
+      this.baseMaxSpeed = p.random(2.5, 4.5); // Faster, more uniform
       this.maxSpeed = this.baseMaxSpeed;
-      this.life = p.random(100, 300);
+      this.life = p.random(80, 180); // Shorter lifespan for crisper trails
       this.age = 0;
-      this.influenced = 0; // How much affected by cursor (0-1)
+      this.influenced = 0;
     }
 
     follow() {
@@ -63,13 +63,13 @@ const heroParticles = (p) => {
       const safeCol = p.constrain(col, 0, cols - 1);
       const safeRow = p.constrain(row, 0, rows - 1);
 
-      // Sample noise for flow direction
-      const xoff = safeCol * 0.1;
-      const yoff = safeRow * 0.1;
-      const angle = p.noise(xoff, yoff, zoff) * p.TWO_PI * 2;
+      // Sample noise for flow direction - larger scale = smoother, more geometric flow
+      const xoff = safeCol * 0.04; // Lower frequency for straighter paths
+      const yoff = safeRow * 0.04;
+      const angle = p.noise(xoff, yoff, zoff) * p.TWO_PI * 1.5; // Less angular variation
 
-      // Apply flow force
-      const flowForce = 0.3;
+      // Apply flow force - stronger for more decisive movement
+      const flowForce = 0.4;
       this.vx += p.cos(angle) * flowForce;
       this.vy += p.sin(angle) * flowForce;
     }
@@ -178,13 +178,13 @@ const heroParticles = (p) => {
     }
 
     show(isDarkMode) {
-      const color = isDarkMode ? goldColor : darkAmber;
+      const color = isDarkMode ? cyanColor : darkCyan;
 
       // Calculate alpha based on age (fade in and out)
-      const baseMaxAlpha = isDarkMode ? 16 : 38;
+      const baseMaxAlpha = isDarkMode ? 25 : 50; // Higher alpha for visibility with fewer particles
       let alpha;
-      const fadeIn = 20;
-      const fadeOut = 50;
+      const fadeIn = 10; // Quick fade in
+      const fadeOut = 30; // Quick fade out
 
       if (this.age < fadeIn) {
         alpha = p.map(this.age, 0, fadeIn, 0, baseMaxAlpha);
@@ -195,12 +195,12 @@ const heroParticles = (p) => {
       }
 
       // Subtle brightness boost when influenced by cursor
-      const influenceBoost = 1 + this.influenced * 1.2; // Up to 1.7x brighter (subtle)
-      alpha = Math.min(alpha * influenceBoost, isDarkMode ? 45 : 70);
+      const influenceBoost = 1 + this.influenced * 1.5;
+      alpha = Math.min(alpha * influenceBoost, isDarkMode ? 60 : 90);
 
-      // Subtle stroke weight boost near cursor
-      const baseWeight = isDarkMode ? 1 : 1.5;
-      const weight = baseWeight + this.influenced * 0.5;
+      // Thin, sleek strokes
+      const baseWeight = isDarkMode ? 0.8 : 1;
+      const weight = baseWeight + this.influenced * 0.4;
 
       // Draw trail line from previous to current position
       p.stroke(color.r, color.g, color.b, alpha);
@@ -231,13 +231,13 @@ const heroParticles = (p) => {
     cols = p.floor(width / flowResolution) + 1;
     rows = p.floor(height / flowResolution) + 1;
 
-    // Adjust particle count based on screen size
+    // Adjust particle count based on screen size - fewer for cleaner look
     if (p.width < 768) {
-      particleCount = 1500;
+      particleCount = 600;
     } else if (p.width < 1024) {
-      particleCount = 2000;
+      particleCount = 800;
     } else {
-      particleCount = 3000;
+      particleCount = 1200;
     }
 
     // Initialize particles
@@ -258,13 +258,12 @@ const heroParticles = (p) => {
     // Check dark mode
     const isDarkMode = document.documentElement.getAttribute('data-theme') !== 'light';
 
-    // Fade background instead of clearing (creates trails)
-    // Lower alpha = longer trails, higher alpha = faster fade
+    // Fade background - faster fade for cleaner, sleeker look
     p.noStroke();
     if (isDarkMode) {
-      p.fill(0, 0, 0, 12); // Slower fade for longer, more visible trails
+      p.fill(0, 0, 0, 25); // Faster fade for crisp trails
     } else {
-      p.fill(248, 248, 248, 18); // Semi-transparent light - match site background
+      p.fill(248, 248, 248, 30); // Faster fade in light mode
     }
     p.rect(0, 0, p.width, p.height);
 
@@ -315,8 +314,8 @@ const heroParticles = (p) => {
       if (bp.life <= 0) {
         burstParticles.splice(i, 1);
       } else {
-        const alpha = p.map(bp.life, 0, bp.maxLife, 0, isDarkMode ? 35 : 50);
-        p.stroke(goldColor.r, goldColor.g, goldColor.b, alpha);
+        const alpha = p.map(bp.life, 0, bp.maxLife, 0, isDarkMode ? 40 : 55);
+        p.stroke(cyanColor.r, cyanColor.g, cyanColor.b, alpha);
         p.strokeWeight(1.5);
         p.point(bp.x, bp.y);
       }
@@ -341,8 +340,8 @@ const heroParticles = (p) => {
       cols = p.floor(width / flowResolution) + 1;
       rows = p.floor(height / flowResolution) + 1;
 
-      // Adjust particle count
-      const targetCount = p.width < 768 ? 1500 : (p.width < 1024 ? 2000 : 3000);
+      // Adjust particle count - fewer for cleaner look
+      const targetCount = p.width < 768 ? 600 : (p.width < 1024 ? 800 : 1200);
 
       if (particles.length > targetCount) {
         particles = particles.slice(0, targetCount);
