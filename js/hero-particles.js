@@ -298,14 +298,12 @@ const heroParticles = (p) => {
 
     const isDarkMode = document.documentElement.getAttribute('data-theme') !== 'light';
 
-    // Fade background for trails
-    p.noStroke();
+    // Clear background (no trails)
     if (isDarkMode) {
-      p.fill(0, 0, 0, 30);
+      p.background(0);
     } else {
-      p.fill(248, 248, 248, 35);
+      p.background(248);
     }
-    p.rect(0, 0, p.width, p.height);
 
     // Check mouse position
     isMouseInHero = p.mouseX >= 0 && p.mouseX <= p.width &&
