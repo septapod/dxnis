@@ -1682,18 +1682,25 @@ a:focus, button:focus {
   opacity: 0.8;
 }
 
-.newsletter-form {
-  margin-top: var(--space-2);
+.newsletter-cta {
+  margin-top: var(--space-4);
 }
 
-.newsletter-form iframe {
-  width: 100%;
-  max-width: 400px;
-  height: 60px;
-  border: none;
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
+.btn-newsletter {
+  display: inline-block;
+  padding: var(--space-3) var(--space-6);
+  background: var(--color-accent);
+  color: #000;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.btn-newsletter:hover {
+  background: #d4a800;
+  transform: translateY(-1px);
 }
 
 /* Light mode newsletter styles */
@@ -1710,13 +1717,9 @@ a:focus, button:focus {
   color: var(--color-accent);
 }
 
-/* Ensure forms stay visible on theme toggle */
-[data-theme="light"] .newsletter-form iframe,
-[data-theme="dark"] .newsletter-form iframe,
-.newsletter-form iframe {
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
+[data-theme="light"] .btn-newsletter {
+  background: var(--color-accent);
+  color: #000;
 }
 
 /* Newsletter responsive */
