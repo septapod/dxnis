@@ -1602,7 +1602,7 @@ a:focus, button:focus {
 }
 
 .newsletter-logo {
-  height: 48px;
+  height: 80px;
   width: auto;
   transition: opacity 0.2s ease;
 }
