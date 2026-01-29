@@ -45,7 +45,7 @@ const heroParticles = (p) => {
       this.noiseOffset = p.random(1000);
 
       // Cell properties
-      this.baseRadius = p.random(0.8, 2);
+      this.baseRadius = p.random(1.2, 2.8);
       this.maxSpeed = p.random(1.5, 3);
       this.life = p.random(300, 600);
       this.age = 0;
@@ -163,7 +163,7 @@ const heroParticles = (p) => {
       const color = isDarkMode ? cyanColor : darkCyan;
 
       // Base alpha with age fade
-      let baseAlpha = isDarkMode ? 70 : 90;
+      let baseAlpha = isDarkMode ? 95 : 110;
       const fadeIn = 30;
       const fadeOut = 60;
 
@@ -175,12 +175,12 @@ const heroParticles = (p) => {
 
       // Breathing effect
       const breathe = p.sin(p.frameCount * this.breatheSpeed + this.breatheOffset);
-      const pulseScale = 1 + breathe * 0.2;
+      const pulseScale = 1 + breathe * 0.25;
 
       const radius = this.baseRadius * pulseScale;
-      const alignmentBoost = 1 + this.alignment * 0.4;
+      const alignmentBoost = 1 + this.alignment * 0.5;
       const finalRadius = radius * alignmentBoost;
-      const finalAlpha = Math.min(baseAlpha * (1 + this.alignment * 0.4), isDarkMode ? 110 : 130);
+      const finalAlpha = Math.min(baseAlpha * (1 + this.alignment * 0.5), isDarkMode ? 145 : 160);
 
       // Single circle with slight glow from blend mode
       p.noStroke();
