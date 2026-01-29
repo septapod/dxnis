@@ -236,6 +236,9 @@
 
   <!-- Stylesheet -->
   <link rel="stylesheet" href="css/styles.css">
+
+  <!-- p5.js Library for Interactive Hero Background -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
 </head>
 
 <body>
@@ -274,6 +277,8 @@
 
   <!-- Hero Section -->
   <section id="home" class="hero" aria-labelledby="hero-heading">
+    <!-- Interactive Particle Canvas Background -->
+    <div id="hero-canvas-container" aria-hidden="true"></div>
     <div class="grid-12">
       <div class="hero-content">
         <h1 id="hero-heading">Strategic Facilitation</h1>
@@ -662,6 +667,7 @@
 
 <!-- JavaScript -->
 <script src="js/main.js"></script>
+<script src="js/hero-particles.js"></script>
 
 </body>
 </html>

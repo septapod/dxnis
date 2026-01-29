@@ -594,6 +594,39 @@ a:focus, button:focus {
   overflow: hidden;
 }
 
+/* Hero Particle Canvas Container */
+#hero-canvas-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+#hero-canvas-container canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Ensure hero grid content sits above canvas but allows pointer events to pass through */
+.hero .grid-12 {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Re-enable pointer events for interactive elements within hero */
+.hero .hero-content {
+  pointer-events: auto;
+}
+
+.hero .hero-content a,
+.hero .hero-content button {
+  pointer-events: auto;
+}
+
 .hero::before {
   content: '';
   position: absolute;
