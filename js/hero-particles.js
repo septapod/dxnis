@@ -76,7 +76,7 @@ const heroParticles = (p) => {
       const dy = my - this.y;
       const distSq = dx * dx + dy * dy;
       const influenceRadius = 600;
-      const orbitRadius = 85;
+      const orbitRadius = 120;
 
       if (distSq < influenceRadius * influenceRadius && distSq > 4) {
         const dist = p.sqrt(distSq);
@@ -89,17 +89,17 @@ const heroParticles = (p) => {
         const tangentX = -radialY;
         const tangentY = radialX;
 
-        // Attraction strength
+        // Attraction strength - softer for organic feel
         let attractionStrength;
         if (dist > orbitRadius) {
-          const pullIntensity = Math.pow(1 - (dist - orbitRadius) / (influenceRadius - orbitRadius), 2);
-          attractionStrength = 0.6 * pullIntensity;
+          const pullIntensity = Math.pow(1 - (dist - orbitRadius) / (influenceRadius - orbitRadius), 1.5);
+          attractionStrength = 0.35 * pullIntensity;
         } else {
-          attractionStrength = -0.3 * (1 - dist / orbitRadius);
+          attractionStrength = -0.15 * (1 - dist / orbitRadius);
         }
 
-        // Orbit strength
-        const orbitStrength = 0.45 * falloff;
+        // Orbit strength - gentler for organic flow
+        const orbitStrength = 0.3 * falloff;
 
         this.applyForce(
           radialX * attractionStrength + tangentX * orbitStrength,
