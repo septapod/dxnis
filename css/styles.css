@@ -1698,15 +1698,15 @@ a:focus, button:focus {
   padding: 14px var(--space-4);
   font-size: 1rem;
   line-height: 1.2;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--color-text);
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
   box-sizing: border-box;
 }
 
 .newsletter-input-group input[type="email"]::placeholder {
-  color: var(--color-muted);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .newsletter-input-group input[type="email"]:focus {
