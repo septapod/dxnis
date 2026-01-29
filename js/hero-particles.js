@@ -23,9 +23,9 @@ const heroParticles = (p) => {
   let lastMouseY = 0;
   let mouseVelocity = 0;
 
-  // Sleek cyan accent - futuristic aesthetic
-  const cyanColor = { r: 0, g: 200, b: 255 }; // Bright cyan for dark mode
-  const darkCyan = { r: 0, g: 120, b: 150 }; // Darker teal for light mode visibility
+  // Sleek cyan accent - futuristic aesthetic with strong contrast
+  const cyanColor = { r: 0, g: 220, b: 255 }; // Bright cyan for dark mode
+  const darkCyan = { r: 0, g: 80, b: 110 }; // Much darker teal for light mode contrast
 
   // Flow field settings
   const flowResolution = 20;
@@ -47,9 +47,9 @@ const heroParticles = (p) => {
       this.prevY = this.y;
       this.vx = 0;
       this.vy = 0;
-      this.baseMaxSpeed = p.random(2.5, 4.5); // Faster, more uniform
+      this.baseMaxSpeed = p.random(3, 4); // Uniform speed for sleek look
       this.maxSpeed = this.baseMaxSpeed;
-      this.life = p.random(80, 180); // Shorter lifespan for crisper trails
+      this.life = p.random(60, 120); // Short lifespan for clean trails
       this.age = 0;
       this.influenced = 0;
     }
@@ -63,13 +63,13 @@ const heroParticles = (p) => {
       const safeCol = p.constrain(col, 0, cols - 1);
       const safeRow = p.constrain(row, 0, rows - 1);
 
-      // Sample noise for flow direction - larger scale = smoother, more geometric flow
-      const xoff = safeCol * 0.04; // Lower frequency for straighter paths
-      const yoff = safeRow * 0.04;
-      const angle = p.noise(xoff, yoff, zoff) * p.TWO_PI * 1.5; // Less angular variation
+      // Very smooth noise for sleek, sweeping curves
+      const xoff = safeCol * 0.025;
+      const yoff = safeRow * 0.025;
+      const angle = p.noise(xoff, yoff, zoff) * p.TWO_PI * 1.2;
 
-      // Apply flow force - stronger for more decisive movement
-      const flowForce = 0.4;
+      // Strong, decisive flow
+      const flowForce = 0.5;
       this.vx += p.cos(angle) * flowForce;
       this.vy += p.sin(angle) * flowForce;
     }
@@ -180,11 +180,11 @@ const heroParticles = (p) => {
     show(isDarkMode) {
       const color = isDarkMode ? cyanColor : darkCyan;
 
-      // Calculate alpha based on age (fade in and out)
-      const baseMaxAlpha = isDarkMode ? 25 : 50; // Higher alpha for visibility with fewer particles
+      // Calculate alpha - higher for better contrast
+      const baseMaxAlpha = isDarkMode ? 40 : 70;
       let alpha;
-      const fadeIn = 10; // Quick fade in
-      const fadeOut = 30; // Quick fade out
+      const fadeIn = 8;
+      const fadeOut = 25;
 
       if (this.age < fadeIn) {
         alpha = p.map(this.age, 0, fadeIn, 0, baseMaxAlpha);
@@ -194,15 +194,15 @@ const heroParticles = (p) => {
         alpha = baseMaxAlpha;
       }
 
-      // Subtle brightness boost when influenced by cursor
-      const influenceBoost = 1 + this.influenced * 1.5;
-      alpha = Math.min(alpha * influenceBoost, isDarkMode ? 60 : 90);
+      // Brightness boost when influenced by cursor
+      const influenceBoost = 1 + this.influenced * 1.8;
+      alpha = Math.min(alpha * influenceBoost, isDarkMode ? 90 : 130);
 
-      // Thin, sleek strokes
-      const baseWeight = isDarkMode ? 0.8 : 1;
-      const weight = baseWeight + this.influenced * 0.4;
+      // Sleek, uniform strokes
+      const baseWeight = 1;
+      const weight = baseWeight + this.influenced * 0.3;
 
-      // Draw trail line from previous to current position
+      // Draw clean line from previous to current position
       p.stroke(color.r, color.g, color.b, alpha);
       p.strokeWeight(weight);
       p.line(this.prevX, this.prevY, this.x, this.y);
