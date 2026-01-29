@@ -45,7 +45,7 @@ const heroParticles = (p) => {
       this.noiseOffset = p.random(1000);
 
       // Cell properties
-      this.baseRadius = p.random(1.2, 2.8);
+      this.baseRadius = p.random(0.8, 2);
       this.maxSpeed = p.random(1.5, 3);
       this.life = p.random(300, 600);
       this.age = 0;
@@ -212,11 +212,11 @@ const heroParticles = (p) => {
 
     // Adjust cell count based on screen size
     if (p.width < 768) {
-      cellCount = 250;
+      cellCount = 350;
     } else if (p.width < 1024) {
-      cellCount = 400;
+      cellCount = 550;
     } else {
-      cellCount = 600;
+      cellCount = 850;
     }
 
     // If reduced motion, use minimal particles
