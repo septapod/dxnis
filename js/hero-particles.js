@@ -46,7 +46,7 @@ const heroParticles = (p) => {
       this.noiseOffsetSize = p.random(1000);
 
       // Cell properties
-      this.baseRadius = p.random(1, 3);
+      this.baseRadius = p.random(0.5, 1.8);
       this.maxSpeed = p.random(1, 2);
       this.life = p.random(300, 600);
       this.age = 0;
@@ -212,8 +212,8 @@ const heroParticles = (p) => {
     show(isDarkMode) {
       const color = isDarkMode ? cyanColor : darkCyan;
 
-      // Base alpha with age fade
-      let baseAlpha = isDarkMode ? 120 : 150;
+      // Base alpha with age fade (subtle for readability)
+      let baseAlpha = isDarkMode ? 60 : 80;
       const fadeIn = 30;
       const fadeOut = 60;
 
@@ -236,7 +236,7 @@ const heroParticles = (p) => {
       // Aligned cells are slightly larger and brighter
       const alignmentBoost = 1 + this.alignment * 0.5;
       const finalRadius = radius * alignmentBoost;
-      const finalAlpha = Math.min(baseAlpha * (1 + this.alignment * 0.5), isDarkMode ? 200 : 220);
+      const finalAlpha = Math.min(baseAlpha * (1 + this.alignment * 0.5), isDarkMode ? 100 : 120);
 
       // Draw cell membrane (outer ring)
       p.noFill();
