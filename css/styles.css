@@ -16,6 +16,7 @@
   --space-4: 32px;   /* 8 * 4 */
   --space-6: 48px;   /* 8 * 6 */
   --space-8: 64px;   /* 8 * 8 */
+  --space-10: 80px;  /* 8 * 10 */
   --space-12: 96px;  /* 8 * 12 */
   --space-16: 128px; /* 8 * 16 */
 
@@ -594,11 +595,11 @@ a:focus, button:focus {
 
 /* Hero Section - 12-Column Grid */
 .hero {
-  min-height: 100vh;
+  min-height: 60vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(var(--space-12), 15vh, var(--space-16)) 0;
+  padding: var(--space-8) 0;
   position: relative;
   overflow: hidden;
 }
@@ -663,7 +664,7 @@ a:focus, button:focus {
 
 /* Section Spacing */
 .section {
-  padding: var(--space-16) 0;
+  padding: var(--space-10) 0;
   opacity: 0;
   transform: translateY(30px);
   transition: opacity var(--transition-smooth), transform var(--transition-smooth);
@@ -1024,7 +1025,7 @@ a:focus, button:focus {
 
 .clients-section {
   background: #000000;
-  padding: var(--space-12) 0; /* 96px top/bottom */
+  padding: var(--space-8) 0; /* 64px top/bottom - tightened */
   overflow: hidden;
   position: relative;
   transition: background-color 0.3s ease;
@@ -1414,7 +1415,7 @@ a:focus, button:focus {
 
 .photo-hero-split {
   display: flex;
-  min-height: 600px;
+  min-height: 450px;
 }
 
 .photo-hero-image {
