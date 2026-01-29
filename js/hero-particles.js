@@ -64,7 +64,7 @@ const heroParticles = (p) => {
       const dy = my - this.y;
       const distSq = dx * dx + dy * dy;
       const influenceRadius = 400;
-      const orbitRadius = 80; // Particles orbit at this distance from cursor
+      const orbitRadius = 35; // Particles orbit at this distance from cursor
       const influenceRadiusSq = influenceRadius * influenceRadius;
 
       if (distSq < influenceRadiusSq && distSq > 25) {
@@ -86,11 +86,11 @@ const heroParticles = (p) => {
         // Pull in when far, push out when too close
         let attractionStrength;
         if (dist > orbitRadius) {
-          // Outside orbit radius - attract inward
-          attractionStrength = 0.03 * falloff;
+          // Outside orbit radius - attract inward more strongly
+          attractionStrength = 0.08 * falloff;
         } else {
           // Inside orbit radius - push outward gently
-          attractionStrength = -0.02 * (1 - dist / orbitRadius);
+          attractionStrength = -0.03 * (1 - dist / orbitRadius);
         }
 
         // Tangential (orbit) strength - creates the swirl
