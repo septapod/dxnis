@@ -60,17 +60,7 @@
 
 /* Light Mode Specific Overrides */
 [data-theme="light"] .hero::after {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.93) 0%, rgba(250, 250, 250, 0.88) 100%);
-}
-
-[data-theme="light"] .hero h1 {
-  color: #0A0A0A;
-  text-shadow: 0 2px 8px rgba(255, 255, 255, 0.8);
-}
-
-[data-theme="light"] .hero p {
-  color: #2A2A2A;
-  text-shadow: 0 1px 4px rgba(255, 255, 255, 0.8);
+  background: radial-gradient(circle, rgba(184, 149, 0, 0.06) 0%, transparent 70%);
 }
 
 [data-theme="light"] .site-header {
@@ -611,22 +601,20 @@ a:focus, button:focus {
   left: 0;
   width: 100%;
   height: 100%;
-  background: url('../assets/_heroholder.jpg');
-  background-size: cover;
-  background-position: center;
-  opacity: 1;
+  background: var(--color-bg);
   pointer-events: none;
-  z-index: -1;
+  z-index: -2;
 }
 
 .hero::after {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.6) 100%);
+  top: 50%;
+  left: 30%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(251, 226, 72, 0.08) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
   pointer-events: none;
   z-index: -1;
 }
@@ -637,8 +625,7 @@ a:focus, button:focus {
 }
 
 .hero h1 {
-  color: #FFFFFF;
-  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.6);
+  color: var(--color-text);
   margin-bottom: var(--space-4);
 }
 
@@ -648,8 +635,7 @@ a:focus, button:focus {
 }
 
 .hero p {
-  color: rgba(255, 255, 255, 0.95);
-  text-shadow: 0 3px 12px rgba(0, 0, 0, 0.8), 0 1px 4px rgba(0, 0, 0, 0.6);
+  color: var(--color-muted);
   font-size: clamp(1.125rem, 2vw, 1.5rem);
   font-weight: 500;
   line-height: 1.6;
