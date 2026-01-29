@@ -1,22 +1,34 @@
 /**
- * Interactive Hero Background with p5.js
- * Concept: Alignment emerging from chaos - particles flowing organically,
- * then subtly aligning toward mouse/touch interaction.
+ * Dense Flowing Particle Background with p5.js
  *
- * Visual metaphor: bringing order to complexity through attention/focus
+ * Visual: Thousands of particles flowing through a Perlin noise field,
+ * creating organic, galaxy-like streams with luminous accumulation.
+ *
+ * Interaction: Mouse creates vortex attractor - particles spiral toward cursor,
+ * creating bright concentration rings.
  */
 
 const heroParticles = (p) => {
   let particles = [];
-  let particleCount = 150;
+  let flowField;
+  let particleCount = 3000;
   let canvas;
   let heroSection;
   let canvasContainer;
+  let isMouseInHero = false;
 
   // Brand colors
-  const goldColor = [251, 226, 72]; // #FBE248
-  const darkAmber = [180, 140, 40]; // Darker for light mode
+  const goldColor = { r: 251, g: 226, b: 72 }; // #FBE248
+  const darkAmber = { r: 180, g: 140, b: 40 }; // Darker for light mode
 
+  // Flow field settings
+  const flowResolution = 20;
+  let cols, rows;
+  let zoff = 0;
+
+  // ============================================
+  // PARTICLE CLASS
+  // ============================================
   class Particle {
     constructor() {
       this.reset();
@@ -25,92 +37,140 @@ const heroParticles = (p) => {
     reset() {
       this.x = p.random(p.width);
       this.y = p.random(p.height);
-      this.noiseOffsetX = p.random(1000);
-      this.noiseOffsetY = p.random(1000);
-      this.noiseOffsetAngle = p.random(1000);
-      this.noiseOffsetLength = p.random(1000);
-      this.noiseOffsetOpacity = p.random(1000);
-      this.baseAngle = p.random(p.TWO_PI);
-      this.length = p.random(8, 20);
-      this.opacity = p.random(0.1, 0.3);
+      this.prevX = this.x;
+      this.prevY = this.y;
+      this.vx = 0;
+      this.vy = 0;
+      this.maxSpeed = p.random(1, 3);
+      this.life = p.random(100, 300);
+      this.age = 0;
+    }
+
+    follow() {
+      // Get flow angle at current position from noise field
+      const col = p.floor(this.x / flowResolution);
+      const row = p.floor(this.y / flowResolution);
+
+      // Clamp to bounds
+      const safeCol = p.constrain(col, 0, cols - 1);
+      const safeRow = p.constrain(row, 0, rows - 1);
+
+      // Sample noise for flow direction
+      const xoff = safeCol * 0.1;
+      const yoff = safeRow * 0.1;
+      const angle = p.noise(xoff, yoff, zoff) * p.TWO_PI * 2;
+
+      // Apply flow force
+      const flowForce = 0.3;
+      this.vx += p.cos(angle) * flowForce;
+      this.vy += p.sin(angle) * flowForce;
+    }
+
+    applyAttractor(mx, my) {
+      // Calculate vector toward mouse
+      const dx = mx - this.x;
+      const dy = my - this.y;
+      const distSq = dx * dx + dy * dy;
+      const influenceRadius = 250;
+      const influenceRadiusSq = influenceRadius * influenceRadius;
+
+      if (distSq < influenceRadiusSq && distSq > 100) {
+        const dist = p.sqrt(distSq);
+
+        // Attractor strength - stronger closer to center
+        const strength = p.map(dist, 0, influenceRadius, 2.5, 0);
+
+        // Add perpendicular component for spiral/vortex effect
+        const perpX = -dy / dist;
+        const perpY = dx / dist;
+        const spiralStrength = 0.8;
+
+        // Combine attraction and spiral
+        this.vx += (dx / dist) * strength * 0.5 + perpX * spiralStrength;
+        this.vy += (dy / dist) * strength * 0.5 + perpY * spiralStrength;
+      }
     }
 
     update() {
-      // Noise-driven movement
-      const noiseScale = 0.002;
-      const noiseStrength = 0.5;
+      // Store previous position for trail drawing
+      this.prevX = this.x;
+      this.prevY = this.y;
 
-      // Update position with noise
-      this.x += p.map(p.noise(this.noiseOffsetX), 0, 1, -noiseStrength, noiseStrength);
-      this.y += p.map(p.noise(this.noiseOffsetY), 0, 1, -noiseStrength, noiseStrength);
-
-      // Update noise offsets
-      this.noiseOffsetX += 0.005;
-      this.noiseOffsetY += 0.005;
-      this.noiseOffsetAngle += 0.01;
-      this.noiseOffsetLength += 0.005;
-      this.noiseOffsetOpacity += 0.003;
-
-      // Base angle from noise field
-      this.baseAngle = p.noise(this.x * noiseScale, this.y * noiseScale, this.noiseOffsetAngle) * p.TWO_PI * 2;
-
-      // Vary length and opacity with noise
-      this.length = p.map(p.noise(this.noiseOffsetLength), 0, 1, 8, 20);
-      this.opacity = p.map(p.noise(this.noiseOffsetOpacity), 0, 1, 0.1, 0.3);
-
-      // Wrap around edges
-      if (this.x < -20) this.x = p.width + 20;
-      if (this.x > p.width + 20) this.x = -20;
-      if (this.y < -20) this.y = p.height + 20;
-      if (this.y > p.height + 20) this.y = -20;
-    }
-
-    getAngle(mouseX, mouseY, isInteracting) {
-      if (!isInteracting) {
-        return this.baseAngle;
+      // Limit velocity
+      const speed = p.sqrt(this.vx * this.vx + this.vy * this.vy);
+      if (speed > this.maxSpeed) {
+        this.vx = (this.vx / speed) * this.maxSpeed;
+        this.vy = (this.vy / speed) * this.maxSpeed;
       }
 
-      // Calculate distance to mouse/touch
-      const dx = mouseX - this.x;
-      const dy = mouseY - this.y;
-      const distance = p.sqrt(dx * dx + dy * dy);
+      // Apply velocity
+      this.x += this.vx;
+      this.y += this.vy;
 
-      // Influence radius - particles within this range align
-      const influenceRadius = 200;
+      // Apply friction
+      this.vx *= 0.98;
+      this.vy *= 0.98;
 
-      if (distance < influenceRadius) {
-        // Angle toward mouse
-        const targetAngle = p.atan2(dy, dx);
+      // Age particle
+      this.age++;
 
-        // Influence strength (stronger closer to cursor)
-        const influence = p.map(distance, 0, influenceRadius, 1, 0);
-        const easedInfluence = influence * influence; // Ease out
-
-        // Lerp between base angle and target angle
-        return p.lerp(this.baseAngle, targetAngle, easedInfluence * 0.8);
-      }
-
-      return this.baseAngle;
+      // Wrap around edges or reset if too old
+      this.edges();
     }
 
-    draw(mouseX, mouseY, isInteracting, isDarkMode) {
-      const angle = this.getAngle(mouseX, mouseY, isInteracting);
+    edges() {
+      // Wrap horizontally
+      if (this.x < 0) {
+        this.x = p.width;
+        this.prevX = this.x;
+      }
+      if (this.x > p.width) {
+        this.x = 0;
+        this.prevX = this.x;
+      }
 
-      // Calculate line endpoints
-      const halfLength = this.length / 2;
-      const x1 = this.x - p.cos(angle) * halfLength;
-      const y1 = this.y - p.sin(angle) * halfLength;
-      const x2 = this.x + p.cos(angle) * halfLength;
-      const y2 = this.y + p.sin(angle) * halfLength;
+      // Wrap vertically
+      if (this.y < 0) {
+        this.y = p.height;
+        this.prevY = this.y;
+      }
+      if (this.y > p.height) {
+        this.y = 0;
+        this.prevY = this.y;
+      }
 
-      // Set color based on theme
+      // Reset if too old
+      if (this.age > this.life) {
+        this.reset();
+      }
+    }
+
+    show(isDarkMode) {
       const color = isDarkMode ? goldColor : darkAmber;
-      p.stroke(color[0], color[1], color[2], this.opacity * 255);
-      p.strokeWeight(1.5);
-      p.line(x1, y1, x2, y2);
+
+      // Calculate alpha based on age (fade in and out)
+      let alpha;
+      const fadeIn = 20;
+      const fadeOut = 50;
+
+      if (this.age < fadeIn) {
+        alpha = p.map(this.age, 0, fadeIn, 0, 12);
+      } else if (this.age > this.life - fadeOut) {
+        alpha = p.map(this.age, this.life - fadeOut, this.life, 12, 0);
+      } else {
+        alpha = 12;
+      }
+
+      // Draw trail line from previous to current position
+      p.stroke(color.r, color.g, color.b, alpha);
+      p.strokeWeight(1);
+      p.line(this.prevX, this.prevY, this.x, this.y);
     }
   }
 
+  // ============================================
+  // P5.JS SETUP
+  // ============================================
   p.setup = () => {
     heroSection = document.getElementById('home');
     canvasContainer = document.getElementById('hero-canvas-container');
@@ -126,11 +186,17 @@ const heroParticles = (p) => {
     canvas = p.createCanvas(width, height);
     canvas.parent('hero-canvas-container');
 
-    // Reduce particle count on mobile for performance
+    // Calculate flow field dimensions
+    cols = p.floor(width / flowResolution) + 1;
+    rows = p.floor(height / flowResolution) + 1;
+
+    // Adjust particle count based on screen size
     if (p.width < 768) {
-      particleCount = 80;
+      particleCount = 1500;
     } else if (p.width < 1024) {
-      particleCount = 120;
+      particleCount = 2000;
+    } else {
+      particleCount = 3000;
     }
 
     // Initialize particles
@@ -138,38 +204,73 @@ const heroParticles = (p) => {
       particles.push(new Particle());
     }
 
-    // Set frame rate for performance (30fps is sufficient for subtle animation)
-    p.frameRate(30);
+    // Set initial background
+    p.background(0);
   };
 
+  // ============================================
+  // P5.JS DRAW LOOP
+  // ============================================
   p.draw = () => {
     if (!heroSection) return;
 
-    // Check dark mode from document attribute
+    // Check dark mode
     const isDarkMode = document.documentElement.getAttribute('data-theme') !== 'light';
 
-    // Clear canvas (transparent background)
-    p.clear();
+    // Fade background instead of clearing (creates trails)
+    p.noStroke();
+    if (isDarkMode) {
+      p.fill(0, 0, 0, 20); // Semi-transparent black
+    } else {
+      p.fill(250, 250, 250, 25); // Semi-transparent light gray
+    }
+    p.rect(0, 0, p.width, p.height);
 
-    // Check if mouse is over the hero section
-    const isInteracting = p.mouseX >= 0 && p.mouseX <= p.width &&
-                          p.mouseY >= 0 && p.mouseY <= p.height;
+    // Update flow field time offset (slowly evolving patterns)
+    zoff += 0.002;
 
-    // Update and draw particles
+    // Check if mouse is in hero section
+    isMouseInHero = p.mouseX >= 0 && p.mouseX <= p.width &&
+                    p.mouseY >= 0 && p.mouseY <= p.height;
+
+    // Set blend mode for additive brightness (dark mode only)
+    if (isDarkMode) {
+      p.blendMode(p.ADD);
+    }
+
+    // Update and draw all particles
     for (let particle of particles) {
+      particle.follow();
+
+      if (isMouseInHero) {
+        particle.applyAttractor(p.mouseX, p.mouseY);
+      }
+
       particle.update();
-      particle.draw(p.mouseX, p.mouseY, isInteracting, isDarkMode);
+      particle.show(isDarkMode);
+    }
+
+    // Reset blend mode
+    if (isDarkMode) {
+      p.blendMode(p.BLEND);
     }
   };
 
+  // ============================================
+  // WINDOW RESIZE
+  // ============================================
   p.windowResized = () => {
     if (heroSection && canvasContainer) {
       const width = heroSection.offsetWidth || window.innerWidth;
       const height = heroSection.offsetHeight || window.innerHeight;
       p.resizeCanvas(width, height);
 
-      // Adjust particle count on resize
-      const targetCount = p.width < 768 ? 80 : (p.width < 1024 ? 120 : 150);
+      // Recalculate flow field dimensions
+      cols = p.floor(width / flowResolution) + 1;
+      rows = p.floor(height / flowResolution) + 1;
+
+      // Adjust particle count
+      const targetCount = p.width < 768 ? 1500 : (p.width < 1024 ? 2000 : 3000);
 
       if (particles.length > targetCount) {
         particles = particles.slice(0, targetCount);
@@ -178,20 +279,32 @@ const heroParticles = (p) => {
           particles.push(new Particle());
         }
       }
+
+      // Reset background
+      const isDarkMode = document.documentElement.getAttribute('data-theme') !== 'light';
+      if (isDarkMode) {
+        p.background(0);
+      } else {
+        p.background(250);
+      }
     }
   };
 
-  // Touch support - p5.js maps touch to mouseX/mouseY automatically
+  // ============================================
+  // TOUCH SUPPORT
+  // ============================================
   p.touchStarted = () => {
-    return true; // Prevent default to allow page scroll
+    return true; // Allow page scroll
   };
 
   p.touchMoved = () => {
-    return true; // Prevent default to allow page scroll
+    return true; // Allow page scroll
   };
 };
 
-// Initialize when DOM is ready
+// ============================================
+// INITIALIZE ON DOM READY
+// ============================================
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('hero-canvas-container');
   if (container) {
