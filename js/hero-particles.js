@@ -14,7 +14,7 @@
 
 const heroParticles = (p) => {
   let cells = [];
-  let cellCount = 800;
+  let cellCount = 1200;
   let canvas;
   let heroSection;
   let canvasContainer;
@@ -47,7 +47,7 @@ const heroParticles = (p) => {
 
       // Cell properties
       this.baseRadius = p.random(0.5, 1.8);
-      this.maxSpeed = p.random(1, 2);
+      this.maxSpeed = p.random(1.5, 3);
       this.life = p.random(300, 600);
       this.age = 0;
 
@@ -116,13 +116,15 @@ const heroParticles = (p) => {
       const dx = mx - this.x;
       const dy = my - this.y;
       const distSq = dx * dx + dy * dy;
-      const influenceRadius = 500;
-      const orbitRadius = 100;
+      const influenceRadius = 600;
+      const orbitRadius = 50;
 
-      if (distSq < influenceRadius * influenceRadius && distSq > 9) {
+      if (distSq < influenceRadius * influenceRadius && distSq > 4) {
         const dist = p.sqrt(distSq);
         const normalizedDist = dist / influenceRadius;
-        const falloff = Math.pow(1 - normalizedDist, 1.5);
+
+        // Stronger falloff curve - much more concentrated near cursor
+        const falloff = Math.pow(1 - normalizedDist, 2.5);
 
         // Radial direction (toward mouse)
         const radialX = dx / dist;
@@ -132,18 +134,19 @@ const heroParticles = (p) => {
         const tangentX = -radialY;
         const tangentY = radialX;
 
-        // Gentle attraction toward the orbit radius
+        // Strong, immediate attraction
         let attractionStrength;
         if (dist > orbitRadius) {
-          // Outside orbit - gentle pull inward
-          attractionStrength = 0.12 * falloff;
+          // Outside orbit - strong pull inward, stronger when closer
+          const pullIntensity = Math.pow(1 - (dist - orbitRadius) / (influenceRadius - orbitRadius), 1.5);
+          attractionStrength = 0.4 * pullIntensity;
         } else {
           // Inside orbit - gentle push outward
-          attractionStrength = -0.08 * (1 - dist / orbitRadius);
+          attractionStrength = -0.1 * (1 - dist / orbitRadius);
         }
 
-        // Graceful orbit - not too fast
-        const orbitStrength = 0.12 * falloff;
+        // Strong orbit for satisfying spin
+        const orbitStrength = 0.25 * falloff;
 
         // Apply combined force
         this.applyForce(
@@ -151,9 +154,9 @@ const heroParticles = (p) => {
           radialY * attractionStrength + tangentY * orbitStrength
         );
 
-        this.alignment = p.lerp(this.alignment, falloff, 0.15);
+        this.alignment = p.lerp(this.alignment, falloff, 0.2);
       } else {
-        this.alignment = p.lerp(this.alignment, 0, 0.02);
+        this.alignment = p.lerp(this.alignment, 0, 0.03);
       }
     }
 
@@ -172,7 +175,7 @@ const heroParticles = (p) => {
 
       // Limit speed
       const speed = p.sqrt(this.vx * this.vx + this.vy * this.vy);
-      const currentMaxSpeed = this.maxSpeed + this.alignment * 1.5;
+      const currentMaxSpeed = this.maxSpeed + this.alignment * 2.5;
       if (speed > currentMaxSpeed) {
         this.vx = (this.vx / speed) * currentMaxSpeed;
         this.vy = (this.vy / speed) * currentMaxSpeed;
@@ -275,11 +278,11 @@ const heroParticles = (p) => {
 
     // Adjust cell count based on screen size
     if (p.width < 768) {
-      cellCount = 300;
+      cellCount = 400;
     } else if (p.width < 1024) {
-      cellCount = 500;
+      cellCount = 700;
     } else {
-      cellCount = 800;
+      cellCount = 1200;
     }
 
     // Initialize cells
@@ -334,7 +337,7 @@ const heroParticles = (p) => {
       const height = heroSection.offsetHeight || window.innerHeight;
       p.resizeCanvas(width, height);
 
-      const targetCount = p.width < 768 ? 300 : (p.width < 1024 ? 500 : 800);
+      const targetCount = p.width < 768 ? 400 : (p.width < 1024 ? 700 : 1200);
 
       if (cells.length > targetCount) {
         cells = cells.slice(0, targetCount);
