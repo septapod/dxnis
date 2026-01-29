@@ -58,37 +58,58 @@ const heroParticles = (p) => {
       }
     }
 
-    // Aligned movement - flow toward mouse
+    // Aligned movement - orbit around mouse
     moveAligned(mx, my) {
       const dx = mx - this.x;
       const dy = my - this.y;
       const distSq = dx * dx + dy * dy;
       const influenceRadius = 400;
+      const orbitRadius = 80; // Particles orbit at this distance from cursor
       const influenceRadiusSq = influenceRadius * influenceRadius;
 
-      if (distSq < influenceRadiusSq && distSq > 100) {
+      if (distSq < influenceRadiusSq && distSq > 25) {
         const dist = p.sqrt(distSq);
         const normalizedDist = dist / influenceRadius;
 
-        // Smooth falloff - stronger alignment closer to cursor
+        // Smooth falloff - stronger effect closer to cursor
         const falloff = Math.pow(1 - normalizedDist, 1.5);
 
-        // Direction toward mouse
-        const dirX = dx / dist;
-        const dirY = dy / dist;
+        // Direction toward mouse (radial)
+        const radialX = dx / dist;
+        const radialY = dy / dist;
 
-        // Alignment force - particles steer toward cursor
-        const alignStrength = 0.08 * falloff;
+        // Perpendicular direction (tangential) - creates orbit
+        const tangentX = -radialY;
+        const tangentY = radialX;
+
+        // Attraction strength varies with distance
+        // Pull in when far, push out when too close
+        let attractionStrength;
+        if (dist > orbitRadius) {
+          // Outside orbit radius - attract inward
+          attractionStrength = 0.03 * falloff;
+        } else {
+          // Inside orbit radius - push outward gently
+          attractionStrength = -0.02 * (1 - dist / orbitRadius);
+        }
+
+        // Tangential (orbit) strength - creates the swirl
+        const orbitStrength = 0.06 * falloff;
+
+        // Combined target velocity: orbit + gentle attraction
+        const targetVx = tangentX * this.baseMaxSpeed * 2 + radialX * this.baseMaxSpeed * attractionStrength * 10;
+        const targetVy = tangentY * this.baseMaxSpeed * 2 + radialY * this.baseMaxSpeed * attractionStrength * 10;
 
         // Gradually steer toward target direction
-        this.vx = p.lerp(this.vx, dirX * this.baseMaxSpeed * 1.5, alignStrength);
-        this.vy = p.lerp(this.vy, dirY * this.baseMaxSpeed * 1.5, alignStrength);
+        const steerStrength = 0.05 * falloff;
+        this.vx = p.lerp(this.vx, targetVx, steerStrength);
+        this.vy = p.lerp(this.vy, targetVy, steerStrength);
 
         // Track alignment level for visual feedback
         this.alignment = p.lerp(this.alignment, falloff, 0.1);
 
         // Speed boost when aligned
-        this.maxSpeed = p.lerp(this.baseMaxSpeed, this.baseMaxSpeed * 2, this.alignment);
+        this.maxSpeed = p.lerp(this.baseMaxSpeed, this.baseMaxSpeed * 2.5, this.alignment);
       } else {
         // Outside influence - stay chaotic but slowly decay alignment
         this.moveChaoticly();
