@@ -79,7 +79,7 @@ const heroParticles = (p) => {
       const dx = mx - this.x;
       const dy = my - this.y;
       const distSq = dx * dx + dy * dy;
-      const influenceRadius = 350; // Larger influence area
+      const influenceRadius = 280; // Medium influence area
       const influenceRadiusSq = influenceRadius * influenceRadius;
 
       if (distSq < influenceRadiusSq && distSq > 25) {
@@ -93,30 +93,30 @@ const heroParticles = (p) => {
         const perpX = -dirY;
         const perpY = dirX;
 
-        // Distance-based strength with smooth falloff (exponential feels better)
+        // Distance-based strength with smooth falloff
         const normalizedDist = dist / influenceRadius;
         const falloff = Math.pow(1 - normalizedDist, 2); // Quadratic falloff
 
-        // Dynamic strength based on mouse movement
-        const baseAttraction = 1.5;
-        const baseSpin = 2.0;
-        const speedBoost = 1 + mouseSpeed * 0.3; // Faster mouse = stronger effect
+        // Moderate strength - noticeable but not overwhelming
+        const baseAttraction = 0.8;
+        const baseSpin = 1.2;
+        const speedBoost = 1 + mouseSpeed * 0.15; // Subtle speed influence
 
         // Attraction pulls toward center
         const attractStrength = baseAttraction * falloff * speedBoost;
 
-        // Spin creates orbital motion (stronger further out for stable orbits)
-        const spinStrength = baseSpin * falloff * (0.5 + normalizedDist * 0.5);
+        // Spin creates orbital motion
+        const spinStrength = baseSpin * falloff * (0.4 + normalizedDist * 0.4);
 
         // Apply forces
         this.vx += dirX * attractStrength + perpX * spinStrength;
         this.vy += dirY * attractStrength + perpY * spinStrength;
 
-        // Boost max speed when near cursor for snappier response
-        this.maxSpeed = p.map(dist, 0, influenceRadius, 5, this.baseMaxSpeed);
+        // Slight speed boost near cursor
+        this.maxSpeed = p.map(dist, 0, influenceRadius, 4, this.baseMaxSpeed);
 
-        // Mark as influenced (for brightness boost)
-        this.influenced = falloff;
+        // Mark as influenced (for subtle brightness boost)
+        this.influenced = falloff * 0.6; // Reduced influence marker
       } else {
         this.influenced = 0;
         this.maxSpeed = this.baseMaxSpeed;
@@ -181,8 +181,7 @@ const heroParticles = (p) => {
       const color = isDarkMode ? goldColor : darkAmber;
 
       // Calculate alpha based on age (fade in and out)
-      // Higher alpha for light mode (no additive blending help)
-      const baseMaxAlpha = isDarkMode ? 18 : 40;
+      const baseMaxAlpha = isDarkMode ? 16 : 38;
       let alpha;
       const fadeIn = 20;
       const fadeOut = 50;
@@ -195,13 +194,13 @@ const heroParticles = (p) => {
         alpha = baseMaxAlpha;
       }
 
-      // Brightness boost when influenced by cursor
-      const influenceBoost = 1 + this.influenced * 2.5; // Up to 3.5x brighter
-      alpha = Math.min(alpha * influenceBoost, isDarkMode ? 80 : 120);
+      // Subtle brightness boost when influenced by cursor
+      const influenceBoost = 1 + this.influenced * 1.2; // Up to 1.7x brighter (subtle)
+      alpha = Math.min(alpha * influenceBoost, isDarkMode ? 45 : 70);
 
-      // Stroke weight boost near cursor
+      // Subtle stroke weight boost near cursor
       const baseWeight = isDarkMode ? 1 : 1.5;
-      const weight = baseWeight + this.influenced * 1.5;
+      const weight = baseWeight + this.influenced * 0.5;
 
       // Draw trail line from previous to current position
       p.stroke(color.r, color.g, color.b, alpha);
@@ -304,21 +303,21 @@ const heroParticles = (p) => {
       particle.show(isDarkMode);
     }
 
-    // Update and draw burst particles
+    // Update and draw burst particles (subtle)
     for (let i = burstParticles.length - 1; i >= 0; i--) {
       const bp = burstParticles[i];
       bp.x += bp.vx;
       bp.y += bp.vy;
-      bp.vx *= 0.96;
-      bp.vy *= 0.96;
+      bp.vx *= 0.94;
+      bp.vy *= 0.94;
       bp.life--;
 
       if (bp.life <= 0) {
         burstParticles.splice(i, 1);
       } else {
-        const alpha = p.map(bp.life, 0, bp.maxLife, 0, isDarkMode ? 60 : 80);
+        const alpha = p.map(bp.life, 0, bp.maxLife, 0, isDarkMode ? 35 : 50);
         p.stroke(goldColor.r, goldColor.g, goldColor.b, alpha);
-        p.strokeWeight(2);
+        p.strokeWeight(1.5);
         p.point(bp.x, bp.y);
       }
     }
@@ -364,36 +363,36 @@ const heroParticles = (p) => {
   };
 
   // ============================================
-  // CLICK BURST EFFECT
+  // CLICK BURST EFFECT (subtle)
   // ============================================
   p.mousePressed = () => {
     if (!isMouseInHero) return;
 
-    // Create burst of particles from click point
-    const burstCount = 40;
+    // Create subtle burst of particles from click point
+    const burstCount = 20;
     for (let i = 0; i < burstCount; i++) {
       const angle = p.random(p.TWO_PI);
-      const speed = p.random(3, 12);
+      const speed = p.random(2, 6);
       burstParticles.push({
         x: p.mouseX,
         y: p.mouseY,
         vx: p.cos(angle) * speed,
         vy: p.sin(angle) * speed,
-        life: p.random(30, 60),
-        maxLife: 60
+        life: p.random(20, 40),
+        maxLife: 40
       });
     }
 
-    // Also give nearby particles a velocity boost outward
+    // Gentle push to nearby particles
     for (let particle of particles) {
       const dx = particle.x - p.mouseX;
       const dy = particle.y - p.mouseY;
       const distSq = dx * dx + dy * dy;
-      const burstRadius = 150;
+      const burstRadius = 120;
 
       if (distSq < burstRadius * burstRadius && distSq > 0) {
         const dist = p.sqrt(distSq);
-        const force = p.map(dist, 0, burstRadius, 8, 0);
+        const force = p.map(dist, 0, burstRadius, 3, 0);
         particle.vx += (dx / dist) * force;
         particle.vy += (dy / dist) * force;
       }
@@ -404,22 +403,22 @@ const heroParticles = (p) => {
   // TOUCH SUPPORT
   // ============================================
   p.touchStarted = () => {
-    // Trigger burst on touch
+    // Trigger subtle burst on touch
     if (p.touches.length > 0) {
       const touch = p.touches[0];
       if (touch.x >= 0 && touch.x <= p.width && touch.y >= 0 && touch.y <= p.height) {
-        // Create burst at touch point
-        const burstCount = 30;
+        // Create subtle burst at touch point
+        const burstCount = 15;
         for (let i = 0; i < burstCount; i++) {
           const angle = p.random(p.TWO_PI);
-          const speed = p.random(3, 10);
+          const speed = p.random(2, 5);
           burstParticles.push({
             x: touch.x,
             y: touch.y,
             vx: p.cos(angle) * speed,
             vy: p.sin(angle) * speed,
-            life: p.random(25, 50),
-            maxLife: 50
+            life: p.random(20, 35),
+            maxLife: 35
           });
         }
       }
