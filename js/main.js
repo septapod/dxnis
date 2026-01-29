@@ -643,3 +643,14 @@ if (servicesSection) {
     });
   }
 })();
+
+// Newsletter form handler
+const newsletterForm = document.getElementById('newsletterForm');
+if (newsletterForm) {
+  newsletterForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('newsletter-email').value;
+    // Open Beehiiv subscribe page with email pre-filled
+    window.open(`https://ai4fis.beehiiv.com/subscribe?email=${encodeURIComponent(email)}`, '_blank');
+  });
+}
