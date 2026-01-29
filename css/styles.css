@@ -672,9 +672,17 @@ a:focus, button:focus {
   font-size: clamp(1.125rem, 2vw, 1.5rem);
   font-weight: 500;
   line-height: 1.6;
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-3);
   margin-left: 0;
   margin-right: 0;
+}
+
+.hero-subline {
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  font-weight: 400;
+  font-style: italic;
+  opacity: 0.8;
+  margin-bottom: var(--space-6);
 }
 
 .hero p strong {
