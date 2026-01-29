@@ -8,8 +8,8 @@
  * Optimizations:
  * - Removed O(n²) separation check
  * - Single circle per particle
- * - Reduced particle count
  * - Respects prefers-reduced-motion
+ * - Adaptive quality: auto-reduces particles if FPS drops below 28
  */
 
 const heroParticles = (p) => {
@@ -20,6 +20,16 @@ const heroParticles = (p) => {
   let canvasContainer;
   let isMouseInHero = false;
   let prefersReducedMotion = false;
+
+  // Adaptive quality settings
+  let targetCellCount = 600;
+  let lastFrameTime = 0;
+  let fpsHistory = [];
+  const FPS_SAMPLE_SIZE = 30;
+  const FPS_THRESHOLD_LOW = 28;
+  const FPS_CHECK_INTERVAL = 60; // Check every 60 frames
+  let framesSinceCheck = 0;
+  let qualityReduced = false;
 
   // Colors
   const cyanColor = { r: 0, g: 220, b: 255 };
@@ -190,6 +200,41 @@ const heroParticles = (p) => {
   }
 
   // ============================================
+  // ADAPTIVE QUALITY SYSTEM
+  // ============================================
+  function checkAdaptiveQuality() {
+    const currentTime = performance.now();
+
+    if (lastFrameTime > 0) {
+      const deltaTime = currentTime - lastFrameTime;
+      const currentFps = 1000 / deltaTime;
+
+      fpsHistory.push(currentFps);
+      if (fpsHistory.length > FPS_SAMPLE_SIZE) {
+        fpsHistory.shift();
+      }
+    }
+    lastFrameTime = currentTime;
+
+    framesSinceCheck++;
+
+    // Only evaluate quality periodically
+    if (framesSinceCheck >= FPS_CHECK_INTERVAL && fpsHistory.length >= FPS_SAMPLE_SIZE) {
+      framesSinceCheck = 0;
+
+      const avgFps = fpsHistory.reduce((a, b) => a + b, 0) / fpsHistory.length;
+
+      // If FPS is consistently low, reduce particles
+      if (avgFps < FPS_THRESHOLD_LOW && !qualityReduced) {
+        const reduceBy = Math.floor(cells.length * 0.3);
+        cells.splice(0, reduceBy);
+        qualityReduced = true;
+        console.log(`Adaptive quality: Reduced to ${cells.length} particles (avg FPS: ${avgFps.toFixed(1)})`);
+      }
+    }
+  }
+
+  // ============================================
   // P5.JS SETUP
   // ============================================
   p.setup = () => {
@@ -224,6 +269,9 @@ const heroParticles = (p) => {
       cellCount = Math.floor(cellCount * 0.3);
     }
 
+    // Store target for adaptive quality reference
+    targetCellCount = cellCount;
+
     // Initialize cells
     for (let i = 0; i < cellCount; i++) {
       cells.push(new Cell());
@@ -242,6 +290,9 @@ const heroParticles = (p) => {
     if (prefersReducedMotion && p.frameCount % 3 !== 0) {
       return;
     }
+
+    // Monitor performance and adapt quality
+    checkAdaptiveQuality();
 
     const isDarkMode = document.documentElement.getAttribute('data-theme') !== 'light';
 
