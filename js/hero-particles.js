@@ -1,36 +1,27 @@
 /**
- * Dense Flowing Particle Background with p5.js
+ * Chaos to Alignment Particle Animation
  *
- * Visual: Thousands of particles flowing through a Perlin noise field,
- * creating organic, galaxy-like streams with luminous accumulation.
- *
- * Interaction: Mouse creates vortex attractor - particles spiral toward cursor,
- * creating bright concentration rings.
+ * Concept: Particles represent "diverse perspectives" - chaotic when idle,
+ * but aligning and flowing toward the cursor when the mouse is present.
+ * Visual metaphor for "bringing people together" and creating alignment.
  */
 
 const heroParticles = (p) => {
   let particles = [];
-  let flowField;
-  let particleCount = 1200; // Fewer particles for cleaner look
+  let particleCount = 1000;
   let canvas;
   let heroSection;
   let canvasContainer;
   let isMouseInHero = false;
 
   // Interaction state
-  let burstParticles = []; // For click burst effect
+  let burstParticles = [];
   let lastMouseX = 0;
   let lastMouseY = 0;
-  let mouseVelocity = 0;
 
-  // Sleek cyan accent - futuristic aesthetic with strong contrast
-  const cyanColor = { r: 0, g: 220, b: 255 }; // Bright cyan for dark mode
-  const darkCyan = { r: 0, g: 80, b: 110 }; // Much darker teal for light mode contrast
-
-  // Flow field settings
-  const flowResolution = 20;
-  let cols, rows;
-  let zoff = 0;
+  // Colors
+  const cyanColor = { r: 0, g: 220, b: 255 };
+  const darkCyan = { r: 0, g: 80, b: 110 };
 
   // ============================================
   // PARTICLE CLASS
@@ -45,88 +36,81 @@ const heroParticles = (p) => {
       this.y = p.random(p.height);
       this.prevX = this.x;
       this.prevY = this.y;
-      this.vx = 0;
-      this.vy = 0;
-      this.baseMaxSpeed = p.random(3, 4); // Uniform speed for sleek look
+      this.vx = p.random(-1, 1);
+      this.vy = p.random(-1, 1);
+      this.baseMaxSpeed = p.random(1.5, 2.5);
       this.maxSpeed = this.baseMaxSpeed;
-      this.life = p.random(60, 120); // Short lifespan for clean trails
+      this.life = p.random(150, 300);
       this.age = 0;
-      this.influenced = 0;
+      this.alignment = 0; // 0 = chaotic, 1 = fully aligned
     }
 
-    follow() {
-      // Get flow angle at current position from noise field
-      const col = p.floor(this.x / flowResolution);
-      const row = p.floor(this.y / flowResolution);
+    // Chaotic movement - random, conflicting directions
+    moveChaoticly() {
+      // Brownian motion - small random velocity changes
+      this.vx += p.random(-0.15, 0.15);
+      this.vy += p.random(-0.15, 0.15);
 
-      // Clamp to bounds
-      const safeCol = p.constrain(col, 0, cols - 1);
-      const safeRow = p.constrain(row, 0, rows - 1);
-
-      // Very smooth noise for sleek, sweeping curves
-      const xoff = safeCol * 0.025;
-      const yoff = safeRow * 0.025;
-      const angle = p.noise(xoff, yoff, zoff) * p.TWO_PI * 1.2;
-
-      // Strong, decisive flow
-      const flowForce = 0.5;
-      this.vx += p.cos(angle) * flowForce;
-      this.vy += p.sin(angle) * flowForce;
-    }
-
-    applyAttractor(mx, my, mouseSpeed) {
-      // Calculate vector toward mouse
-      const dx = mx - this.x;
-      const dy = my - this.y;
-      const distSq = dx * dx + dy * dy;
-      const influenceRadius = 280; // Medium influence area
-      const influenceRadiusSq = influenceRadius * influenceRadius;
-
-      if (distSq < influenceRadiusSq && distSq > 25) {
-        const dist = p.sqrt(distSq);
-
-        // Normalized direction
-        const dirX = dx / dist;
-        const dirY = dy / dist;
-
-        // Perpendicular for spiral (rotate 90 degrees)
-        const perpX = -dirY;
-        const perpY = dirX;
-
-        // Distance-based strength with smooth falloff
-        const normalizedDist = dist / influenceRadius;
-        const falloff = Math.pow(1 - normalizedDist, 2); // Quadratic falloff
-
-        // Moderate strength - noticeable but not overwhelming
-        const baseAttraction = 0.8;
-        const baseSpin = 1.2;
-        const speedBoost = 1 + mouseSpeed * 0.15; // Subtle speed influence
-
-        // Attraction pulls toward center
-        const attractStrength = baseAttraction * falloff * speedBoost;
-
-        // Spin creates orbital motion
-        const spinStrength = baseSpin * falloff * (0.4 + normalizedDist * 0.4);
-
-        // Apply forces
-        this.vx += dirX * attractStrength + perpX * spinStrength;
-        this.vy += dirY * attractStrength + perpY * spinStrength;
-
-        // Slight speed boost near cursor
-        this.maxSpeed = p.map(dist, 0, influenceRadius, 4, this.baseMaxSpeed);
-
-        // Mark as influenced (for subtle brightness boost)
-        this.influenced = falloff * 0.6; // Reduced influence marker
-      } else {
-        this.influenced = 0;
-        this.maxSpeed = this.baseMaxSpeed;
+      // Occasional larger direction changes for visible chaos
+      if (p.random() < 0.02) {
+        this.vx += p.random(-0.5, 0.5);
+        this.vy += p.random(-0.5, 0.5);
       }
     }
 
-    update() {
-      // Store previous position for trail drawing
+    // Aligned movement - flow toward mouse
+    moveAligned(mx, my) {
+      const dx = mx - this.x;
+      const dy = my - this.y;
+      const distSq = dx * dx + dy * dy;
+      const influenceRadius = 400;
+      const influenceRadiusSq = influenceRadius * influenceRadius;
+
+      if (distSq < influenceRadiusSq && distSq > 100) {
+        const dist = p.sqrt(distSq);
+        const normalizedDist = dist / influenceRadius;
+
+        // Smooth falloff - stronger alignment closer to cursor
+        const falloff = Math.pow(1 - normalizedDist, 1.5);
+
+        // Direction toward mouse
+        const dirX = dx / dist;
+        const dirY = dy / dist;
+
+        // Alignment force - particles steer toward cursor
+        const alignStrength = 0.08 * falloff;
+
+        // Gradually steer toward target direction
+        this.vx = p.lerp(this.vx, dirX * this.baseMaxSpeed * 1.5, alignStrength);
+        this.vy = p.lerp(this.vy, dirY * this.baseMaxSpeed * 1.5, alignStrength);
+
+        // Track alignment level for visual feedback
+        this.alignment = p.lerp(this.alignment, falloff, 0.1);
+
+        // Speed boost when aligned
+        this.maxSpeed = p.lerp(this.baseMaxSpeed, this.baseMaxSpeed * 2, this.alignment);
+      } else {
+        // Outside influence - stay chaotic but slowly decay alignment
+        this.moveChaoticly();
+        this.alignment = p.lerp(this.alignment, 0, 0.02);
+        this.maxSpeed = p.lerp(this.maxSpeed, this.baseMaxSpeed, 0.05);
+      }
+    }
+
+    update(mouseActive, mx, my) {
+      // Store previous position for trail
       this.prevX = this.x;
       this.prevY = this.y;
+
+      // Movement based on state
+      if (mouseActive) {
+        this.moveAligned(mx, my);
+      } else {
+        this.moveChaoticly();
+        // Decay alignment when mouse leaves
+        this.alignment = p.lerp(this.alignment, 0, 0.03);
+        this.maxSpeed = p.lerp(this.maxSpeed, this.baseMaxSpeed, 0.05);
+      }
 
       // Limit velocity
       const speed = p.sqrt(this.vx * this.vx + this.vy * this.vy);
@@ -139,37 +123,23 @@ const heroParticles = (p) => {
       this.x += this.vx;
       this.y += this.vy;
 
-      // Apply friction
-      this.vx *= 0.98;
-      this.vy *= 0.98;
+      // Friction
+      this.vx *= 0.99;
+      this.vy *= 0.99;
 
-      // Age particle
+      // Age
       this.age++;
 
-      // Wrap around edges or reset if too old
+      // Edges
       this.edges();
     }
 
     edges() {
-      // Wrap horizontally
-      if (this.x < 0) {
-        this.x = p.width;
-        this.prevX = this.x;
-      }
-      if (this.x > p.width) {
-        this.x = 0;
-        this.prevX = this.x;
-      }
-
-      // Wrap vertically
-      if (this.y < 0) {
-        this.y = p.height;
-        this.prevY = this.y;
-      }
-      if (this.y > p.height) {
-        this.y = 0;
-        this.prevY = this.y;
-      }
+      // Wrap around
+      if (this.x < -10) { this.x = p.width + 10; this.prevX = this.x; }
+      if (this.x > p.width + 10) { this.x = -10; this.prevX = this.x; }
+      if (this.y < -10) { this.y = p.height + 10; this.prevY = this.y; }
+      if (this.y > p.height + 10) { this.y = -10; this.prevY = this.y; }
 
       // Reset if too old
       if (this.age > this.life) {
@@ -180,29 +150,25 @@ const heroParticles = (p) => {
     show(isDarkMode) {
       const color = isDarkMode ? cyanColor : darkCyan;
 
-      // Calculate alpha - higher for better contrast
-      const baseMaxAlpha = isDarkMode ? 40 : 70;
-      let alpha;
-      const fadeIn = 8;
-      const fadeOut = 25;
+      // Base alpha with age fade
+      let baseAlpha = isDarkMode ? 25 : 45;
+      const fadeIn = 15;
+      const fadeOut = 40;
 
       if (this.age < fadeIn) {
-        alpha = p.map(this.age, 0, fadeIn, 0, baseMaxAlpha);
+        baseAlpha = p.map(this.age, 0, fadeIn, 0, baseAlpha);
       } else if (this.age > this.life - fadeOut) {
-        alpha = p.map(this.age, this.life - fadeOut, this.life, baseMaxAlpha, 0);
-      } else {
-        alpha = baseMaxAlpha;
+        baseAlpha = p.map(this.age, this.life - fadeOut, this.life, baseAlpha, 0);
       }
 
-      // Brightness boost when influenced by cursor
-      const influenceBoost = 1 + this.influenced * 1.8;
-      alpha = Math.min(alpha * influenceBoost, isDarkMode ? 90 : 130);
+      // Aligned particles are brighter and thicker
+      const alignmentBoost = 1 + this.alignment * 2.5;
+      const alpha = Math.min(baseAlpha * alignmentBoost, isDarkMode ? 80 : 120);
 
-      // Sleek, uniform strokes
-      const baseWeight = 1;
-      const weight = baseWeight + this.influenced * 0.3;
+      // Stroke weight varies with alignment
+      const baseWeight = 0.8;
+      const weight = baseWeight + this.alignment * 0.8;
 
-      // Draw clean line from previous to current position
       p.stroke(color.r, color.g, color.b, alpha);
       p.strokeWeight(weight);
       p.line(this.prevX, this.prevY, this.x, this.y);
@@ -227,17 +193,13 @@ const heroParticles = (p) => {
     canvas = p.createCanvas(width, height);
     canvas.parent('hero-canvas-container');
 
-    // Calculate flow field dimensions
-    cols = p.floor(width / flowResolution) + 1;
-    rows = p.floor(height / flowResolution) + 1;
-
-    // Adjust particle count based on screen size - fewer for cleaner look
+    // Adjust particle count based on screen size
     if (p.width < 768) {
-      particleCount = 600;
+      particleCount = 500;
     } else if (p.width < 1024) {
-      particleCount = 800;
+      particleCount = 700;
     } else {
-      particleCount = 1200;
+      particleCount = 1000;
     }
 
     // Initialize particles
@@ -245,7 +207,6 @@ const heroParticles = (p) => {
       particles.push(new Particle());
     }
 
-    // Set initial background
     p.background(0);
   };
 
@@ -255,73 +216,55 @@ const heroParticles = (p) => {
   p.draw = () => {
     if (!heroSection) return;
 
-    // Check dark mode
     const isDarkMode = document.documentElement.getAttribute('data-theme') !== 'light';
 
-    // Fade background - faster fade for cleaner, sleeker look
+    // Fade background
     p.noStroke();
     if (isDarkMode) {
-      p.fill(0, 0, 0, 25); // Faster fade for crisp trails
+      p.fill(0, 0, 0, 20);
     } else {
-      p.fill(248, 248, 248, 30); // Faster fade in light mode
+      p.fill(248, 248, 248, 25);
     }
     p.rect(0, 0, p.width, p.height);
 
-    // Update flow field time offset (slowly evolving patterns)
-    zoff += 0.002;
-
-    // Check if mouse is in hero section
+    // Check mouse position
     isMouseInHero = p.mouseX >= 0 && p.mouseX <= p.width &&
                     p.mouseY >= 0 && p.mouseY <= p.height;
 
-    // Calculate mouse velocity for dynamic interaction
-    const mouseDx = p.mouseX - lastMouseX;
-    const mouseDy = p.mouseY - lastMouseY;
-    const currentMouseSpeed = p.sqrt(mouseDx * mouseDx + mouseDy * mouseDy);
-    mouseVelocity = p.lerp(mouseVelocity, currentMouseSpeed, 0.2); // Smooth it
+    // Track mouse
     lastMouseX = p.mouseX;
     lastMouseY = p.mouseY;
 
-    // Set blend mode for additive brightness (dark mode only)
+    // Blend mode for dark mode
     if (isDarkMode) {
       p.blendMode(p.ADD);
     }
 
-    // Update and draw all particles
+    // Update and draw particles
     for (let particle of particles) {
-      particle.follow();
-
-      if (isMouseInHero) {
-        particle.applyAttractor(p.mouseX, p.mouseY, mouseVelocity);
-      } else {
-        particle.influenced = 0;
-        particle.maxSpeed = particle.baseMaxSpeed;
-      }
-
-      particle.update();
+      particle.update(isMouseInHero, p.mouseX, p.mouseY);
       particle.show(isDarkMode);
     }
 
-    // Update and draw burst particles (subtle)
+    // Burst particles
     for (let i = burstParticles.length - 1; i >= 0; i--) {
       const bp = burstParticles[i];
       bp.x += bp.vx;
       bp.y += bp.vy;
-      bp.vx *= 0.94;
-      bp.vy *= 0.94;
+      bp.vx *= 0.95;
+      bp.vy *= 0.95;
       bp.life--;
 
       if (bp.life <= 0) {
         burstParticles.splice(i, 1);
       } else {
-        const alpha = p.map(bp.life, 0, bp.maxLife, 0, isDarkMode ? 40 : 55);
+        const alpha = p.map(bp.life, 0, bp.maxLife, 0, isDarkMode ? 50 : 70);
         p.stroke(cyanColor.r, cyanColor.g, cyanColor.b, alpha);
         p.strokeWeight(1.5);
         p.point(bp.x, bp.y);
       }
     }
 
-    // Reset blend mode
     if (isDarkMode) {
       p.blendMode(p.BLEND);
     }
@@ -336,12 +279,7 @@ const heroParticles = (p) => {
       const height = heroSection.offsetHeight || window.innerHeight;
       p.resizeCanvas(width, height);
 
-      // Recalculate flow field dimensions
-      cols = p.floor(width / flowResolution) + 1;
-      rows = p.floor(height / flowResolution) + 1;
-
-      // Adjust particle count - fewer for cleaner look
-      const targetCount = p.width < 768 ? 600 : (p.width < 1024 ? 800 : 1200);
+      const targetCount = p.width < 768 ? 500 : (p.width < 1024 ? 700 : 1000);
 
       if (particles.length > targetCount) {
         particles = particles.slice(0, targetCount);
@@ -351,50 +289,30 @@ const heroParticles = (p) => {
         }
       }
 
-      // Reset background
       const isDarkMode = document.documentElement.getAttribute('data-theme') !== 'light';
-      if (isDarkMode) {
-        p.background(0);
-      } else {
-        p.background(250);
-      }
+      p.background(isDarkMode ? 0 : 250);
     }
   };
 
   // ============================================
-  // CLICK BURST EFFECT (subtle)
+  // CLICK EFFECT
   // ============================================
   p.mousePressed = () => {
     if (!isMouseInHero) return;
 
-    // Create subtle burst of particles from click point
-    const burstCount = 20;
+    // Burst effect
+    const burstCount = 25;
     for (let i = 0; i < burstCount; i++) {
       const angle = p.random(p.TWO_PI);
-      const speed = p.random(2, 6);
+      const speed = p.random(2, 5);
       burstParticles.push({
         x: p.mouseX,
         y: p.mouseY,
         vx: p.cos(angle) * speed,
         vy: p.sin(angle) * speed,
-        life: p.random(20, 40),
-        maxLife: 40
+        life: p.random(25, 45),
+        maxLife: 45
       });
-    }
-
-    // Gentle push to nearby particles
-    for (let particle of particles) {
-      const dx = particle.x - p.mouseX;
-      const dy = particle.y - p.mouseY;
-      const distSq = dx * dx + dy * dy;
-      const burstRadius = 120;
-
-      if (distSq < burstRadius * burstRadius && distSq > 0) {
-        const dist = p.sqrt(distSq);
-        const force = p.map(dist, 0, burstRadius, 3, 0);
-        particle.vx += (dx / dist) * force;
-        particle.vy += (dy / dist) * force;
-      }
     }
   };
 
@@ -402,15 +320,13 @@ const heroParticles = (p) => {
   // TOUCH SUPPORT
   // ============================================
   p.touchStarted = () => {
-    // Trigger subtle burst on touch
     if (p.touches.length > 0) {
       const touch = p.touches[0];
       if (touch.x >= 0 && touch.x <= p.width && touch.y >= 0 && touch.y <= p.height) {
-        // Create subtle burst at touch point
-        const burstCount = 15;
+        const burstCount = 20;
         for (let i = 0; i < burstCount; i++) {
           const angle = p.random(p.TWO_PI);
-          const speed = p.random(2, 5);
+          const speed = p.random(2, 4);
           burstParticles.push({
             x: touch.x,
             y: touch.y,
@@ -422,17 +338,15 @@ const heroParticles = (p) => {
         }
       }
     }
-    return true; // Allow page scroll
+    return true;
   };
 
   p.touchMoved = () => {
-    return true; // Allow page scroll
+    return true;
   };
 };
 
-// ============================================
-// INITIALIZE ON DOM READY
-// ============================================
+// Initialize
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('hero-canvas-container');
   if (container) {

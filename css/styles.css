@@ -684,10 +684,16 @@ a:focus, button:focus {
   font-size: clamp(0.8rem, 1vw, 0.9rem);
   font-weight: 400;
   font-style: italic;
-  opacity: 0.65;
+  opacity: 0.9;
   margin-bottom: var(--space-6);
   line-height: 1.8;
   max-width: 600px;
+}
+
+/* Improve readability in light mode */
+[data-theme="light"] .hero-subline {
+  color: var(--color-text);
+  opacity: 0.75;
 }
 
 .hero p strong {
