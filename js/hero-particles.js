@@ -117,7 +117,7 @@ const heroParticles = (p) => {
       const dy = my - this.y;
       const distSq = dx * dx + dy * dy;
       const influenceRadius = 500;
-      const orbitRadius = 30;
+      const orbitRadius = 100;
 
       if (distSq < influenceRadius * influenceRadius && distSq > 9) {
         const dist = p.sqrt(distSq);
@@ -132,18 +132,18 @@ const heroParticles = (p) => {
         const tangentX = -radialY;
         const tangentY = radialX;
 
-        // Strong attraction that pulls cells toward the orbit radius
+        // Gentle attraction toward the orbit radius
         let attractionStrength;
         if (dist > orbitRadius) {
-          // Outside orbit - strong pull inward
-          attractionStrength = 0.25 * falloff;
+          // Outside orbit - gentle pull inward
+          attractionStrength = 0.12 * falloff;
         } else {
-          // Inside orbit - push outward
-          attractionStrength = -0.15 * (1 - dist / orbitRadius);
+          // Inside orbit - gentle push outward
+          attractionStrength = -0.08 * (1 - dist / orbitRadius);
         }
 
-        // Strong orbit strength for tight circling
-        const orbitStrength = 0.2 * falloff;
+        // Graceful orbit - not too fast
+        const orbitStrength = 0.12 * falloff;
 
         // Apply combined force
         this.applyForce(
