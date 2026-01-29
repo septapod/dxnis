@@ -134,19 +134,19 @@ const heroParticles = (p) => {
         const tangentX = -radialY;
         const tangentY = radialX;
 
-        // Strong, immediate attraction
+        // Strong, immediate attraction for high concentration
         let attractionStrength;
         if (dist > orbitRadius) {
           // Outside orbit - strong pull inward, stronger when closer
-          const pullIntensity = Math.pow(1 - (dist - orbitRadius) / (influenceRadius - orbitRadius), 1.5);
-          attractionStrength = 0.4 * pullIntensity;
+          const pullIntensity = Math.pow(1 - (dist - orbitRadius) / (influenceRadius - orbitRadius), 2);
+          attractionStrength = 0.6 * pullIntensity;
         } else {
           // Inside orbit - firm push outward to stay outside ring
           attractionStrength = -0.3 * (1 - dist / orbitRadius);
         }
 
-        // Strong orbit for satisfying spin
-        const orbitStrength = 0.25 * falloff;
+        // Fast, tight orbit spin
+        const orbitStrength = 0.45 * falloff;
 
         // Apply combined force
         this.applyForce(
