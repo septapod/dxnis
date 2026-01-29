@@ -17,9 +17,9 @@ const heroParticles = (p) => {
   let canvasContainer;
   let isMouseInHero = false;
 
-  // Brand colors
-  const goldColor = { r: 251, g: 226, b: 72 }; // #FBE248
-  const darkAmber = { r: 180, g: 140, b: 40 }; // Darker for light mode
+  // Brand colors - optimized for contrast
+  const goldColor = { r: 251, g: 226, b: 72 }; // #FBE248 for dark mode
+  const darkAmber = { r: 120, g: 90, b: 20 }; // Much darker for light mode visibility
 
   // Flow field settings
   const flowResolution = 20;
@@ -149,21 +149,23 @@ const heroParticles = (p) => {
       const color = isDarkMode ? goldColor : darkAmber;
 
       // Calculate alpha based on age (fade in and out)
+      // Higher alpha for light mode (no additive blending help)
+      const maxAlpha = isDarkMode ? 15 : 35;
       let alpha;
       const fadeIn = 20;
       const fadeOut = 50;
 
       if (this.age < fadeIn) {
-        alpha = p.map(this.age, 0, fadeIn, 0, 12);
+        alpha = p.map(this.age, 0, fadeIn, 0, maxAlpha);
       } else if (this.age > this.life - fadeOut) {
-        alpha = p.map(this.age, this.life - fadeOut, this.life, 12, 0);
+        alpha = p.map(this.age, this.life - fadeOut, this.life, maxAlpha, 0);
       } else {
-        alpha = 12;
+        alpha = maxAlpha;
       }
 
       // Draw trail line from previous to current position
       p.stroke(color.r, color.g, color.b, alpha);
-      p.strokeWeight(1);
+      p.strokeWeight(isDarkMode ? 1 : 1.5); // Slightly thicker in light mode
       p.line(this.prevX, this.prevY, this.x, this.y);
     }
   }
@@ -218,11 +220,12 @@ const heroParticles = (p) => {
     const isDarkMode = document.documentElement.getAttribute('data-theme') !== 'light';
 
     // Fade background instead of clearing (creates trails)
+    // Lower alpha = longer trails, higher alpha = faster fade
     p.noStroke();
     if (isDarkMode) {
-      p.fill(0, 0, 0, 20); // Semi-transparent black
+      p.fill(0, 0, 0, 15); // Semi-transparent black - slower fade for longer trails
     } else {
-      p.fill(250, 250, 250, 25); // Semi-transparent light gray
+      p.fill(248, 248, 248, 20); // Semi-transparent light - match site background
     }
     p.rect(0, 0, p.width, p.height);
 
