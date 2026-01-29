@@ -117,7 +117,7 @@ const heroParticles = (p) => {
       const dy = my - this.y;
       const distSq = dx * dx + dy * dy;
       const influenceRadius = 600;
-      const orbitRadius = 50;
+      const orbitRadius = 85;
 
       if (distSq < influenceRadius * influenceRadius && distSq > 4) {
         const dist = p.sqrt(distSq);
@@ -141,8 +141,8 @@ const heroParticles = (p) => {
           const pullIntensity = Math.pow(1 - (dist - orbitRadius) / (influenceRadius - orbitRadius), 1.5);
           attractionStrength = 0.4 * pullIntensity;
         } else {
-          // Inside orbit - gentle push outward
-          attractionStrength = -0.1 * (1 - dist / orbitRadius);
+          // Inside orbit - firm push outward to stay outside ring
+          attractionStrength = -0.3 * (1 - dist / orbitRadius);
         }
 
         // Strong orbit for satisfying spin
