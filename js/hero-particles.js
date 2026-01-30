@@ -8,8 +8,8 @@
  * Optimizations:
  * - Removed O(n²) separation check
  * - Single circle per particle
- * - Reduced particle count
  * - Respects prefers-reduced-motion
+ * - Adaptive quality: auto-reduces particles if FPS drops below 28
  */
 
 const heroParticles = (p) => {
@@ -20,6 +20,16 @@ const heroParticles = (p) => {
   let canvasContainer;
   let isMouseInHero = false;
   let prefersReducedMotion = false;
+
+  // Adaptive quality settings
+  let targetCellCount = 600;
+  let lastFrameTime = 0;
+  let fpsHistory = [];
+  const FPS_SAMPLE_SIZE = 30;
+  const FPS_THRESHOLD_LOW = 28;
+  const FPS_CHECK_INTERVAL = 60; // Check every 60 frames
+  let framesSinceCheck = 0;
+  let qualityReduced = false;
 
   // Colors
   const cyanColor = { r: 0, g: 220, b: 255 };
@@ -163,7 +173,7 @@ const heroParticles = (p) => {
       const color = isDarkMode ? cyanColor : darkCyan;
 
       // Base alpha with age fade
-      let baseAlpha = isDarkMode ? 70 : 90;
+      let baseAlpha = isDarkMode ? 95 : 110;
       const fadeIn = 30;
       const fadeOut = 60;
 
@@ -175,17 +185,52 @@ const heroParticles = (p) => {
 
       // Breathing effect
       const breathe = p.sin(p.frameCount * this.breatheSpeed + this.breatheOffset);
-      const pulseScale = 1 + breathe * 0.2;
+      const pulseScale = 1 + breathe * 0.25;
 
       const radius = this.baseRadius * pulseScale;
-      const alignmentBoost = 1 + this.alignment * 0.4;
+      const alignmentBoost = 1 + this.alignment * 0.5;
       const finalRadius = radius * alignmentBoost;
-      const finalAlpha = Math.min(baseAlpha * (1 + this.alignment * 0.4), isDarkMode ? 110 : 130);
+      const finalAlpha = Math.min(baseAlpha * (1 + this.alignment * 0.5), isDarkMode ? 145 : 160);
 
       // Single circle with slight glow from blend mode
       p.noStroke();
       p.fill(color.r, color.g, color.b, finalAlpha);
       p.circle(this.x, this.y, finalRadius * 2);
+    }
+  }
+
+  // ============================================
+  // ADAPTIVE QUALITY SYSTEM
+  // ============================================
+  function checkAdaptiveQuality() {
+    const currentTime = performance.now();
+
+    if (lastFrameTime > 0) {
+      const deltaTime = currentTime - lastFrameTime;
+      const currentFps = 1000 / deltaTime;
+
+      fpsHistory.push(currentFps);
+      if (fpsHistory.length > FPS_SAMPLE_SIZE) {
+        fpsHistory.shift();
+      }
+    }
+    lastFrameTime = currentTime;
+
+    framesSinceCheck++;
+
+    // Only evaluate quality periodically
+    if (framesSinceCheck >= FPS_CHECK_INTERVAL && fpsHistory.length >= FPS_SAMPLE_SIZE) {
+      framesSinceCheck = 0;
+
+      const avgFps = fpsHistory.reduce((a, b) => a + b, 0) / fpsHistory.length;
+
+      // If FPS is consistently low, reduce particles
+      if (avgFps < FPS_THRESHOLD_LOW && !qualityReduced) {
+        const reduceBy = Math.floor(cells.length * 0.3);
+        cells.splice(0, reduceBy);
+        qualityReduced = true;
+        console.log(`Adaptive quality: Reduced to ${cells.length} particles (avg FPS: ${avgFps.toFixed(1)})`);
+      }
     }
   }
 
@@ -212,17 +257,20 @@ const heroParticles = (p) => {
 
     // Adjust cell count based on screen size
     if (p.width < 768) {
-      cellCount = 250;
+      cellCount = 350;
     } else if (p.width < 1024) {
-      cellCount = 400;
+      cellCount = 550;
     } else {
-      cellCount = 600;
+      cellCount = 850;
     }
 
     // If reduced motion, use minimal particles
     if (prefersReducedMotion) {
       cellCount = Math.floor(cellCount * 0.3);
     }
+
+    // Store target for adaptive quality reference
+    targetCellCount = cellCount;
 
     // Initialize cells
     for (let i = 0; i < cellCount; i++) {
@@ -242,6 +290,9 @@ const heroParticles = (p) => {
     if (prefersReducedMotion && p.frameCount % 3 !== 0) {
       return;
     }
+
+    // Monitor performance and adapt quality
+    checkAdaptiveQuality();
 
     const isDarkMode = document.documentElement.getAttribute('data-theme') !== 'light';
 
