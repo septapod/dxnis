@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Follow Me Home</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <!-- Fonts (same as main site) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@500;700&family=Karla:wght@300;400&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #000;
+      color: #fff;
+      font-family: 'Karla', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      text-align: center;
+      padding: 48px 24px;
+      max-width: 480px;
+    }
+
+    .artist {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #B8B8B8;
+      margin-bottom: 12px;
+    }
+
+    .title {
+      font-family: 'Lora', Georgia, serif;
+      font-weight: 400;
+      font-style: italic;
+      font-size: 2rem;
+      line-height: 1.3;
+      color: #FBE248;
+      margin-bottom: 8px;
+    }
+
+    .demo-tag {
+      font-family: 'Karla', sans-serif;
+      font-weight: 300;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #5a5a5a;
+      margin-bottom: 48px;
+    }
+
+    audio {
+      width: 100%;
+      max-width: 400px;
+      outline: none;
+      border-radius: 40px;
+    }
+
+    /* Style the native player for dark backgrounds */
+    audio::-webkit-media-controls-panel {
+      background: #1A1A1A;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <p class="artist">Aunt Linda</p>
+    <h1 class="title">Follow Me Home</h1>
+    <p class="demo-tag">Demo</p>
+    <audio controls preload="metadata">
+      <source src="../assets/aunt-linda-follow-me-home-demo.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+  </div>
+</body>
+</html>
