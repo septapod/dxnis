@@ -646,6 +646,23 @@ if (servicesSection) {
   }
 })();
 
+// Fetch latest newsletter post
+(function() {
+  const link = document.getElementById('newsletter-latest-link');
+  const titleEl = document.getElementById('newsletter-latest-title');
+  if (!link || !titleEl) return;
+
+  fetch('/api/latest-post')
+    .then(res => res.ok ? res.json() : Promise.reject())
+    .then(data => {
+      if (data.title && data.url) {
+        titleEl.textContent = data.title;
+        link.href = data.url;
+      }
+    })
+    .catch(() => {}); // Silently fall back to default text
+})();
+
 // Newsletter form handler
 const newsletterForm = document.getElementById('newsletterForm');
 if (newsletterForm) {
