@@ -393,7 +393,7 @@ if (servicesSection) {
   // 'fin' = Financial Institutions (Credit Unions, Banks, CDFIs)
   // 'soc' = Social Impact (Nonprofits, Foundations, Civic, Government, Humanitarian)
   const logos = [
-    // Financial Institutions (23)
+    // Financial Institutions (25)
     { src: 'assets/clients/cues_logo.png', alt: 'CUES', sector: 'fin' },
     { src: 'assets/clients/ncuf_logo.png', alt: 'National Credit Union Foundation', sector: 'fin' },
     { src: 'assets/clients/filene_logo.png', alt: 'Filene Research Institute', sector: 'fin' },
@@ -417,6 +417,8 @@ if (servicesSection) {
     { src: 'assets/clients/lendgistics_logo.png', alt: 'Lendgistics', sector: 'fin' },
     { src: 'assets/clients/secunm_logo.png', alt: 'Sandia Laboratory Federal Credit Union', sector: 'fin' },
     { src: 'assets/clients/vantagewestcu_logo.png', alt: 'Vantage West Credit Union', sector: 'fin' },
+    { src: 'assets/clients/true_logo.png', alt: 'TRUE Community Credit Union', sector: 'fin' },
+    { src: 'assets/clients/brewerycu_logo.png', alt: 'Brewery Credit Union', sector: 'fin' },
 
     // Social Impact Organizations (11)
     { src: 'assets/clients/un_logo.png', alt: 'United Nations', sector: 'soc' },
