@@ -5,6 +5,14 @@ Personal/consulting website at dxn.is. Static site (vanilla HTML/CSS/JS) with p5
 
 ## Recent Changes
 
+### Particle Orbit Tuning + Trail Fix (2026-02-23)
+Two improvements to the cursor orbit interaction, deployed to production:
+
+- **Tighter orbit**: `orbitRadius` 160 → 110, attraction 0.35 → 0.65, orbit strength 0.3 → 0.65. Particles rush to cursor faster and spin noticeably quicker.
+- **Dot trail fix**: `maxSpeed` range tightened to 1.5-3.0 (was 2.2-5.0), alignment speed bonus cut from 2.5 to 0.5. Fast particles were moving more pixels per frame than their diameter, creating visible dot gaps. Fixed.
+
+All changes in `js/hero-particles.js`. Deployed to production (f5413c9).
+
 ### Hero Particle Animation Overhaul (2026-02-19)
 Transformed the particle animation from "swarm of insects" to "flowing energy/currents":
 
