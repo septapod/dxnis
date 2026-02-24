@@ -2,8 +2,8 @@
  * Organic Cell Particle Animation (Performance Optimized)
  *
  * Particles represent diverse perspectives as living cells.
- * They wander using Perlin noise, breathe/pulse organically,
- * and attract toward the cursor in a flowing orbit.
+ * They follow a shared flow field for coherent streaming motion,
+ * leave fading trails, and attract toward the cursor in a flowing orbit.
  *
  * Optimizations:
  * - Removed O(n²) separation check
@@ -14,15 +14,25 @@
 
 const heroParticles = (p) => {
   let cells = [];
-  let cellCount = 600;
+  let cellCount = 500;
   let canvas;
   let heroSection;
   let canvasContainer;
   let isMouseInHero = false;
   let prefersReducedMotion = false;
 
+  // Firefly flash chance — set in setup() based on device
+  let flashChance = 0.002;
+
+  // Flash timing constants
+  const FLASH_RISE = 8;
+  const FLASH_HOLD = 4;
+  const FLASH_FALL = 24;
+  const FLASH_COOLDOWN_MIN = 45;
+  const FLASH_COOLDOWN_MAX = 180;
+
   // Adaptive quality settings
-  let targetCellCount = 600;
+  let targetCellCount = 500;
   let lastFrameTime = 0;
   let fpsHistory = [];
   const FPS_SAMPLE_SIZE = 30;
@@ -46,26 +56,35 @@ const heroParticles = (p) => {
     reset() {
       this.x = p.random(p.width);
       this.y = p.random(p.height);
-      this.vx = p.random(-0.5, 0.5);
-      this.vy = p.random(-0.5, 0.5);
+      this.vx = p.random(-0.3, 0.3);
+      this.vy = p.random(-0.3, 0.3);
       this.ax = 0;
       this.ay = 0;
 
-      // Perlin noise offset - unique to each cell
-      this.noiseOffset = p.random(1000);
-
       // Cell properties
-      this.baseRadius = p.random(0.8, 2);
-      this.maxSpeed = p.random(1.5, 3);
+      this.baseRadius = p.random(1.2, 2);
+      this.maxSpeed = p.random(1.5, 3.0);
       this.life = p.random(300, 600);
       this.age = 0;
 
-      // Breathing phase offset
-      this.breatheOffset = p.random(p.TWO_PI);
-      this.breatheSpeed = p.random(0.02, 0.04);
+      // Firefly glow state machine
+      this.glowState = 'idle';
+      this.glowTimer = 0;
+      this.glowIntensity = 0;
+      this.flashPeak = 1.0;
+      this.flashCooldown = Math.floor(Math.random() * FLASH_COOLDOWN_MAX);
 
       // Alignment tracking
       this.alignment = 0;
+
+      // Per-particle brightness variation — 70% dim-to-mid, 30% noticeably bright
+      this.baseBrightness = Math.random() < 0.7
+        ? p.random(0.55, 0.75)
+        : p.random(0.75, 1.0);
+
+      // Per-particle noise seeds — large range so particles sample independent noise regions
+      this.noiseOffsetX = p.random(1000);
+      this.noiseOffsetY = p.random(1000);
     }
 
     applyForce(fx, fy) {
@@ -73,11 +92,11 @@ const heroParticles = (p) => {
       this.ay += fy;
     }
 
-    // Perlin noise wandering
+    // Per-particle wandering — each particle walks through its own region of noise space
     wander() {
-      const angle = p.noise(this.noiseOffset) * p.TWO_PI * 2;
-      this.applyForce(p.cos(angle) * 0.12, p.sin(angle) * 0.12);
-      this.noiseOffset += 0.008;
+      const timeShift = p.frameCount * 0.003;
+      const angle = p.noise(this.noiseOffsetX + timeShift, this.noiseOffsetY + timeShift) * p.TWO_PI * 2;
+      this.applyForce(p.cos(angle) * 0.14, p.sin(angle) * 0.14);
     }
 
     // Attraction to mouse with orbital tendency
@@ -86,7 +105,7 @@ const heroParticles = (p) => {
       const dy = my - this.y;
       const distSq = dx * dx + dy * dy;
       const influenceRadius = 600;
-      const orbitRadius = 120;
+      const orbitRadius = 110;
 
       if (distSq < influenceRadius * influenceRadius && distSq > 4) {
         const dist = p.sqrt(distSq);
@@ -103,13 +122,13 @@ const heroParticles = (p) => {
         let attractionStrength;
         if (dist > orbitRadius) {
           const pullIntensity = Math.pow(1 - (dist - orbitRadius) / (influenceRadius - orbitRadius), 1.5);
-          attractionStrength = 0.35 * pullIntensity;
+          attractionStrength = 0.65 * pullIntensity;
         } else {
-          attractionStrength = -0.15 * (1 - dist / orbitRadius);
+          attractionStrength = -0.28 * (1 - dist / orbitRadius);
         }
 
         // Orbit strength - gentler for organic flow
-        const orbitStrength = 0.3 * falloff;
+        const orbitStrength = 0.65 * falloff;
 
         this.applyForce(
           radialX * attractionStrength + tangentX * orbitStrength,
@@ -122,7 +141,45 @@ const heroParticles = (p) => {
       }
     }
 
+    updateGlow() {
+      if (this.glowState === 'idle') {
+        if (this.flashCooldown > 0) {
+          this.flashCooldown--;
+        } else if (Math.random() < flashChance) {
+          this.glowState = 'rising';
+          this.glowTimer = FLASH_RISE;
+          this.glowIntensity = 0;
+          this.flashPeak = Math.random() < 0.6 ? 1.0 : 0.55;
+        }
+      } else if (this.glowState === 'rising') {
+        this.glowTimer--;
+        this.glowIntensity = (1 - this.glowTimer / FLASH_RISE) * this.flashPeak;
+        if (this.glowTimer <= 0) {
+          this.glowState = 'hold';
+          this.glowTimer = FLASH_HOLD;
+          this.glowIntensity = this.flashPeak;
+        }
+      } else if (this.glowState === 'hold') {
+        this.glowTimer--;
+        if (this.glowTimer <= 0) {
+          this.glowState = 'falling';
+          this.glowTimer = FLASH_FALL;
+        }
+      } else if (this.glowState === 'falling') {
+        this.glowTimer--;
+        this.glowIntensity = (this.glowTimer / FLASH_FALL) * this.flashPeak;
+        if (this.glowTimer <= 0) {
+          this.glowState = 'idle';
+          this.glowIntensity = 0;
+          this.flashCooldown = Math.floor(
+            FLASH_COOLDOWN_MIN + Math.random() * (FLASH_COOLDOWN_MAX - FLASH_COOLDOWN_MIN)
+          );
+        }
+      }
+    }
+
     update(mouseActive, mx, my) {
+      this.updateGlow();
       this.wander();
 
       if (mouseActive) {
@@ -135,7 +192,7 @@ const heroParticles = (p) => {
 
       // Limit speed
       const speed = p.sqrt(this.vx * this.vx + this.vy * this.vy);
-      const currentMaxSpeed = this.maxSpeed + this.alignment * 2.5;
+      const currentMaxSpeed = this.maxSpeed + this.alignment * 0.5;
       if (speed > currentMaxSpeed) {
         this.vx = (this.vx / speed) * currentMaxSpeed;
         this.vy = (this.vy / speed) * currentMaxSpeed;
@@ -146,8 +203,8 @@ const heroParticles = (p) => {
       this.y += this.vy;
 
       // Friction
-      this.vx *= 0.98;
-      this.vy *= 0.98;
+      this.vx *= 0.97;
+      this.vy *= 0.97;
 
       // Reset acceleration
       this.ax = 0;
@@ -183,14 +240,17 @@ const heroParticles = (p) => {
         baseAlpha = p.map(this.age, this.life - fadeOut, this.life, baseAlpha, 0);
       }
 
-      // Breathing effect
-      const breathe = p.sin(p.frameCount * this.breatheSpeed + this.breatheOffset);
-      const pulseScale = 1 + breathe * 0.25;
+      // Firefly glow — ambient presence always visible, flashes pop on top
+      const IDLE_ALPHA_SCALE = 1.2;
+      const FLASH_ALPHA_SCALE = 3.5;
+      const FLASH_RADIUS_SCALE = 1.8;
 
-      const radius = this.baseRadius * pulseScale;
-      const alignmentBoost = 1 + this.alignment * 0.5;
-      const finalRadius = radius * alignmentBoost;
-      const finalAlpha = Math.min(baseAlpha * (1 + this.alignment * 0.5), isDarkMode ? 145 : 160);
+      const idleAlpha = IDLE_ALPHA_SCALE * this.baseBrightness;
+      const alphaScale = idleAlpha + (FLASH_ALPHA_SCALE - idleAlpha) * this.glowIntensity;
+      const radiusScale = 1 + (FLASH_RADIUS_SCALE - 1) * this.glowIntensity;
+
+      const finalAlpha = baseAlpha * alphaScale;
+      const finalRadius = (this.baseRadius * radiusScale) * (1 + this.alignment * 0.5);
 
       // Single circle with slight glow from blend mode
       p.noStroke();
@@ -257,11 +317,14 @@ const heroParticles = (p) => {
 
     // Adjust cell count based on screen size
     if (p.width < 768) {
-      cellCount = 350;
+      cellCount = 200;
+      flashChance = 0.012;
     } else if (p.width < 1024) {
-      cellCount = 550;
+      cellCount = 350;
+      flashChance = 0.009;
     } else {
-      cellCount = 850;
+      cellCount = 500;
+      flashChance = 0.006;
     }
 
     // If reduced motion, use minimal particles
@@ -296,7 +359,8 @@ const heroParticles = (p) => {
 
     const isDarkMode = document.documentElement.getAttribute('data-theme') !== 'light';
 
-    // Clear background
+    // Clear canvas each frame — no motion trails
+    p.blendMode(p.BLEND);
     if (isDarkMode) {
       p.background(0);
     } else {
@@ -332,7 +396,7 @@ const heroParticles = (p) => {
       const height = heroSection.offsetHeight || window.innerHeight;
       p.resizeCanvas(width, height);
 
-      let targetCount = p.width < 768 ? 250 : (p.width < 1024 ? 400 : 600);
+      let targetCount = p.width < 768 ? 150 : (p.width < 1024 ? 250 : 400);
       if (prefersReducedMotion) {
         targetCount = Math.floor(targetCount * 0.3);
       }
@@ -346,7 +410,7 @@ const heroParticles = (p) => {
       }
 
       const isDarkMode = document.documentElement.getAttribute('data-theme') !== 'light';
-      p.background(isDarkMode ? 0 : 250);
+      p.background(isDarkMode ? 0 : 248);
     }
   };
 
@@ -364,7 +428,7 @@ const heroParticles = (p) => {
 
       if (distSq < burstRadius * burstRadius && distSq > 0) {
         const dist = p.sqrt(distSq);
-        const force = (1 - dist / burstRadius) * 3;
+        const force = (1 - dist / burstRadius) * 2;
         cell.vx += (dx / dist) * force;
         cell.vy += (dy / dist) * force;
       }
@@ -386,7 +450,7 @@ const heroParticles = (p) => {
 
           if (distSq < burstRadius * burstRadius && distSq > 0) {
             const dist = p.sqrt(distSq);
-            const force = (1 - dist / burstRadius) * 2.5;
+            const force = (1 - dist / burstRadius) * 2;
             cell.vx += (dx / dist) * force;
             cell.vy += (dy / dist) * force;
           }
