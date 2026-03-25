@@ -294,9 +294,9 @@ if (servicesSection) {
     });
   });
 
-  // Pause auto-rotation on hover
-  carousel.addEventListener('mouseenter', stopAutoRotate);
-  carousel.addEventListener('mouseleave', startAutoRotate);
+  // Pause auto-rotation on hover (arrow functions ensure reassigned startAutoRotate is called)
+  carousel.addEventListener('mouseenter', () => stopAutoRotate());
+  carousel.addEventListener('mouseleave', () => startAutoRotate());
 
   // Touch/swipe support for mobile
   let touchStartX = 0;
@@ -514,6 +514,7 @@ if (servicesSection) {
     { src: 'assets/clients/true_logo.png', alt: 'TRUE Community Credit Union', sector: 'fin' },
     { src: 'assets/clients/brewerycu_logo.png', alt: 'Brewery Credit Union', sector: 'fin' },
     { src: 'assets/clients/mcul_logo.png', alt: 'Michigan Credit Union League', sector: 'fin' },
+    { src: 'assets/clients/statenational_logo.png', alt: 'State National Companies', sector: 'fin' },
 
     // Social Impact Organizations (11)
     { src: 'assets/clients/un_logo.png', alt: 'United Nations', sector: 'soc' },
@@ -766,6 +767,8 @@ if (servicesSection) {
 
   let calendlyLoaded = false;
   let calendlyLoading = false;
+  let calendlyFailed = false;
+  const CALENDLY_URL = 'https://calendly.com/hellobrent';
 
   function loadCalendly(callback) {
     if (calendlyLoaded) { callback(); return; }
@@ -788,18 +791,25 @@ if (servicesSection) {
     };
     script.onerror = function() {
       calendlyLoading = false;
-      window.open('https://calendly.com/hellobrent', '_blank');
+      calendlyFailed = true;
+      calendlyBtn.textContent = 'Schedule a Call';
+      window.open(CALENDLY_URL, '_blank');
     };
     document.head.appendChild(script);
   }
 
   calendlyBtn.addEventListener('click', (e) => {
     e.preventDefault();
+    if (calendlyLoading) return;
+    if (calendlyFailed) {
+      window.open(CALENDLY_URL, '_blank');
+      return;
+    }
     calendlyBtn.textContent = 'Loading...';
     loadCalendly(() => {
       calendlyBtn.textContent = 'Schedule a Call';
       if (typeof Calendly !== 'undefined') {
-        Calendly.initPopupWidget({ url: 'https://calendly.com/hellobrent' });
+        Calendly.initPopupWidget({ url: CALENDLY_URL });
       }
     });
   });
