@@ -111,6 +111,56 @@ document.querySelectorAll('.section').forEach(el => {
   setTimeout(updateHeader, 100);
 })();
 
+// Mobile Navigation Toggle
+(function() {
+  const navToggle = document.querySelector('.nav-toggle');
+  const navLinks = document.querySelector('.nav-links');
+  if (!navToggle || !navLinks) return;
+
+  function openNav() {
+    navLinks.classList.add('open');
+    navToggle.setAttribute('aria-expanded', 'true');
+    navToggle.setAttribute('aria-label', 'Close menu');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeNav() {
+    navLinks.classList.remove('open');
+    navToggle.setAttribute('aria-expanded', 'false');
+    navToggle.setAttribute('aria-label', 'Open menu');
+    document.body.style.overflow = '';
+  }
+
+  navToggle.addEventListener('click', () => {
+    const isOpen = navToggle.getAttribute('aria-expanded') === 'true';
+    if (isOpen) {
+      closeNav();
+    } else {
+      openNav();
+    }
+  });
+
+  // Close on nav link click
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', closeNav);
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && navToggle.getAttribute('aria-expanded') === 'true') {
+      closeNav();
+      navToggle.focus();
+    }
+  });
+
+  // Close if resized above mobile breakpoint
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 768 && navToggle.getAttribute('aria-expanded') === 'true') {
+      closeNav();
+    }
+  });
+})();
+
 // Interactive background for services section
 const servicesSection = document.querySelector('#services');
 if (servicesSection) {
