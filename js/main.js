@@ -3,9 +3,6 @@
  * Swiss Grid Design with Mathematical Precision
  */
 
-// Progressive Enhancement: signal that JS is available
-document.body.classList.add('js-loaded');
-
 // Custom Cursor Implementation (mouse-only, optimized animation loop)
 (function() {
   // Only activate for devices with a fine pointer (mouse)

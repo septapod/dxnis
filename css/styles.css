@@ -444,7 +444,7 @@ a:focus, button:focus {
   }
 
   /* When JS is loaded, hamburger takes over */
-  body.js-loaded .nav-links {
+  .js-loaded .nav-links {
     display: none;
     position: fixed;
     inset: 0;
@@ -456,11 +456,11 @@ a:focus, button:focus {
     gap: var(--space-8);
   }
 
-  body.js-loaded .nav-links.open {
+  .js-loaded .nav-links.open {
     display: flex;
   }
 
-  body.js-loaded .nav-links a {
+  .js-loaded .nav-links a {
     font-size: 1.5rem;
     font-weight: 600;
     letter-spacing: 0.05em;
@@ -469,7 +469,7 @@ a:focus, button:focus {
     text-shadow: none;
   }
 
-  body.js-loaded .nav-links .nav-cta-mobile {
+  .js-loaded .nav-links .nav-cta-mobile {
     display: inline-block;
     margin-top: var(--space-4);
   }
@@ -685,13 +685,12 @@ a:focus, button:focus {
 }
 
 .hero-subline {
-  font-family: var(--font-accent);
-  font-size: clamp(0.8rem, 1vw, 0.9rem);
+  font-family: var(--font-body);
+  font-size: clamp(0.95rem, 1.5vw, 1.1rem);
   font-weight: 400;
-  font-style: italic;
-  opacity: 0.9;
+  opacity: 0.85;
   margin-bottom: var(--space-6);
-  line-height: 1.8;
+  line-height: 1.7;
   max-width: 600px;
 }
 
@@ -708,13 +707,13 @@ a:focus, button:focus {
   position: relative;
 }
 
-body.js-loaded .section {
+.js-loaded .section {
   opacity: 0;
   transform: translateY(30px);
   transition: opacity var(--transition-smooth), transform var(--transition-smooth);
 }
 
-body.js-loaded .section.visible {
+.js-loaded .section.visible {
   opacity: 1;
   transform: translateY(0);
 }
@@ -1124,7 +1123,7 @@ body.js-loaded .section.visible {
 .about-content p {
   font-size: 1.125rem;
   line-height: 1.8;
-  max-width: none;
+  max-width: 70ch;
   color: var(--color-text-body);
 }
 
