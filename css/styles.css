@@ -8,55 +8,17 @@
   varied column spans WITHIN the grid structure, never by breaking it.
 */
 
+/* Site-specific tokens (brand tokens in dsl-tokens.css) */
 :root {
-  /* Mathematical Spacing System - 8px base unit */
-  --space-unit: 8px;
-  --space-2: 16px;   /* 8 * 2 */
-  --space-3: 24px;   /* 8 * 3 */
-  --space-4: 32px;   /* 8 * 4 */
-  --space-6: 48px;   /* 8 * 6 */
-  --space-8: 64px;   /* 8 * 8 */
-  --space-10: 80px;  /* 8 * 10 */
-  --space-12: 96px;  /* 8 * 12 */
-  --space-16: 128px; /* 8 * 16 */
-
   /* Grid System */
   --grid-columns: 12;
   --grid-gap: var(--space-3);
   --site-gutter: clamp(24px, 5vw, 80px);
   --max-width: 1400px;
 
-  /* Colors - Dark Mode (Default) */
-  --color-text: #FFFFFF;
-  --color-bg: #000000;
-  --color-accent: #FBE248;
-  --color-accent-coral: #CF5A5A;
-  --color-accent-teal: #437481;
-  --color-muted: #B8B8B8;
-  --color-surface: #1A1A1A;
-  --color-text-body: #E8E8E8;
-
-  /* Typography - Baseline Grid 8px */
-  --font-display: 'Montserrat', sans-serif;
-  --font-body: 'Karla', sans-serif;
-  --font-accent: 'Lora', Georgia, serif;
+  /* Typography aliases */
+  --font-accent: var(--font-serif);
   --baseline: 8px;
-
-  /* Transitions */
-  --transition-smooth: 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
-  --transition-quick: 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-}
-
-/* Light Mode Theme */
-[data-theme="light"] {
-  --color-text: #0A0A0A;
-  --color-bg: #FAFAFA;
-  --color-accent: #B89500;
-  --color-accent-coral: #B84545;
-  --color-accent-teal: #3A6370;
-  --color-muted: #5A5A5A;
-  --color-surface: #FFFFFF;
-  --color-text-body: #2A2A2A;
 }
 
 /* Light Mode Specific Overrides */
@@ -274,7 +236,7 @@ body {
   left: 0;
   background: var(--color-accent);
   color: var(--color-bg);
-  padding: var(--space-unit) var(--space-2);
+  padding: var(--space-1) var(--space-2);
   text-decoration: none;
   font-weight: 600;
   z-index: 200;

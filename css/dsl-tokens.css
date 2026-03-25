@@ -1,0 +1,88 @@
+/* DSL Design Tokens — Dixon Strategic Labs
+   Brand source of truth. Import into any project.
+*/
+
+:root {
+  /* === Typography === */
+  --font-display: 'Satoshi', system-ui, sans-serif;
+  --font-body: 'Karla', system-ui, sans-serif;
+  --font-serif: 'Lora', Georgia, serif;
+
+  /* === Brand Colors (universal) === */
+  --brand-gold: #FBE248;
+  --brand-coral: #CF5A5A;
+  --brand-teal: #437481;
+
+  /* === Radii === */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-full: 100px;
+
+  /* === Spacing (8px base grid) === */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-6: 48px;
+  --space-8: 64px;
+  --space-10: 80px;
+  --space-12: 96px;
+  --space-16: 128px;
+
+  /* === Transitions === */
+  --transition-fast: 0.15s ease;
+  --transition-quick: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* === Dark Theme (default) === */
+[data-theme="dark"], .dark, :root {
+  --color-bg: #09090B;
+  --color-surface: #111114;
+  --color-surface-elevated: #1A1A1F;
+  --color-surface-hover: #242429;
+  --color-border: #2A2A32;
+  --color-border-hover: #3A3A44;
+  --color-text: #FAFAFA;
+  --color-text-body: #E8E8ED;
+  --color-text-dim: #8A8A96;
+  --color-text-muted: #55555F;
+  --color-primary: #437481;
+  --color-accent: #FBE248;
+  --color-accent-coral: #CF5A5A;
+  --color-accent-teal: #437481;
+  --color-alert: #CF5A5A;
+  --color-muted: #B8B8B8;
+  --color-shadow: rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 20px rgba(67, 116, 129, 0.15);
+}
+
+/* === Light Theme === */
+[data-theme="light"], .light {
+  --color-bg: #FAFAF8;
+  --color-surface: #FFFFFF;
+  --color-surface-elevated: #F4F4F2;
+  --color-surface-hover: #EBEBEA;
+  --color-border: #D4D4D0;
+  --color-border-hover: #B0B0AC;
+  --color-text: #0A0A0A;
+  --color-text-body: #2D2D2D;
+  --color-text-dim: #6B6B6B;
+  --color-text-muted: #999999;
+  --color-primary: #2D5A66;
+  --color-accent: #B89500;
+  --color-accent-coral: #B84545;
+  --color-accent-teal: #3A6370;
+  --color-alert: #B84545;
+  --color-muted: #5A5A5A;
+  --color-shadow: rgba(0, 0, 0, 0.08);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --shadow-glow: none;
+}
