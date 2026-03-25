@@ -133,9 +133,9 @@ This repository is set up for automatic deployment via Vercel whenever you push 
 
 ## 📝 Typography
 
-- **Headers:** Montserrat (700-900 weight) from Google Fonts
+- **Display/Headers:** Satoshi (400/500/700 weight), self-hosted from `fonts/`
 - **Body:** Karla (300-700 weight) from Google Fonts
-- **Fonts load automatically** - no local files needed
+- **Accent/Serif:** Lora (400-600 weight) from Google Fonts
 
 ---
 

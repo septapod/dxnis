@@ -581,7 +581,6 @@ if (servicesSection) {
   /**
    * Generate logo HTML elements
    * @param {Array} logoData - Array of logo objects
-   * @param {number} lazyAfter - Add loading="lazy" to images after this index
    * @returns {string} - HTML string
    */
   function generateLogoHTML(logoData) {

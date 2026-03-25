@@ -11,14 +11,12 @@
 /* Site-specific tokens (brand tokens in dsl-tokens.css) */
 :root {
   /* Grid System */
-  --grid-columns: 12;
   --grid-gap: var(--space-3);
   --site-gutter: clamp(24px, 5vw, 80px);
   --max-width: 1400px;
 
   /* Typography aliases */
   --font-accent: var(--font-serif);
-  --baseline: 8px;
 }
 
 /* Light Mode Specific Overrides */
@@ -261,7 +259,7 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
   font-size: clamp(1.5rem, 3.5vw, 3rem);
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1.2;
   margin-bottom: var(--space-4);
 }
@@ -685,11 +683,6 @@ a:focus, button:focus {
   margin-bottom: var(--space-4);
 }
 
-.hero h1 span {
-  color: var(--color-accent);
-  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.9), 0 2px 8px rgba(0, 0, 0, 0.7), 0 0 40px rgba(251, 226, 72, 0.3);
-}
-
 .hero p {
   color: var(--color-muted);
   font-size: clamp(1.125rem, 2vw, 1.5rem);
@@ -715,10 +708,6 @@ a:focus, button:focus {
 [data-theme="light"] .hero-subline {
   color: var(--color-text);
   opacity: 0.75;
-}
-
-.hero p strong {
-  font-weight: 800;
 }
 
 /* Section Spacing */
@@ -1538,15 +1527,6 @@ body.js-loaded .section.visible {
 .contact-header h2 {
   font-size: clamp(2.5rem, 5vw, 4rem);
   margin-bottom: var(--space-4);
-}
-
-.contact-header p {
-  font-size: 1.25rem;
-  line-height: 1.8;
-  color: var(--color-muted);
-  max-width: 60ch;
-  margin: 0 auto;
-  text-align: left;
 }
 
 /* Contact Form Container */
