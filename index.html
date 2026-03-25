@@ -227,7 +227,7 @@
   <link rel="stylesheet" href="css/styles.css">
 
   <!-- p5.js Library for Interactive Hero Background -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js" defer></script>
 </head>
 
 <body>
@@ -335,7 +335,7 @@
         <div class="testimonial-track">
           <!-- Testimonial 1 - Ray Springsteen -->
           <div class="testimonial-slide active">
-            <img src="assets/ray.jpg" alt="Ray Springsteen" class="testimonial-image">
+            <img src="assets/ray.jpg" alt="Ray Springsteen" class="testimonial-image" width="150" height="150">
             <blockquote class="testimonial">
               <p>"Brent led the most <em><u>strategic</u></em> strategic planning sessions we've ever had."</p>
               <footer class="testimonial-author">
@@ -347,7 +347,7 @@
 
           <!-- Testimonial 2 - Nancy Giordano -->
           <div class="testimonial-slide">
-            <img src="assets/nancy.jpg" alt="Nancy Giordano" class="testimonial-image">
+            <img src="assets/nancy.jpg" alt="Nancy Giordano" class="testimonial-image" width="150" height="150">
             <blockquote class="testimonial">
               <p>"I know many intelligent people, good people, creative people, and visionary people. At the intersection of all these groups is Brent."</p>
               <footer class="testimonial-author">
@@ -359,7 +359,7 @@
 
           <!-- Testimonial 3 - Mary Beth Spuck -->
           <div class="testimonial-slide">
-            <img src="assets/mb.png" alt="Mary Beth Spuck" class="testimonial-image">
+            <img src="assets/mb.png" alt="Mary Beth Spuck" class="testimonial-image" width="150" height="150">
             <blockquote class="testimonial">
               <p>"Well, I think this is the best strategic planning discussion we've ever had."</p>
               <footer class="testimonial-author">
@@ -372,7 +372,7 @@
 
           <!-- Testimonial 4 - Ronaldo Hardy -->
           <div class="testimonial-slide">
-            <img src="assets/ronaldo.jpg" alt="Ronaldo Hardy" class="testimonial-image">
+            <img src="assets/ronaldo.jpg" alt="Ronaldo Hardy" class="testimonial-image" width="150" height="150">
             <blockquote class="testimonial">
               <p>"Brent is an innovative, forward thinking leader, who inspires the next wave of leadership. I credit Brent as one of the reasons I have found success at such an early age."</p>
               <footer class="testimonial-author">
@@ -384,7 +384,7 @@
 
           <!-- Testimonial 5 - Stephen Pagenstecher -->
           <div class="testimonial-slide">
-            <img src="assets/steve.jpg" alt="Stephen Pagenstecher" class="testimonial-image">
+            <img src="assets/steve.jpg" alt="Stephen Pagenstecher" class="testimonial-image" width="150" height="150">
             <blockquote class="testimonial">
               <p>"We needed a leader that could be engaging, approachable, and attentive, and Brent delivered."</p>
               <footer class="testimonial-author">
@@ -396,7 +396,7 @@
 
           <!-- Testimonial 6 - Dr. Philipp Khallerhoff -->
           <div class="testimonial-slide">
-            <img src="assets/dr-phil.jpg" alt="Dr. Philipp Khallerhoff" class="testimonial-image">
+            <img src="assets/dr-phil.jpg" alt="Dr. Philipp Khallerhoff" class="testimonial-image" width="150" height="150">
             <blockquote class="testimonial">
               <p>"Brent supervised my team at Singularity University, and we received $250,000 in funding for our idea from Richmond Global."</p>
               <footer class="testimonial-author">
@@ -408,7 +408,7 @@
 
           <!-- Testimonial 7 - George Hofheimer -->
           <div class="testimonial-slide">
-            <img src="assets/george.jpg" alt="George Hofheimer" class="testimonial-image">
+            <img src="assets/george.jpg" alt="George Hofheimer" class="testimonial-image" width="150" height="150">
             <blockquote class="testimonial">
               <p>"Brent is that unique individual who possess a well-spring of creativity AND a desire to get things done...Also, he makes me laugh."</p>
               <footer class="testimonial-author">
@@ -563,14 +563,12 @@
       <div class="calendly-container">
         <h3>Book a Call</h3>
         <p class="calendly-intro">Prefer to schedule a time to talk? Book a 30-minute discovery call directly.</p>
-        <button class="btn btn-calendly" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/hellobrent'});return false;">Schedule a Call</button>
+        <button class="btn btn-calendly">Schedule a Call</button>
       </div>
     </div>
   </section>
 
-  <!-- Calendly Widget Script -->
-  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
-  <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+  <!-- Calendly loaded on-demand by main.js -->
 
   <!-- Bold Statement Quote -->
   <section class="statement-quote-section" aria-label="Core philosophy">

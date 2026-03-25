@@ -580,12 +580,13 @@ if (servicesSection) {
   /**
    * Generate logo HTML elements
    * @param {Array} logoData - Array of logo objects
+   * @param {number} lazyAfter - Add loading="lazy" to images after this index
    * @returns {string} - HTML string
    */
-  function generateLogoHTML(logoData) {
-    return logoData.map(logo => `
+  function generateLogoHTML(logoData, lazyAfter) {
+    return logoData.map((logo, i) => `
       <div class="logo-item">
-        <img src="${logo.src}" alt="${logo.alt}" height="48">
+        <img src="${logo.src}" alt="${logo.alt}" height="48"${i >= lazyAfter ? ' loading="lazy"' : ''}>
       </div>
     `).join('');
   }
@@ -593,11 +594,11 @@ if (servicesSection) {
   // Apply stratified distribution (3:1 fin:soc ratio)
   const distributedLogos = distributedShuffle(logos);
 
-  // Create 3 duplicate sets for seamless infinite loop
-  const tripleLogos = [...distributedLogos, ...distributedLogos, ...distributedLogos];
+  // Create 2 duplicate sets for seamless infinite loop (reduced from 3)
+  const doubleLogos = [...distributedLogos, ...distributedLogos];
 
-  // Generate and inject HTML
-  logoTrack.innerHTML = generateLogoHTML(tripleLogos);
+  // Generate HTML with lazy loading on the second set
+  logoTrack.innerHTML = generateLogoHTML(doubleLogos, distributedLogos.length);
 
   /**
    * Measure and set pixel-perfect animation
@@ -756,6 +757,52 @@ if (servicesSection) {
       }
     })
     .catch(() => {}); // Silently fall back to default text
+})();
+
+// Calendly lazy-loader (loads CSS + JS on first click)
+(function() {
+  const calendlyBtn = document.querySelector('.btn-calendly');
+  if (!calendlyBtn) return;
+
+  let calendlyLoaded = false;
+  let calendlyLoading = false;
+
+  function loadCalendly(callback) {
+    if (calendlyLoaded) { callback(); return; }
+    if (calendlyLoading) return;
+    calendlyLoading = true;
+
+    // Load CSS
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://assets.calendly.com/assets/external/widget.css';
+    document.head.appendChild(link);
+
+    // Load JS
+    const script = document.createElement('script');
+    script.src = 'https://assets.calendly.com/assets/external/widget.js';
+    script.onload = function() {
+      calendlyLoaded = true;
+      calendlyLoading = false;
+      callback();
+    };
+    script.onerror = function() {
+      calendlyLoading = false;
+      window.open('https://calendly.com/hellobrent', '_blank');
+    };
+    document.head.appendChild(script);
+  }
+
+  calendlyBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    calendlyBtn.textContent = 'Loading...';
+    loadCalendly(() => {
+      calendlyBtn.textContent = 'Schedule a Call';
+      if (typeof Calendly !== 'undefined') {
+        Calendly.initPopupWidget({ url: 'https://calendly.com/hellobrent' });
+      }
+    });
+  });
 })();
 
 // Newsletter form handler
