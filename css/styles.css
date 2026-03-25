@@ -67,7 +67,7 @@
 }
 
 [data-theme="light"] .section-light {
-  background: #FFFFFF;
+  background: var(--color-surface);
 }
 
 
@@ -107,7 +107,7 @@
 
 [data-theme="light"] .carousel-btn:hover {
   background: rgba(184, 149, 0, 0.15);
-  border-color: #B89500;
+  border-color: var(--color-accent);
   box-shadow: 0 0 0 6px rgba(184, 69, 69, 0.1);
 }
 
@@ -142,13 +142,13 @@
 
 [data-theme="light"] .form-group input,
 [data-theme="light"] .form-group textarea {
-  background: #FAFAFA;
+  background: var(--color-bg);
   border: 1px solid rgba(0, 0, 0, 0.15);
 }
 
 [data-theme="light"] .form-group input:focus,
 [data-theme="light"] .form-group textarea:focus {
-  border-color: #3A6370;
+  border-color: var(--color-accent-teal);
   box-shadow: 0 0 0 3px rgba(58, 99, 112, 0.1);
 }
 
@@ -165,7 +165,7 @@
 
 
 [data-theme="light"] .service-card h3 {
-  color: #0A0A0A;
+  color: var(--color-text);
 }
 
 [data-theme="light"] .testimonial-author strong {
@@ -177,15 +177,15 @@
 }
 
 [data-theme="light"] .statement-quote-section {
-  background: #FFFFFF;
+  background: var(--color-surface);
 }
 
 [data-theme="light"] .statement-quote p {
-  color: #0A0A0A;
+  color: var(--color-text);
 }
 
 [data-theme="light"] .statement-quote-attribution {
-  color: #5A5A5A;
+  color: var(--color-muted);
 }
 
 * {
@@ -1434,13 +1434,13 @@ a:focus, button:focus {
 
 [data-theme="light"] .btn-newsletter {
   background: var(--color-accent);
-  color: #000;
+  color: var(--color-text);
 }
 
 [data-theme="light"] .newsletter-input-group input[type="email"] {
-  background: #fff;
+  background: var(--color-surface);
   border: 1px solid rgba(0, 0, 0, 0.2);
-  color: #000;
+  color: var(--color-text);
 }
 
 [data-theme="light"] .newsletter-input-group input[type="email"]::placeholder {
