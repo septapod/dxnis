@@ -469,6 +469,7 @@ if (servicesSection) {
     { src: 'assets/clients/vantagewestcu_logo.png', alt: 'Vantage West Credit Union', sector: 'fin' },
     { src: 'assets/clients/true_logo.png', alt: 'TRUE Community Credit Union', sector: 'fin' },
     { src: 'assets/clients/brewerycu_logo.png', alt: 'Brewery Credit Union', sector: 'fin' },
+    { src: 'assets/clients/mcul_logo.png', alt: 'Michigan Credit Union League', sector: 'fin' },
 
     // Social Impact Organizations (11)
     { src: 'assets/clients/un_logo.png', alt: 'United Nations', sector: 'soc' },
