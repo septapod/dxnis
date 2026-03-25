@@ -5,6 +5,24 @@ Personal/consulting website at dxn.is. Static site (vanilla HTML/CSS/JS) with p5
 
 ## Recent Changes
 
+### Site Design Improvement Pass (2026-03-25) — COMPLETE
+Two-phase improvement: mobile responsiveness and professional polish.
+
+**Phase 1: Mobile-Ready**
+- Added hamburger menu with full-screen overlay below 768px (Services, About, Contact, Get Started, theme toggle)
+- Verified existing responsive breakpoints handle card stacking, photo hero, testimonials, contact, newsletter
+
+**Phase 2: Professional Polish**
+- Removed ~600 lines of dead HTML/CSS (4 commented-out sections, dead selectors, invalid schemas)
+- Fixed ARIA violations: role="list" wrapper, visually-hidden h2 for testimonials, fixed aria-labelledby
+- Carousel keyboard nav works without mouse hover; added pause/play button
+- Progressive enhancement: sections visible by default, animation only with JS
+- Custom cursor restricted to mouse-only, rAF loop stops when idle
+- Deferred p5.js, lazy-loaded Calendly on click, added image dimensions, reduced logo duplication
+- Consolidated design tokens into dsl-tokens.css as single source of truth
+
+Branch: `feat/site-improvements` (7 commits, not yet merged)
+
 ### Particle Orbit Tuning + Trail Fix (2026-02-23)
 Two improvements to the cursor orbit interaction, deployed to production:
 
