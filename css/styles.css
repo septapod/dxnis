@@ -76,21 +76,21 @@
 }
 
 [data-theme="light"] .btn:hover {
-  background: linear-gradient(135deg, #B89500 0%, #B84545 100%);
-  border-color: #B89500;
+  background: var(--color-accent);
+  border-color: var(--color-accent);
   color: #FFFFFF;
-  box-shadow: 0 8px 24px rgba(184, 149, 0, 0.25);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 [data-theme="light"] .btn-primary {
-  background: linear-gradient(135deg, #B89500 0%, #B84545 100%);
-  border-color: #B89500;
+  background: var(--color-accent);
+  border-color: var(--color-accent);
   color: #FFFFFF;
 }
 
 [data-theme="light"] .btn-primary:hover {
-  background: linear-gradient(135deg, #B84545 0%, #3A6370 100%);
-  border-color: #B84545;
+  background: var(--color-accent-teal);
+  border-color: var(--color-accent-teal);
 }
 
 [data-theme="light"] .testimonial-image {
@@ -153,14 +153,14 @@
 }
 
 [data-theme="light"] .btn-calendly {
-  border: 2px solid #3A6370;
-  color: #3A6370;
+  border: 2px solid var(--color-accent-teal);
+  color: var(--color-accent-teal);
 }
 
 [data-theme="light"] .btn-calendly:hover {
-  background: linear-gradient(135deg, #3A6370 0%, #B84545 100%);
+  background: var(--color-accent-teal);
   color: #FFFFFF;
-  border-color: #3A6370;
+  border-color: var(--color-accent-teal);
 }
 
 
@@ -478,8 +478,9 @@ a:focus, button:focus {
 .nav-links a {
   color: var(--color-text);
   text-decoration: none;
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 500;
+  letter-spacing: 0.03em;
   opacity: 0.9;
   transition: opacity var(--transition-quick), color var(--transition-quick);
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
@@ -571,11 +572,11 @@ a:focus, button:focus {
 }
 
 .btn:hover {
-  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-coral) 100%);
+  background: var(--color-accent);
   border-color: var(--color-accent);
   color: var(--color-bg);
   transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(251, 226, 72, 0.3), 0 5px 15px rgba(207, 90, 90, 0.2);
+  box-shadow: 0 8px 24px rgba(251, 226, 72, 0.2);
 }
 
 .btn:hover::before {
@@ -583,15 +584,16 @@ a:focus, button:focus {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-coral) 100%);
+  background: var(--color-accent);
   border-color: var(--color-accent);
   color: var(--color-bg);
 }
 
 .btn-primary:hover {
-  background: linear-gradient(135deg, var(--color-accent-coral) 0%, var(--color-accent-teal) 100%);
-  border-color: var(--color-accent-coral);
-  transform: translateY(-2px) scale(1.02);
+  background: var(--color-accent-teal);
+  border-color: var(--color-accent-teal);
+  color: var(--color-text);
+  transform: translateY(-2px);
 }
 
 /* Hero Section - 12-Column Grid */
