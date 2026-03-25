@@ -6,57 +6,69 @@
 // Progressive Enhancement: signal that JS is available
 document.body.classList.add('js-loaded');
 
-// Custom Cursor Implementation
-const cursor = document.querySelector('.custom-cursor');
-const follower = document.querySelector('.cursor-follower');
+// Custom Cursor Implementation (mouse-only, optimized animation loop)
+(function() {
+  // Only activate for devices with a fine pointer (mouse)
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
 
-let mouseX = 0;
-let mouseY = 0;
-let followerX = 0;
-let followerY = 0;
+  const cursor = document.querySelector('.custom-cursor');
+  const follower = document.querySelector('.cursor-follower');
+  if (!cursor || !follower) return;
 
-document.addEventListener('mousemove', (e) => {
-  mouseX = e.clientX;
-  mouseY = e.clientY;
+  let mouseX = 0;
+  let mouseY = 0;
+  let followerX = 0;
+  let followerY = 0;
+  let animationId = null;
 
-  cursor.style.left = mouseX + 'px';
-  cursor.style.top = mouseY + 'px';
-});
+  function animateFollower() {
+    const distX = mouseX - followerX;
+    const distY = mouseY - followerY;
 
-function animateFollower() {
-  const distX = mouseX - followerX;
-  const distY = mouseY - followerY;
+    followerX += distX * 0.1;
+    followerY += distY * 0.1;
 
-  followerX += distX * 0.1;
-  followerY += distY * 0.1;
+    follower.style.left = followerX + 'px';
+    follower.style.top = followerY + 'px';
 
-  follower.style.left = followerX + 'px';
-  follower.style.top = followerY + 'px';
+    // Stop the loop when follower has caught up (within 0.5px)
+    if (Math.abs(distX) > 0.5 || Math.abs(distY) > 0.5) {
+      animationId = requestAnimationFrame(animateFollower);
+    } else {
+      animationId = null;
+    }
+  }
 
-  requestAnimationFrame(animateFollower);
-}
+  function startFollowerLoop() {
+    if (!animationId) {
+      animationId = requestAnimationFrame(animateFollower);
+    }
+  }
 
-animateFollower();
-
-// Hover effects
-const clickables = document.querySelectorAll('a, button, .value-card, .service-card, .industry-card');
-clickables.forEach(el => {
-  el.addEventListener('mouseenter', () => {
-    cursor.classList.add('hover');
-    follower.classList.add('hover');
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    cursor.style.left = mouseX + 'px';
+    cursor.style.top = mouseY + 'px';
+    startFollowerLoop();
   });
 
-  el.addEventListener('mouseleave', () => {
-    cursor.classList.remove('hover');
-    follower.classList.remove('hover');
+  // Hover effects for interactive elements
+  const clickables = document.querySelectorAll('a, button, .service-card');
+  clickables.forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.classList.add('hover');
+      follower.classList.add('hover');
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.classList.remove('hover');
+      follower.classList.remove('hover');
+    });
   });
-});
 
-// Hide default cursor
-document.body.style.cursor = 'none';
-clickables.forEach(el => {
-  el.style.cursor = 'none';
-});
+  // Hide native cursor via CSS class (not inline styles)
+  document.body.classList.add('custom-cursor-active');
+})();
 
 // Scroll-triggered animations
 const observerOptions = {
