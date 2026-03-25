@@ -284,6 +284,19 @@ body {
   top: 0;
 }
 
+/* Visually hidden but accessible to screen readers */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* Typography - Aligned to Baseline Grid */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
@@ -747,15 +760,19 @@ a:focus, button:focus {
 }
 
 /* Section Spacing */
+/* Sections visible by default; JS adds animation when available */
 .section {
   padding: var(--space-10) 0;
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity var(--transition-smooth), transform var(--transition-smooth);
   position: relative;
 }
 
-.section.visible {
+body.js-loaded .section {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity var(--transition-smooth), transform var(--transition-smooth);
+}
+
+body.js-loaded .section.visible {
   opacity: 1;
   transform: translateY(0);
 }
@@ -807,6 +824,13 @@ a:focus, button:focus {
   grid-column: 1 / 13;
   text-align: center;
   margin-bottom: var(--space-8);
+}
+
+.services-list {
+  grid-column: 1 / 13;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--grid-gap);
 }
 
 .services-header h2 {
@@ -1186,6 +1210,32 @@ a:focus, button:focus {
   width: 32px;
   border-radius: 6px;
   box-shadow: 0 0 0 3px rgba(207, 90, 90, 0.15);
+}
+
+/* Carousel Pause/Play Button */
+.carousel-pause {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  margin: var(--space-3) auto 0;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  color: var(--color-muted);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.carousel-pause:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+[data-theme="light"] .carousel-pause {
+  border-color: rgba(0, 0, 0, 0.15);
 }
 
 
@@ -1858,6 +1908,11 @@ a:focus, button:focus {
     grid-column: 1 / 9;
   }
 
+  .services-list {
+    grid-column: 1 / 9;
+    grid-template-columns: repeat(8, 1fr);
+  }
+
   .service-card-1 {
     grid-column: 1 / 5;
   }
@@ -1990,6 +2045,7 @@ a:focus, button:focus {
 
   .hero-content,
   .services-header,
+  .services-list,
   .service-card-1,
   .service-card-2,
   .service-card-3,
@@ -2000,6 +2056,10 @@ a:focus, button:focus {
   .contact-form-container,
   .calendly-container {
     grid-column: 1 / 5;
+  }
+
+  .services-list {
+    grid-template-columns: repeat(4, 1fr);
   }
 
   /* Switch to vertical layout on mobile */

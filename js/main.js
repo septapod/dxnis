@@ -3,6 +3,9 @@
  * Swiss Grid Design with Mathematical Precision
  */
 
+// Progressive Enhancement: signal that JS is available
+document.body.classList.add('js-loaded');
+
 // Custom Cursor Implementation
 const cursor = document.querySelector('.custom-cursor');
 const follower = document.querySelector('.cursor-follower');
@@ -313,9 +316,9 @@ if (servicesSection) {
     }
   }
 
-  // Keyboard navigation
+  // Keyboard navigation (works when carousel or children have focus)
   document.addEventListener('keydown', (e) => {
-    if (!carousel.matches(':hover')) return;
+    if (!carousel.contains(document.activeElement) && !carousel.matches(':hover')) return;
 
     if (e.key === 'ArrowLeft') {
       prevSlide();
@@ -327,6 +330,35 @@ if (servicesSection) {
       startAutoRotate();
     }
   });
+
+  // Pause/Play button
+  const pauseBtn = carousel.querySelector('.carousel-pause');
+  if (pauseBtn) {
+    let isPaused = false;
+    const pauseIcon = pauseBtn.querySelector('.pause-icon');
+    const playIcon = pauseBtn.querySelector('.play-icon');
+
+    pauseBtn.addEventListener('click', () => {
+      isPaused = !isPaused;
+      if (isPaused) {
+        stopAutoRotate();
+        pauseIcon.style.display = 'none';
+        playIcon.style.display = 'block';
+        pauseBtn.setAttribute('aria-label', 'Resume auto-rotation');
+      } else {
+        startAutoRotate();
+        pauseIcon.style.display = 'block';
+        playIcon.style.display = 'none';
+        pauseBtn.setAttribute('aria-label', 'Pause auto-rotation');
+      }
+    });
+
+    // Respect pause state in visibility change and hover handlers
+    const originalStartAutoRotate = startAutoRotate;
+    startAutoRotate = function() {
+      if (!isPaused) originalStartAutoRotate();
+    };
+  }
 
   // Initialize carousel after ensuring DOM is fully laid out
   function initCarousel() {
