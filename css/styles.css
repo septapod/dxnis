@@ -446,7 +446,7 @@ a:focus, button:focus {
 }
 
 /* Mobile CTA inside nav overlay (hidden on desktop) */
-.nav-cta-mobile {
+.nav-links .nav-cta-mobile.btn {
   display: none;
 }
 

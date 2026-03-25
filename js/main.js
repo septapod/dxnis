@@ -583,10 +583,10 @@ if (servicesSection) {
    * @param {number} lazyAfter - Add loading="lazy" to images after this index
    * @returns {string} - HTML string
    */
-  function generateLogoHTML(logoData, lazyAfter) {
-    return logoData.map((logo, i) => `
+  function generateLogoHTML(logoData) {
+    return logoData.map(logo => `
       <div class="logo-item">
-        <img src="${logo.src}" alt="${logo.alt}" height="48"${i >= lazyAfter ? ' loading="lazy"' : ''}>
+        <img src="${logo.src}" alt="${logo.alt}" height="48">
       </div>
     `).join('');
   }
@@ -597,8 +597,8 @@ if (servicesSection) {
   // Create 2 duplicate sets for seamless infinite loop (reduced from 3)
   const doubleLogos = [...distributedLogos, ...distributedLogos];
 
-  // Generate HTML with lazy loading on the second set
-  logoTrack.innerHTML = generateLogoHTML(doubleLogos, distributedLogos.length);
+  // Generate and inject HTML
+  logoTrack.innerHTML = generateLogoHTML(doubleLogos);
 
   /**
    * Measure and set pixel-perfect animation
