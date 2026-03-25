@@ -47,18 +47,9 @@
 }
 
 [data-theme="light"] .service-card:hover {
-  border-color: rgba(184, 149, 0, 0.35);
-  box-shadow: 0 12px 32px rgba(184, 149, 0, 0.15), 0 8px 20px rgba(184, 69, 69, 0.1), 0 -4px 12px rgba(58, 99, 112, 0.08);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
 }
 
-[data-theme="light"] .service-card::after {
-  background: linear-gradient(90deg, var(--color-accent-teal) 0%, var(--color-accent) 100%);
-}
-
-
-[data-theme="light"] .service-card::before {
-  background: linear-gradient(180deg, #B89500 0%, #D4AD00 100%);
-}
 
 [data-theme="light"] .logo-item img {
   opacity: 0.6;
@@ -788,17 +779,20 @@ body.js-loaded .section.visible {
   margin-bottom: var(--space-3);
 }
 
-/* Equal 4-column layout for clear hierarchy */
+/* Equal 4-column layout with color-coded top borders */
 .service-card-1 {
   grid-column: 1 / 5;
+  border-top: 3px solid var(--color-accent);
 }
 
 .service-card-2 {
   grid-column: 5 / 9;
+  border-top: 3px solid var(--color-accent-coral);
 }
 
 .service-card-3 {
   grid-column: 9 / 13;
+  border-top: 3px solid var(--color-accent-teal);
 }
 
 .service-card {
@@ -812,40 +806,9 @@ body.js-loaded .section.visible {
   gap: var(--space-3);
 }
 
-.service-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  height: 0;
-  background: linear-gradient(180deg, var(--color-accent) 0%, var(--color-accent-coral) 100%);
-  transition: height var(--transition-quick);
-}
-
-.service-card::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--color-accent-teal) 0%, var(--color-accent) 100%);
-  transition: width var(--transition-quick);
-}
-
 .service-card:hover {
-  border-color: rgba(251, 226, 72, 0.3);
   transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(207, 90, 90, 0.12), 0 -8px 20px rgba(67, 116, 129, 0.08);
-}
-
-.service-card:hover::before {
-  height: 100%;
-}
-
-.service-card:hover::after {
-  width: 100%;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.3);
 }
 
 .service-card h3 {
@@ -937,12 +900,27 @@ body.js-loaded .section.visible {
 /* Marquee Animation - Continuous Scroll */
 /* Static animation removed - now dynamically calculated by JavaScript for pixel-perfect alignment */
 
+/* Social Proof Section Label */
+.social-proof-label {
+  grid-column: 1 / 13;
+  text-align: center;
+  margin-bottom: var(--space-4);
+}
+
+.social-proof-label h2 {
+  text-transform: uppercase;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  color: var(--color-muted);
+}
+
 /* Testimonial Carousel - Horizontal Layout */
 .testimonial-carousel {
   grid-column: 2 / 12; /* 10 columns centered, 1 column margin each side */
   position: relative;
   overflow: hidden;
-  padding: var(--space-4) var(--space-4); /* Reduced top padding from space-8 to space-4 */
+  padding: var(--space-2) var(--space-4);
 }
 
 .testimonial-track {
@@ -1796,6 +1774,10 @@ body.custom-cursor-active button {
     grid-column: 1 / 9;
   }
 
+  .social-proof-label {
+    grid-column: 1 / 9;
+  }
+
   .testimonial-carousel {
     grid-column: 1 / 9;
     padding: var(--space-6) var(--space-2);
@@ -1916,6 +1898,7 @@ body.custom-cursor-active button {
   .service-card-1,
   .service-card-2,
   .service-card-3,
+  .social-proof-label,
   .testimonial-carousel,
   .about-content,
   .contact-header,
