@@ -95,7 +95,7 @@
 
 [data-theme="light"] .testimonial-image {
   border: 3px solid var(--color-accent);
-  box-shadow: 0 8px 24px rgba(184, 149, 0, 0.2), 0 0 0 6px rgba(184, 69, 69, 0.08), 0 0 0 10px rgba(58, 99, 112, 0.05);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
 
@@ -956,9 +956,9 @@ a:focus, button:focus {
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid var(--color-accent);
-  box-shadow: 0 8px 24px rgba(251, 226, 72, 0.25), 0 0 0 6px rgba(207, 90, 90, 0.1);
-  background: var(--color-surface); /* Fallback background */
-  display: block; /* Ensure image displays as block */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  background: var(--color-surface);
+  display: block;
 }
 
 .testimonial {
@@ -1057,7 +1057,7 @@ a:focus, button:focus {
 .carousel-indicators {
   display: flex;
   justify-content: center; /* Centered dots */
-  gap: var(--space-2);
+  gap: var(--space-1);
   margin-top: var(--space-6);
 }
 
@@ -1603,8 +1603,7 @@ a:focus, button:focus {
 
 /* Submit Button */
 .btn-submit {
-  width: 100%;
-  padding: var(--space-3) var(--space-4);
+  padding: var(--space-3) var(--space-6);
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -1682,7 +1681,7 @@ a:focus, button:focus {
   left: 0;
   width: 100%;
   height: 3px;
-  background: linear-gradient(90deg, transparent 0%, var(--color-accent-teal) 25%, var(--color-accent) 50%, var(--color-accent-coral) 75%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, var(--color-accent-teal) 50%, transparent 100%);
   opacity: 0.4;
 }
 
