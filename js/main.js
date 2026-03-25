@@ -644,18 +644,18 @@ if (servicesSection) {
           }
 
           .logo-track {
-            animation: marquee-dynamic 60s linear infinite;
+            animation: marquee-dynamic 90s linear infinite;
           }
 
           @media (max-width: 1024px) {
             .logo-track {
-              animation: marquee-dynamic 48s linear infinite;
+              animation: marquee-dynamic 72s linear infinite;
             }
           }
 
           @media (max-width: 768px) {
             .logo-track {
-              animation: marquee-dynamic 40s linear infinite;
+              animation: marquee-dynamic 60s linear infinite;
             }
           }
         `;
