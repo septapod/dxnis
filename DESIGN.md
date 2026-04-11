@@ -33,6 +33,9 @@ These are design-signature moves, not decoration. They should be preserved acros
 
 ## 2. Color Palette & Roles
 
+<!-- DSL:COLORS:BEGIN -->
+<!-- This section is auto-generated from css/dsl-tokens.css by scripts/sync-design-md.mjs. Do not edit by hand. -->
+
 ### Brand colors (universal, theme-independent)
 
 | Name | Hex | Role |
@@ -47,7 +50,7 @@ Retired: indigo (`#6366f1`). Teal replaced it across the system. Do not reintrod
 
 | Token | Hex | Usage |
 |-------|-----|-------|
-| `--color-bg` | `#09090B` | Page background (near-black, warm) |
+| `--color-bg` | `#09090B` | Page background |
 | `--color-surface` | `#111114` | Cards, panels |
 | `--color-surface-elevated` | `#1A1A1F` | Modals, dropdowns |
 | `--color-surface-hover` | `#242429` | Hover states on surfaces |
@@ -57,31 +60,35 @@ Retired: indigo (`#6366f1`). Teal replaced it across the system. Do not reintrod
 | `--color-text-body` | `#E8E8ED` | Body paragraphs |
 | `--color-text-dim` | `#8A8A96` | Captions, secondary text |
 | `--color-text-muted` | `#55555F` | Tertiary, timestamps, disabled |
-| `--color-primary` | `#437481` | Primary interactive (teal) |
-| `--color-accent` | `#FBE248` | Accent (gold) |
-| `--color-accent-coral` | `#CF5A5A` | Accent (coral) |
+| `--color-primary` | `#437481` | Primary interactive |
+| `--color-accent` | `#FBE248` | Accent highlight |
+| `--color-accent-coral` | `#CF5A5A` | Coral accent |
+| `--color-accent-teal` | `#437481` | Teal accent |
 | `--color-alert` | `#CF5A5A` | Alerts and errors |
 
 ### Light theme
 
 | Token | Hex | Usage |
 |-------|-----|-------|
-| `--color-bg` | `#FAFAF8` | Page background (warm white, not pure white) |
-| `--color-surface` | `#FFFFFF` | Cards |
-| `--color-surface-elevated` | `#F4F4F2` | Secondary panels |
-| `--color-surface-hover` | `#EBEBEA` | Hover states |
+| `--color-bg` | `#FAFAF8` | Page background |
+| `--color-surface` | `#FFFFFF` | Cards, panels |
+| `--color-surface-elevated` | `#F4F4F2` | Modals, dropdowns |
+| `--color-surface-hover` | `#EBEBEA` | Hover states on surfaces |
 | `--color-border` | `#D4D4D0` | Default borders |
 | `--color-border-hover` | `#B0B0AC` | Hover and focus borders |
-| `--color-text` | `#0A0A0A` | Primary text |
+| `--color-text` | `#0A0A0A` | Primary text, headings |
 | `--color-text-body` | `#2D2D2D` | Body paragraphs |
-| `--color-text-dim` | `#6B6B6B` | Captions |
-| `--color-text-muted` | `#999999` | Tertiary |
-| `--color-primary` | `#2D5A66` | Darkened teal for contrast |
-| `--color-accent` | `#B89500` | Darkened gold for contrast |
-| `--color-accent-coral` | `#B84545` | Darkened coral for contrast |
-| `--color-alert` | `#B84545` | Alerts |
+| `--color-text-dim` | `#6B6B6B` | Captions, secondary text |
+| `--color-text-muted` | `#999999` | Tertiary, timestamps, disabled |
+| `--color-primary` | `#2D5A66` | Primary interactive |
+| `--color-accent` | `#B89500` | Accent highlight |
+| `--color-accent-coral` | `#B84545` | Coral accent |
+| `--color-accent-teal` | `#3A6370` | Teal accent |
+| `--color-alert` | `#B84545` | Alerts and errors |
 
 Light theme brand colors are darkened from their universal values to maintain WCAG contrast ratios on a light background. Dark theme uses the pure brand values.
+
+<!-- DSL:COLORS:END -->
 
 ### Semantic color roles
 
@@ -208,6 +215,9 @@ Satoshi is self-hosted in `fonts/Satoshi-*.woff2` with `@font-face` declarations
 
 Every spacing value is a multiple of 8px. Custom arbitrary values are not allowed.
 
+<!-- DSL:SPACING:BEGIN -->
+<!-- This section is auto-generated from css/dsl-tokens.css by scripts/sync-design-md.mjs. Do not edit by hand. -->
+
 | Token | Value | Typical use |
 |-------|-------|-------------|
 | `--space-1` | 8px | Tight element gaps |
@@ -219,6 +229,8 @@ Every spacing value is a multiple of 8px. Custom arbitrary values are not allowe
 | `--space-10` | 80px | Between content blocks |
 | `--space-12` | 96px | Major section vertical padding |
 | `--space-16` | 128px | Extra-generous section rhythm |
+
+<!-- DSL:SPACING:END -->
 
 ### Vertical rhythm
 
@@ -264,6 +276,9 @@ From back to front:
 
 ### Radius system
 
+<!-- DSL:RADII:BEGIN -->
+<!-- This section is auto-generated from css/dsl-tokens.css by scripts/sync-design-md.mjs. Do not edit by hand. -->
+
 | Token | Size | Usage |
 |-------|------|-------|
 | `--radius-sm` | 8px | Inputs, badges, small cards |
@@ -271,6 +286,8 @@ From back to front:
 | `--radius-lg` | 16px | Modal, large cards |
 | `--radius-xl` | 20px | Hero sections, major features |
 | `--radius-full` | 100px | Pills, avatars |
+
+<!-- DSL:RADII:END -->
 
 Buttons are a deliberate exception. They use radius 0 (square corners) to echo the Swiss grid philosophy.
 
