@@ -1,8 +1,40 @@
 # DXN.is Production Website
 
-**Status:** Production-Ready
-**Date:** October 17, 2025
+**Status:** Site rebuild in progress on `feat/site-transformation`, ship target Monday
 **Design System:** Swiss Grid with Mathematical Precision
+**Design System Doc:** [DESIGN.md](./DESIGN.md) (v2.1, Stitch 9-section format)
+**Live Design System:** [design.dxn.is](https://design.dxn.is)
+
+---
+
+## Design System Pipeline
+
+Design tokens live in `css/dsl-tokens.css` on `main` and are the single source of truth for:
+
+1. **This site (dxn.is).** The CSS file is imported directly by `index.html`. Changes go live on the next deploy.
+2. **design.dxn.is.** Loads `dsl-tokens.css` from `cdn.jsdelivr.net/gh/septapod/dxnis@main/css/dsl-tokens.css`. Any change propagates automatically. 12-hour cache TTL with a purge button on the site for instant refresh.
+3. **DESIGN.md documentation.** The colors, spacing, and radii sections are auto-generated from `dsl-tokens.css` by `scripts/sync-design-md.mjs`. Prose sections are hand-maintained.
+
+### Workflow for a token change
+
+```bash
+# 1. Edit the CSS
+vim css/dsl-tokens.css
+
+# 2. Regenerate the DESIGN.md token sections
+node scripts/sync-design-md.mjs
+
+# 3. Commit and push both files
+git add css/dsl-tokens.css DESIGN.md
+git commit -m "feat(tokens): <what changed>"
+git push
+
+# 4. (optional) Force-refresh design.dxn.is cache
+# Click "Purge token cache" button on design.dxn.is, or:
+curl https://purge.jsdelivr.net/gh/septapod/dxnis@main/css/dsl-tokens.css
+```
+
+dxn.is reflects the change on the next Vercel deploy (automatic on push to main). design.dxn.is reflects it after jsDelivr cache refresh.
 
 ---
 
