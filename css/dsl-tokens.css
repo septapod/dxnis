@@ -4,9 +4,9 @@
 
 :root {
   /* === Typography === */
-  --font-display: 'Satoshi', system-ui, sans-serif;
-  --font-body: 'Karla', system-ui, sans-serif;
-  --font-serif: 'Lora', Georgia, serif;
+  --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-serif: 'Fraunces', Georgia, serif;
 
   /* === Brand Colors (universal) === */
   --brand-gold: #FBE248;
@@ -48,14 +48,22 @@
   --color-text: #FAFAFA;
   --color-text-body: #E8E8ED;
   --color-text-dim: #8A8A96;
-  --color-text-muted: #55555F;
-  --color-primary: #437481;
+  --color-text-muted: #78787F;
+  --color-primary: #529099;
+  --color-primary-hover: #3A7A87;
+  --color-cta: #529099;
+  --color-cta-hover: #3A7A87;
   --color-accent: #FBE248;
   --color-accent-coral: #CF5A5A;
-  --color-accent-teal: #437481;
+  --color-accent-teal: #529099;
   --color-alert: #CF5A5A;
+  --color-success: #22c55e;
+  --color-danger: #ef4444;
   --color-muted: #B8B8B8;
   --color-shadow: rgba(0, 0, 0, 0.4);
+  --color-surface-gold: rgba(251, 226, 72, 0.04);
+  --color-surface-coral: rgba(207, 90, 90, 0.04);
+  --color-surface-teal: rgba(67, 116, 129, 0.04);
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
@@ -73,14 +81,22 @@
   --color-text: #0A0A0A;
   --color-text-body: #2D2D2D;
   --color-text-dim: #6B6B6B;
-  --color-text-muted: #999999;
+  --color-text-muted: #6E6E6E;
   --color-primary: #2D5A66;
-  --color-accent: #B89500;
+  --color-primary-hover: #1E4650;
+  --color-cta: #B84545;
+  --color-cta-hover: #9A3838;
+  --color-accent: #7D6400;
   --color-accent-coral: #B84545;
   --color-accent-teal: #3A6370;
   --color-alert: #B84545;
-  --color-muted: #5A5A5A;
+  --color-success: #16a34a;
+  --color-danger: #dc2626;
+  --color-muted: #6E6E6E;
   --color-shadow: rgba(0, 0, 0, 0.08);
+  --color-surface-gold: #F6F4EC;
+  --color-surface-coral: #F5EDEA;
+  --color-surface-teal: #ECF3F6;
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);

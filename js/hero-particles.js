@@ -41,9 +41,12 @@ const heroParticles = (p) => {
   let framesSinceCheck = 0;
   let qualityReduced = false;
 
-  // Colors
-  const cyanColor = { r: 0, g: 220, b: 255 };
-  const darkCyan = { r: 0, g: 100, b: 140 };
+  // Colors (DSL brand palette — gold primary, teal secondary for variety)
+  const goldColor = { r: 251, g: 226, b: 72 };
+  const tealColor = { r: 67, g: 116, b: 129 };
+  // Light mode: saturated, not washed out
+  const goldLight = { r: 180, g: 145, b: 10 };
+  const tealLight = { r: 40, g: 110, b: 130 };
 
   // ============================================
   // CELL CLASS
@@ -82,9 +85,12 @@ const heroParticles = (p) => {
         ? p.random(0.55, 0.75)
         : p.random(0.75, 1.0);
 
-      // Per-particle noise seeds — large range so particles sample independent noise regions
+      // Per-particle noise seeds
       this.noiseOffsetX = p.random(1000);
       this.noiseOffsetY = p.random(1000);
+
+      // Color variety: 75% gold, 25% teal (matches service sketch palette)
+      this.isTeal = Math.random() < 0.25;
     }
 
     applyForce(fx, fy) {
@@ -227,7 +233,9 @@ const heroParticles = (p) => {
     }
 
     show(isDarkMode) {
-      const color = isDarkMode ? cyanColor : darkCyan;
+      const color = isDarkMode
+        ? (this.isTeal ? tealColor : goldColor)
+        : (this.isTeal ? tealLight : goldLight);
 
       // Base alpha with age fade
       let baseAlpha = isDarkMode ? 95 : 110;
@@ -359,19 +367,19 @@ const heroParticles = (p) => {
 
     const isDarkMode = document.documentElement.getAttribute('data-theme') !== 'light';
 
-    // Clear canvas each frame — no motion trails
+    // Clear canvas each frame (no trails)
     p.blendMode(p.BLEND);
     if (isDarkMode) {
       p.background(0);
     } else {
-      p.background(248);
+      p.background(247, 245, 240);
     }
 
     // Check mouse position
     isMouseInHero = p.mouseX >= 0 && p.mouseX <= p.width &&
                     p.mouseY >= 0 && p.mouseY <= p.height;
 
-    // Blend mode for glow in dark mode
+    // Blend mode for organic glow in dark mode
     if (isDarkMode) {
       p.blendMode(p.ADD);
     }

@@ -123,6 +123,106 @@ document.querySelectorAll('.section').forEach(el => {
   setTimeout(updateHeader, 100);
 })();
 
+// Services: Hybrid pinned 50/50 scroll transitions
+(function() {
+  const track = document.querySelector('.services-scroll-track');
+  const panels = document.querySelectorAll('.service-panel');
+  const dots = document.querySelector('.services-dots');
+  const dotBtns = document.querySelectorAll('.services-dot');
+  const counter = document.querySelector('.services-counter');
+  const counterNum = document.getElementById('services-counter-num');
+  if (!track || panels.length === 0) return;
+
+  let current = 0;
+
+  function update() {
+    const rect = track.getBoundingClientRect();
+    const scrollInTrack = -rect.top;
+    const totalScroll = track.offsetHeight - window.innerHeight;
+
+    // Show/hide dots and counter: only while actively scrolling through the panels
+    const inView = scrollInTrack >= 0 && scrollInTrack <= totalScroll;
+    if (dots) dots.classList.toggle('visible', inView);
+    if (counter) counter.classList.toggle('visible', inView);
+
+    if (totalScroll <= 0) return;
+    const progress = Math.max(0, Math.min(1, scrollInTrack / totalScroll));
+    const idx = Math.min(Math.floor(progress * panels.length), panels.length - 1);
+
+    if (idx !== current) {
+      panels[current].classList.remove('active');
+      panels[idx].classList.add('active');
+      dotBtns.forEach((d, i) => d.classList.toggle('active', i === idx));
+      current = idx;
+    }
+
+    // Update progress fill
+    const panelProgress = (progress * panels.length) - idx;
+    const fills = document.querySelectorAll('.service-progress-fill');
+    fills.forEach((fill, i) => {
+      if (i < idx) {
+        fill.style.height = '100%';
+      } else if (i === idx) {
+        fill.style.height = (panelProgress * 100) + '%';
+      } else {
+        fill.style.height = '0%';
+      }
+    });
+
+    // Update panel counter
+    if (counterNum) counterNum.textContent = idx + 1;
+
+    // Pass scroll progress to service sketches via shared state
+    window.__serviceScrollState = { activeIndex: idx, progress: panelProgress };
+  }
+
+  window.addEventListener('scroll', () => requestAnimationFrame(update), { passive: true });
+  update();
+})();
+
+// Hero bloom: mouse-reactive gradient positions (throttled, not continuous)
+(function() {
+  const hero = document.querySelector('.hero');
+  if (!hero) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  let rafId = null;
+
+  function applyPosition(x, y) {
+    const style = hero.style;
+    style.setProperty('--bloom-x1', (15 + (x - 50) * 0.12) + '%');
+    style.setProperty('--bloom-y1', (30 + (y - 50) * 0.10) + '%');
+    style.setProperty('--bloom-x2', (85 + (x - 50) * 0.08) + '%');
+    style.setProperty('--bloom-y2', (25 + (y - 50) * 0.12) + '%');
+    style.setProperty('--bloom-x3', (50 + (x - 50) * 0.10) + '%');
+    style.setProperty('--bloom-y3', (85 + (y - 50) * 0.06) + '%');
+    style.setProperty('--bloom-x4', (72 + (x - 50) * 0.06) + '%');
+    style.setProperty('--bloom-y4', (68 + (y - 50) * 0.08) + '%');
+    rafId = null;
+  }
+
+  hero.addEventListener('mousemove', function(e) {
+    if (rafId) return;
+    const rect = hero.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    rafId = requestAnimationFrame(function() { applyPosition(x, y); });
+  }, { passive: true });
+
+  hero.addEventListener('mouseleave', function() {
+    if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+    requestAnimationFrame(function() { applyPosition(50, 50); });
+  });
+
+  hero.addEventListener('touchmove', function(e) {
+    if (rafId || !e.touches.length) return;
+    const rect = hero.getBoundingClientRect();
+    const x = ((e.touches[0].clientX - rect.left) / rect.width) * 100;
+    const y = ((e.touches[0].clientY - rect.top) / rect.height) * 100;
+    rafId = requestAnimationFrame(function() { applyPosition(x, y); });
+  }, { passive: true });
+})();
+
 // Mobile Navigation Toggle
 (function() {
   const navToggle = document.querySelector('.nav-toggle');
@@ -173,23 +273,60 @@ document.querySelectorAll('.section').forEach(el => {
   });
 })();
 
-// Interactive background for services section
-const servicesSection = document.querySelector('#services');
-if (servicesSection) {
-  servicesSection.addEventListener('mousemove', (e) => {
-    const rect = servicesSection.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
+// Scroll progress bar (gold-coral-teal gradient)
+(function() {
+  const bar = document.getElementById('scroll-progress-bar');
+  if (!bar) return;
 
-    servicesSection.style.setProperty('--mouse-x', `${x}%`);
-    servicesSection.style.setProperty('--mouse-y', `${y}%`);
-  });
+  function update() {
+    const scrolled = window.scrollY;
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = total > 0 ? (scrolled / total) * 100 : 0;
+    bar.style.width = progress + '%';
+  }
 
-  servicesSection.addEventListener('mouseleave', () => {
-    servicesSection.style.setProperty('--mouse-x', '50%');
-    servicesSection.style.setProperty('--mouse-y', '50%');
-  });
-}
+  window.addEventListener('scroll', () => requestAnimationFrame(update), { passive: true });
+  update();
+})();
+
+// Belief sections: scroll-triggered fade-up reveals (Apple-style)
+(function() {
+  const beliefs = document.querySelectorAll('.belief-full');
+  if (!beliefs.length) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    beliefs.forEach(b => b.classList.add('visible'));
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.2 });
+
+  beliefs.forEach(b => observer.observe(b));
+})();
+
+// Framework section: scroll-triggered reveals
+(function() {
+  var items = document.querySelectorAll('.framework-item');
+  if (!items.length) return;
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    items.forEach(function(item) { item.classList.add('visible'); });
+    return;
+  }
+
+  var itemObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.2 });
+
+  items.forEach(function(item) { itemObserver.observe(item); });
+})();
 
 /**
  * Testimonial Carousel
@@ -739,21 +876,36 @@ if (servicesSection) {
   }
 })();
 
-// Fetch latest newsletter post
+// Fetch latest newsletter post (title + hero image from RSS via serverless function)
 (function() {
   const link = document.getElementById('newsletter-latest-link');
   const titleEl = document.getElementById('newsletter-latest-title');
+  const imageContainer = document.getElementById('newsletter-card-image');
   if (!link || !titleEl) return;
+
+  // Local fallback for file:// preview (updated periodically)
+  const LOCAL_FALLBACK = {
+    title: 'The Claude Mythos Red Team Report: What Credit Union Leaders Need to Know',
+    url: 'https://ai4fis.beehiiv.com/p/claude-mythos-report',
+    image: 'https://media.beehiiv.com/cdn-cgi/image/fit=scale-down,format=auto,onerror=redirect,quality=80/uploads/asset/file/3f997d91-fc7b-4b35-9dd1-89a8d278e071/capybara-hero-16d.png'
+  };
+
+  function applyData(data) {
+    if (data.title) titleEl.textContent = data.title;
+    if (data.url) link.href = data.url;
+    if (data.image && imageContainer) {
+      imageContainer.style.backgroundImage = `url(${data.image})`;
+      imageContainer.style.backgroundSize = 'cover';
+      imageContainer.style.backgroundPosition = 'center';
+      const placeholder = imageContainer.querySelector('.newsletter-card-image-placeholder');
+      if (placeholder) placeholder.style.display = 'none';
+    }
+  }
 
   fetch('/api/latest-post')
     .then(res => res.ok ? res.json() : Promise.reject())
-    .then(data => {
-      if (data.title && data.url) {
-        titleEl.textContent = data.title;
-        link.href = data.url;
-      }
-    })
-    .catch(() => {}); // Silently fall back to default text
+    .then(applyData)
+    .catch(() => applyData(LOCAL_FALLBACK)); // Use hardcoded fallback for local preview
 })();
 
 // Calendly lazy-loader (loads CSS + JS on first click)
