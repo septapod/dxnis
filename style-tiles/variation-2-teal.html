@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dixon Strategic Labs — Variation 2: Deep Teal + Terracotta</title>
+<link href="https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wdth,wght@12..60,75..100,200..800&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=switzer@300,400,500,600&display=swap" rel="stylesheet">
+<style>
+/* ============================================
+   CUSTOM PROPERTIES
+   ============================================ */
+:root {
+  --ground: #0f1a1a;
+  --surface: #172424;
+  --text: #e8ebe6;
+  --teal: #2d9e8f;
+  --terracotta: #c4654a;
+  --sand: #d4c5a9;
+  --slate: #5a6b6b;
+  --font-display: 'Bricolage Grotesque', sans-serif;
+  --font-body: 'Switzer', sans-serif;
+  --font-mono: 'Fira Code', monospace;
+}
+
+/* ============================================
+   RESET & BASE
+   ============================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+::selection { background: var(--teal); color: var(--ground); }
+
+body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: 300;
+  color: var(--text);
+  background: var(--ground);
+  overflow-x: hidden;
+}
+
+/* ============================================
+   LAYOUT
+   ============================================ */
+.page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 80px 48px;
+}
+
+section {
+  margin-bottom: 80px;
+}
+
+/* ============================================
+   SECTION 1: HERO
+   ============================================ */
+.hero {
+  position: relative;
+  min-height: 480px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 48px;
+}
+
+.hero-content {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-logo {
+  width: 64px;
+  height: auto;
+  display: block;
+}
+
+.hero-label {
+  margin-top: 16px;
+  font-family: "Maven Pro", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+
+.hero-display {
+  margin-top: 32px;
+  font-family: "Maven Pro", sans-serif;
+  font-weight: 700;
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+
+.hero-display span {
+  display: block;
+}
+
+.hero-weave {
+  flex-shrink: 0;
+  width: 400px;
+  height: 400px;
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    flex-direction: column;
+  }
+  .hero-weave {
+    width: 100%;
+    height: 300px;
+  }
+}
+
+/* ============================================
+   SECTION 2: PALETTE
+   ============================================ */
+.palette {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.palette-swatch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.palette-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+.palette-hex {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text);
+}
+
+.palette-name {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: rgba(232, 235, 230, 0.3);
+}
+
+/* ============================================
+   SECTION 3: TYPE SPECIMEN
+   ============================================ */
+.type-specimen {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.type-row {
+  font-family: "Maven Pro", sans-serif;
+  font-size: 48px;
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--text);
+}
+
+.type-row.compressed {
+  font-variation-settings: 'wdth' 75;
+}
+
+.type-row.normal {
+  font-variation-settings: 'wdth' 100;
+}
+
+.type-row.thin {
+  font-variation-settings: 'wdth' 75;
+  font-weight: 200;
+  color: rgba(232, 235, 230, 0.4);
+}
+
+.type-rule {
+  height: 1px;
+  background: rgba(45, 158, 143, 0.1);
+  margin: 24px 0;
+  border: none;
+}
+
+.type-body {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--slate);
+  max-width: 560px;
+}
+
+.type-data {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 13px;
+  color: var(--teal);
+  margin-top: 16px;
+}
+
+/* ============================================
+   SECTION 4: WEAVE AT THREE SCALES
+   ============================================ */
+.weave-scales {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.weave-scale-row {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.weave-scale-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--slate);
+  width: 64px;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.weave-scale-box {
+  flex: 1;
+  height: 120px;
+  background: var(--surface);
+  overflow: hidden;
+  position: relative;
+}
+
+/* ============================================
+   SECTION 5: MEDIUM DIVIDER
+   ============================================ */
+.medium-divider {
+  width: 100%;
+  height: 40px;
+  position: relative;
+  margin: 0;
+}
+
+/* ============================================
+   SECTION 6: CARD
+   ============================================ */
+.sample-card {
+  max-width: 480px;
+  background: var(--surface);
+  border: 1px solid rgba(45, 158, 143, 0.08);
+  position: relative;
+  padding: 32px 32px 32px 44px;
+}
+
+.sample-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      rgba(45, 158, 143, 0.2) 0px,
+      rgba(45, 158, 143, 0.2) 1px,
+      transparent 1px,
+      transparent 5px
+    );
+}
+
+.card-number {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--teal);
+  margin-bottom: 8px;
+}
+
+.card-title {
+  font-family: "Maven Pro", sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.card-body {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--slate);
+  margin-bottom: 20px;
+}
+
+.card-rule {
+  height: 1px;
+  background: rgba(45, 158, 143, 0.06);
+  border: none;
+  margin-bottom: 12px;
+}
+
+.card-meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--slate);
+}
+
+.card-meta span {
+  color: var(--teal);
+}
+
+/* ============================================
+   SECTION 7: BUTTONS
+   ============================================ */
+.buttons {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.btn {
+  font-family: "Maven Pro", sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 12px 28px;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn:hover {
+  opacity: 0.85;
+}
+
+.btn-primary {
+  background: var(--teal);
+  color: var(--ground);
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid rgba(45, 158, 143, 0.25);
+  color: var(--text);
+}
+
+/* ============================================
+   SECTION 8: FOOTER
+   ============================================ */
+.footer {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: rgba(90, 107, 107, 0.25);
+  margin-top: 80px;
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ========== 1. HERO ========== -->
+  <section class="hero">
+    <div class="hero-content">
+      <img src="dxn-logomark-white.png" alt="DXN Logomark" class="hero-logo">
+      <div class="hero-label">Dixon Strategic Labs</div>
+      <div class="hero-display">
+        <span>Process</span>
+        <span>as</span>
+        <span>architecture.</span>
+      </div>
+    </div>
+    <div class="hero-weave">
+      <svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Strand A: top-left to bottom-right -->
+        <line x1="40" y1="0" x2="400" y2="360" stroke="#2d9e8f" stroke-width="3" opacity="0.1"/>
+        <!-- gap where strand B crosses over A -->
+        <line x1="80" y1="0" x2="200" y2="120" stroke="#2d9e8f" stroke-width="3" opacity="0.1"/>
+        <line x1="206" y1="126" x2="400" y2="320" stroke="#2d9e8f" stroke-width="3" opacity="0.1"/>
+        <!-- Strand B: offset diagonal -->
+        <line x1="160" y1="0" x2="400" y2="240" stroke="#2d9e8f" stroke-width="3" opacity="0.1"/>
+        <!-- Strand C: top-right to bottom-left -->
+        <line x1="360" y1="0" x2="0" y2="360" stroke="#2d9e8f" stroke-width="3" opacity="0.1"/>
+        <!-- gap where strand A crosses over C -->
+        <line x1="320" y1="0" x2="220" y2="100" stroke="#2d9e8f" stroke-width="3" opacity="0.1"/>
+        <line x1="214" y1="106" x2="0" y2="320" stroke="#2d9e8f" stroke-width="3" opacity="0.1"/>
+        <!-- Strand D: counter-diagonal -->
+        <line x1="280" y1="0" x2="0" y2="280" stroke="#2d9e8f" stroke-width="3" opacity="0.1"/>
+        <!-- Additional crossings with gaps to show over/under -->
+        <!-- Strand A2 going right, breaking where C2 passes over -->
+        <line x1="0" y1="80" x2="140" y2="220" stroke="#2d9e8f" stroke-width="3" opacity="0.1"/>
+        <line x1="146" y1="226" x2="320" y2="400" stroke="#2d9e8f" stroke-width="3" opacity="0.1"/>
+        <!-- Strand C2 going left, continuous (it's "over") -->
+        <line x1="400" y1="120" x2="80" y2="400" stroke="#2d9e8f" stroke-width="3" opacity="0.1"/>
+        <!-- A few more strands for density -->
+        <line x1="0" y1="200" x2="200" y2="400" stroke="#2d9e8f" stroke-width="3" opacity="0.1"/>
+        <line x1="400" y1="200" x2="200" y2="400" stroke="#2d9e8f" stroke-width="3" opacity="0.1"/>
+        <!-- Crossing pair with gap -->
+        <line x1="120" y1="0" x2="340" y2="220" stroke="#2d9e8f" stroke-width="3" opacity="0.1"/>
+        <line x1="346" y1="226" x2="400" y2="280" stroke="#2d9e8f" stroke-width="3" opacity="0.1"/>
+        <line x1="240" y1="0" x2="0" y2="240" stroke="#2d9e8f" stroke-width="3" opacity="0.1"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ========== 2. PALETTE ========== -->
+  <section>
+    <div class="palette">
+      <div class="palette-swatch">
+        <div class="palette-circle" style="background: #0f1a1a; box-shadow: inset 0 0 0 1px rgba(232,235,230,0.08);"></div>
+        <span class="palette-hex">#0f1a1a</span>
+        <span class="palette-name">Ground</span>
+      </div>
+      <div class="palette-swatch">
+        <div class="palette-circle" style="background: #172424;"></div>
+        <span class="palette-hex">#172424</span>
+        <span class="palette-name">Surface</span>
+      </div>
+      <div class="palette-swatch">
+        <div class="palette-circle" style="background: #e8ebe6;"></div>
+        <span class="palette-hex">#e8ebe6</span>
+        <span class="palette-name">Text</span>
+      </div>
+      <div class="palette-swatch">
+        <div class="palette-circle" style="background: #2d9e8f;"></div>
+        <span class="palette-hex">#2d9e8f</span>
+        <span class="palette-name">Teal</span>
+      </div>
+      <div class="palette-swatch">
+        <div class="palette-circle" style="background: #c4654a;"></div>
+        <span class="palette-hex">#c4654a</span>
+        <span class="palette-name">Terracotta</span>
+      </div>
+      <div class="palette-swatch">
+        <div class="palette-circle" style="background: #d4c5a9;"></div>
+        <span class="palette-hex">#d4c5a9</span>
+        <span class="palette-name">Sand</span>
+      </div>
+      <div class="palette-swatch">
+        <div class="palette-circle" style="background: #5a6b6b;"></div>
+        <span class="palette-hex">#5a6b6b</span>
+        <span class="palette-name">Slate</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 3. TYPE SPECIMEN ========== -->
+  <section>
+    <div class="type-specimen">
+      <div class="type-row compressed">Strategy</div>
+      <div class="type-row normal">Strategy</div>
+      <div class="type-row thin">Strategy</div>
+      <hr class="type-rule">
+      <p class="type-body">The best strategies feel inevitable in retrospect. They emerge from patient observation, honest assessment, and the discipline to hold a position when the landscape shifts beneath you. Process is the architecture that makes this possible.</p>
+      <p class="type-data">Q4 2026 — engagement.score: 94.2 | retention: 97.1% | nps: +72</p>
+    </div>
+  </section>
+
+  <!-- ========== 4. THE WEAVE AT THREE SCALES ========== -->
+  <section>
+    <div class="weave-scales">
+      <div class="weave-scale-row">
+        <div class="weave-scale-label">Macro</div>
+        <div class="weave-scale-box">
+          <svg width="100%" height="100%" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="macro-over" x="0" y="0" width="45.25" height="45.25" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                <line x1="0" y1="0" x2="0" y2="45.25" stroke="#2d9e8f" stroke-width="4" opacity="0.08"/>
+              </pattern>
+              <pattern id="macro-under" x="0" y="0" width="45.25" height="45.25" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)">
+                <line x1="0" y1="0" x2="0" y2="45.25" stroke="#c4654a" stroke-width="4" opacity="0.04"/>
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#macro-under)"/>
+            <rect width="100%" height="100%" fill="url(#macro-over)"/>
+          </svg>
+        </div>
+      </div>
+      <div class="weave-scale-row">
+        <div class="weave-scale-label">Medium</div>
+        <div class="weave-scale-box">
+          <svg width="100%" height="120" xmlns="http://www.w3.org/2000/svg">
+            <!-- 5 horizontal parallel lines -->
+            <line x1="0" y1="42" x2="100%" y2="42" stroke="#d4c5a9" stroke-width="1.5" opacity="0.12"/>
+            <line x1="0" y1="46" x2="100%" y2="46" stroke="#d4c5a9" stroke-width="1.5" opacity="0.12"/>
+            <line x1="0" y1="50" x2="100%" y2="50" stroke="#d4c5a9" stroke-width="1.5" opacity="0.12"/>
+            <line x1="0" y1="54" x2="100%" y2="54" stroke="#d4c5a9" stroke-width="1.5" opacity="0.12"/>
+            <line x1="0" y1="58" x2="100%" y2="58" stroke="#d4c5a9" stroke-width="1.5" opacity="0.12"/>
+            <!-- One diagonal crossing -->
+            <line x1="280" y1="20" x2="360" y2="100" stroke="#d4c5a9" stroke-width="1.5" opacity="0.12"/>
+          </svg>
+        </div>
+      </div>
+      <div class="weave-scale-row">
+        <div class="weave-scale-label">Micro</div>
+        <div class="weave-scale-box">
+          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="micro-weave" x="0" y="0" width="11.31" height="11.31" patternUnits="userSpaceOnUse">
+                <line x1="0" y1="0" x2="11.31" y2="11.31" stroke="#e8ebe6" stroke-width="1" opacity="0.03"/>
+                <line x1="11.31" y1="0" x2="0" y2="11.31" stroke="#e8ebe6" stroke-width="1" opacity="0.03"/>
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#micro-weave)"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 5. MEDIUM DIVIDER IN USE ========== -->
+  <section class="medium-divider">
+    <svg width="100%" height="40" xmlns="http://www.w3.org/2000/svg">
+      <!-- 5 horizontal lines -->
+      <line x1="0" y1="12" x2="100%" y2="12" stroke="#2d9e8f" stroke-width="1" opacity="0.1"/>
+      <line x1="0" y1="16" x2="100%" y2="16" stroke="#2d9e8f" stroke-width="1" opacity="0.1"/>
+      <line x1="0" y1="20" x2="100%" y2="20" stroke="#2d9e8f" stroke-width="1" opacity="0.1"/>
+      <line x1="0" y1="24" x2="100%" y2="24" stroke="#2d9e8f" stroke-width="1" opacity="0.1"/>
+      <line x1="0" y1="28" x2="100%" y2="28" stroke="#2d9e8f" stroke-width="1" opacity="0.1"/>
+      <!-- Asymmetric diagonal crossing near left third -->
+      <line x1="240" y1="0" x2="320" y2="40" stroke="#2d9e8f" stroke-width="1" opacity="0.1"/>
+    </svg>
+  </section>
+
+  <!-- ========== 6. CARD ========== -->
+  <section>
+    <div class="sample-card">
+      <div class="card-number">01</div>
+      <div class="card-title">Strategic Transitions</div>
+      <p class="card-body">When a credit union shifts its competitive posture, the visible changes (new products, revised rates, refreshed branding) are symptoms. The real transition happens in how decisions get made, how risk is assessed, and how the institution learns from its own data.</p>
+      <hr class="card-rule">
+      <div class="card-meta"><span>Phase 2</span> · Discovery · Updated 2026.03.14</div>
+    </div>
+  </section>
+
+  <!-- ========== 7. BUTTONS ========== -->
+  <section>
+    <div class="buttons">
+      <button class="btn btn-primary">Begin Assessment</button>
+      <button class="btn btn-ghost">View Process</button>
+    </div>
+  </section>
+
+  <!-- ========== 8. FOOTER ========== -->
+  <div class="footer">Variation 2 · Deep Teal + Terracotta</div>
+
+</div>
+</body>
+</html>

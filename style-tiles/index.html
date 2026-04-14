@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DXN Brand Identity Explorations</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: #111114;
+    color: #e8e4dc;
+    min-height: 100vh;
+    padding: 64px 48px;
+  }
+  .page { max-width: 720px; margin: 0 auto; }
+  h1 {
+    font-weight: 300;
+    font-size: 32px;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  .sub {
+    font-family: 'Fira Code', monospace;
+    font-size: 12px;
+    color: #6b6560;
+    margin-bottom: 48px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  a.card {
+    display: block;
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 32px 24px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  a.card:hover {
+    border-color: rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.03);
+  }
+  .card-number {
+    font-family: 'Fira Code', monospace;
+    font-size: 11px;
+    color: #6b6560;
+    margin-bottom: 12px;
+  }
+  .card-title {
+    font-weight: 600;
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+  .card-desc {
+    font-weight: 300;
+    font-size: 14px;
+    color: #8a857a;
+    line-height: 1.5;
+  }
+  .card-palette {
+    display: flex;
+    gap: 6px;
+    margin-top: 16px;
+  }
+  .card-palette span {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+  }
+  .card.light {
+    background: #f5f0e8;
+    border-color: rgba(0,0,0,0.08);
+  }
+  .card.light .card-number { color: #8a857a; }
+  .card.light .card-title { color: #1a1a1f; }
+  .card.light .card-desc { color: #8a857a; }
+  .card.light:hover {
+    border-color: rgba(0,0,0,0.2);
+    background: #ece7dd;
+  }
+  .footer {
+    margin-top: 64px;
+    text-align: center;
+    font-family: 'Fira Code', monospace;
+    font-size: 11px;
+    color: #6b6560;
+    opacity: 0.4;
+  }
+  @media (max-width: 600px) {
+    body { padding: 32px 20px; }
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>DXN Brand Identity Explorations</h1>
+  <p class="sub">Dixon Strategic Labs · March 2026</p>
+
+  <h2 style="font-weight:400;font-size:18px;margin-bottom:16px;color:#e8e4dc;">Site Prototypes</h2>
+  <div class="grid" style="margin-bottom:48px;">
+    <a href="site-amber.html" class="card" style="border-color:rgba(212,160,66,0.2);">
+      <div class="card-number">PROTOTYPE</div>
+      <div class="card-title">dxn.is in Amber</div>
+      <div class="card-desc">Full homepage rebuilt with the Amber + Graphite identity. Fraunces serif, weave animations, real content.</div>
+      <div class="card-palette">
+        <span style="background:#141417;border:1px solid rgba(255,255,255,0.1)"></span>
+        <span style="background:#d4a042"></span>
+        <span style="background:#e8e6ee"></span>
+      </div>
+    </a>
+
+    <a href="site-indigo.html" class="card" style="border-color:rgba(99,102,241,0.2);">
+      <div class="card-number">PROTOTYPE</div>
+      <div class="card-title">dxn.is in Indigo</div>
+      <div class="card-desc">Full homepage rebuilt with the Indigo + Sage identity. Newsreader serif, magenta accents, centered layout.</div>
+      <div class="card-palette">
+        <span style="background:#0d1117;border:1px solid rgba(255,255,255,0.1)"></span>
+        <span style="background:#6366f1"></span>
+        <span style="background:#e879a8"></span>
+      </div>
+    </a>
+
+    <a href="site-stitch.html" class="card" style="border-color:rgba(14,246,204,0.2);">
+      <div class="card-number">PROTOTYPE</div>
+      <div class="card-title">dxn.is in Stitch</div>
+      <div class="card-desc">Full homepage rebuilt with Google Stitch style tile. Inter sans-serif, teal accents, grid-line texture, editorial dark.</div>
+      <div class="card-palette">
+        <span style="background:#0a0a0f;border:1px solid rgba(255,255,255,0.1)"></span>
+        <span style="background:#0ef6cc"></span>
+        <span style="background:#1173d4"></span>
+      </div>
+    </a>
+  </div>
+
+  <h2 style="font-weight:400;font-size:18px;margin-bottom:16px;color:#e8e4dc;">Style Tiles</h2>
+  <div class="grid">
+    <a href="variation-1-amber.html" class="card">
+      <div class="card-number">01</div>
+      <div class="card-title">Amber + Graphite</div>
+      <div class="card-desc">Cool dark ground with warm amber accents. Fraunces serif. Rust and sage complements.</div>
+      <div class="card-palette">
+        <span style="background:#141417;border:1px solid rgba(255,255,255,0.1)"></span>
+        <span style="background:#d4a042"></span>
+        <span style="background:#c45d3e"></span>
+        <span style="background:#7a8c6e"></span>
+        <span style="background:#ede8df"></span>
+      </div>
+    </a>
+
+    <a href="variation-2-teal.html" class="card">
+      <div class="card-number">02</div>
+      <div class="card-title">Deep Teal + Terracotta</div>
+      <div class="card-desc">Strategic, grounded. Bricolage Grotesque variable width. Zero radius.</div>
+      <div class="card-palette">
+        <span style="background:#0f1a1a;border:1px solid rgba(255,255,255,0.1)"></span>
+        <span style="background:#2d9e8f"></span>
+        <span style="background:#c4654a"></span>
+        <span style="background:#d4c5a9"></span>
+        <span style="background:#e8ebe6"></span>
+      </div>
+    </a>
+
+    <a href="variation-3-indigo.html" class="card">
+      <div class="card-number">03</div>
+      <div class="card-title">Indigo + Sage</div>
+      <div class="card-desc">Scholarly, institutional. Newsreader editorial serif. Research institute energy.</div>
+      <div class="card-palette">
+        <span style="background:#0d1117;border:1px solid rgba(255,255,255,0.1)"></span>
+        <span style="background:#6366f1"></span>
+        <span style="background:#86a877"></span>
+        <span style="background:#a5b4fc"></span>
+        <span style="background:#e6edf3"></span>
+      </div>
+    </a>
+
+    <a href="variation-4-light.html" class="card light">
+      <div class="card-number">04</div>
+      <div class="card-title">Warm Paper + Color</div>
+      <div class="card-desc">Light ground. Fraunces WONK serif. Teal, coral, indigo accents. Editorial warmth.</div>
+      <div class="card-palette">
+        <span style="background:#f5f0e8;border:1px solid rgba(0,0,0,0.1)"></span>
+        <span style="background:#0d7c6e"></span>
+        <span style="background:#d4654a"></span>
+        <span style="background:#4f46e5"></span>
+        <span style="background:#1a1a1f"></span>
+      </div>
+    </a>
+  </div>
+
+  <div class="footer">dxn.is · brand explorations · not final</div>
+</div>
+</body>
+</html>

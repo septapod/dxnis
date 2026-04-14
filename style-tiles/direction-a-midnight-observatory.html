@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dixon Strategic Labs — Direction A: The Weave</title>
+<link href="https://api.fontshare.com/v2/css?f[]=boska@300,400,500,700,900&f[]=switzer@200,300,400,500,600,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================
+   CUSTOM PROPERTIES
+   ============================================ */
+:root {
+  --black: #08080f;
+  --cream: #e8e4dc;
+  --violet: #7c5cfc;
+  --font-display: 'Boska', serif;
+  --font-body: 'Switzer', sans-serif;
+  --font-editorial: 'Newsreader', serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+/* ============================================
+   RESET & BASE
+   ============================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+::selection { background: var(--violet); color: var(--black); }
+
+body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.8;
+  font-weight: 300;
+  color: var(--cream);
+  background: var(--black);
+  overflow-x: hidden;
+}
+
+/* ============================================
+   BACKGROUND TEXTURE — diagonal stripe grid
+   ============================================ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(232, 228, 220, 0.03) 0px,
+    rgba(232, 228, 220, 0.03) 1px,
+    transparent 1px,
+    transparent 20px
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* SVG noise overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* ============================================
+   LAYOUT
+   ============================================ */
+.page {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 64px;
+}
+
+/* Weave-line section divider */
+.divider {
+  width: 100%;
+  height: 4px;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(232, 228, 220, 0.06) 0px,
+    rgba(232, 228, 220, 0.06) 1px,
+    transparent 1px,
+    transparent 10px
+  );
+  margin: 80px 0;
+}
+
+/* ============================================
+   HERO — 100vh, left-aligned, enormous type
+   ============================================ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 120px 0 80px;
+  position: relative;
+}
+
+.hero-logomark {
+  width: 80px;
+  height: auto;
+  margin-bottom: 48px;
+  display: block;
+}
+
+.hero-brand {
+  font-family: var(--font-display);
+  font-size: clamp(5rem, 12vw, 10rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+  color: var(--cream);
+}
+
+.hero-brand em {
+  font-style: italic;
+}
+
+.hero-tagline {
+  font-family: var(--font-editorial);
+  font-size: 20px;
+  font-weight: 300;
+  font-style: italic;
+  color: rgba(232, 228, 220, 0.5);
+  margin-top: 48px;
+  line-height: 1.6;
+}
+
+.hero-badge {
+  position: absolute;
+  bottom: 64px;
+  left: 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.2);
+}
+
+/* ============================================
+   TYPOGRAPHY SPECIMEN
+   ============================================ */
+.type-specimen {
+  display: flex;
+  flex-direction: column;
+}
+
+.type-row {
+  display: flex;
+  align-items: baseline;
+  gap: 48px;
+  padding: 32px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.type-row:last-child {
+  border-bottom: none;
+}
+
+.type-meta {
+  flex-shrink: 0;
+  width: 180px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: rgba(232, 228, 220, 0.3);
+  line-height: 1.5;
+}
+
+.type-sample {
+  flex: 1;
+  min-width: 0;
+}
+
+.spec-display {
+  font-family: var(--font-display);
+  font-size: 64px;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--cream);
+}
+
+.spec-heading {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--cream);
+}
+
+.spec-body {
+  font-family: var(--font-body);
+  font-size: 17px;
+  font-weight: 300;
+  line-height: 1.8;
+  color: rgba(232, 228, 220, 0.6);
+}
+
+.spec-editorial {
+  font-family: var(--font-editorial);
+  font-size: 24px;
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--violet);
+}
+
+.spec-mono {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: rgba(232, 228, 220, 0.35);
+}
+
+/* ============================================
+   COLOR PALETTE
+   ============================================ */
+.palette {
+  display: flex;
+  gap: 32px;
+}
+
+.swatch {
+  flex: 1;
+}
+
+.swatch-color {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.swatch-name {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: rgba(232, 228, 220, 0.5);
+  margin-top: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.swatch-hex {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: rgba(232, 228, 220, 0.25);
+  margin-top: 4px;
+}
+
+/* ============================================
+   COMPONENT PATTERNS
+   ============================================ */
+.components {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start;
+}
+
+.buttons-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.btn {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 14px 32px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  border-radius: 0;
+}
+
+.btn:hover { opacity: 0.85; }
+
+.btn-primary {
+  background: var(--violet);
+  color: var(--black);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--cream);
+  border: 1px solid rgba(232, 228, 220, 0.2);
+}
+
+.btn-text {
+  background: transparent;
+  color: var(--violet);
+  border: none;
+  padding: 14px 0;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+}
+
+/* Service card */
+.service-card {
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 32px;
+}
+
+.service-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--violet);
+  margin-bottom: 16px;
+}
+
+.service-title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--cream);
+  margin-bottom: 12px;
+}
+
+.service-body {
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.7;
+  color: rgba(232, 228, 220, 0.5);
+  margin-bottom: 24px;
+}
+
+.service-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.06);
+  margin-bottom: 20px;
+}
+
+.service-data {
+  display: flex;
+  gap: 48px;
+}
+
+.service-datum {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: rgba(232, 228, 220, 0.35);
+  line-height: 1.5;
+}
+
+/* ============================================
+   THE WEAVE — signature element
+   ============================================ */
+.weave-section {
+  background: #0e0e18;
+  margin-left: -64px;
+  margin-right: -64px;
+  padding: 96px 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.weave-art {
+  width: 100%;
+  max-width: 800px;
+  height: 300px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Individual weave lines — diagonal parallel stripes with crossover gaps */
+.weave-line {
+  position: absolute;
+  width: 200%;
+  height: 3px;
+  transform-origin: center center;
+  transform: rotate(45deg);
+}
+
+.weave-line:nth-child(1) {
+  background: linear-gradient(90deg,
+    var(--violet) 0%, var(--violet) 18%,
+    transparent 18%, transparent 22%,
+    var(--violet) 22%, var(--violet) 55%,
+    transparent 55%, transparent 59%,
+    var(--violet) 59%, var(--violet) 100%);
+  opacity: 0.35;
+  top: 15%;
+  left: -50%;
+}
+
+.weave-line:nth-child(2) {
+  background: linear-gradient(90deg,
+    var(--violet) 0%, var(--violet) 30%,
+    transparent 30%, transparent 34%,
+    var(--violet) 34%, var(--violet) 70%,
+    transparent 70%, transparent 74%,
+    var(--violet) 74%, var(--violet) 100%);
+  opacity: 0.15;
+  top: 25%;
+  left: -50%;
+}
+
+.weave-line:nth-child(3) {
+  background: linear-gradient(90deg,
+    var(--violet) 0%, var(--violet) 12%,
+    transparent 12%, transparent 16%,
+    var(--violet) 16%, var(--violet) 48%,
+    transparent 48%, transparent 52%,
+    var(--violet) 52%, var(--violet) 85%,
+    transparent 85%, transparent 89%,
+    var(--violet) 89%, var(--violet) 100%);
+  opacity: 0.4;
+  top: 38%;
+  left: -50%;
+}
+
+.weave-line:nth-child(4) {
+  background: linear-gradient(90deg,
+    var(--violet) 0%, var(--violet) 40%,
+    transparent 40%, transparent 44%,
+    var(--violet) 44%, var(--violet) 100%);
+  opacity: 0.1;
+  top: 48%;
+  left: -50%;
+}
+
+.weave-line:nth-child(5) {
+  background: linear-gradient(90deg,
+    var(--violet) 0%, var(--violet) 25%,
+    transparent 25%, transparent 29%,
+    var(--violet) 29%, var(--violet) 62%,
+    transparent 62%, transparent 66%,
+    var(--violet) 66%, var(--violet) 100%);
+  opacity: 0.3;
+  top: 58%;
+  left: -50%;
+}
+
+.weave-line:nth-child(6) {
+  background: linear-gradient(90deg,
+    var(--violet) 0%, var(--violet) 35%,
+    transparent 35%, transparent 39%,
+    var(--violet) 39%, var(--violet) 75%,
+    transparent 75%, transparent 79%,
+    var(--violet) 79%, var(--violet) 100%);
+  opacity: 0.2;
+  top: 68%;
+  left: -50%;
+}
+
+.weave-line:nth-child(7) {
+  background: linear-gradient(90deg,
+    var(--violet) 0%, var(--violet) 20%,
+    transparent 20%, transparent 24%,
+    var(--violet) 24%, var(--violet) 58%,
+    transparent 58%, transparent 62%,
+    var(--violet) 62%, var(--violet) 90%,
+    transparent 90%, transparent 94%,
+    var(--violet) 94%, var(--violet) 100%);
+  opacity: 0.35;
+  top: 80%;
+  left: -50%;
+}
+
+/* Cross lines going the other direction */
+.weave-line.cross {
+  transform: rotate(-45deg);
+}
+
+.weave-line:nth-child(8) {
+  background: linear-gradient(90deg,
+    var(--violet) 0%, var(--violet) 22%,
+    transparent 22%, transparent 26%,
+    var(--violet) 26%, var(--violet) 60%,
+    transparent 60%, transparent 64%,
+    var(--violet) 64%, var(--violet) 100%);
+  opacity: 0.25;
+  top: 20%;
+  left: -50%;
+  transform: rotate(-45deg);
+}
+
+.weave-line:nth-child(9) {
+  background: linear-gradient(90deg,
+    var(--violet) 0%, var(--violet) 15%,
+    transparent 15%, transparent 19%,
+    var(--violet) 19%, var(--violet) 50%,
+    transparent 50%, transparent 54%,
+    var(--violet) 54%, var(--violet) 100%);
+  opacity: 0.15;
+  top: 40%;
+  left: -50%;
+  transform: rotate(-45deg);
+}
+
+.weave-line:nth-child(10) {
+  background: linear-gradient(90deg,
+    var(--violet) 0%, var(--violet) 32%,
+    transparent 32%, transparent 36%,
+    var(--violet) 36%, var(--violet) 68%,
+    transparent 68%, transparent 72%,
+    var(--violet) 72%, var(--violet) 100%);
+  opacity: 0.3;
+  top: 60%;
+  left: -50%;
+  transform: rotate(-45deg);
+}
+
+.weave-line:nth-child(11) {
+  background: linear-gradient(90deg,
+    var(--violet) 0%, var(--violet) 28%,
+    transparent 28%, transparent 32%,
+    var(--violet) 32%, var(--violet) 100%);
+  opacity: 0.12;
+  top: 75%;
+  left: -50%;
+  transform: rotate(-45deg);
+}
+
+.weave-quote {
+  font-family: var(--font-editorial);
+  font-size: 20px;
+  font-weight: 300;
+  font-style: italic;
+  color: rgba(232, 228, 220, 0.5);
+  text-align: center;
+  max-width: 680px;
+  line-height: 1.7;
+  margin-top: 64px;
+}
+
+/* ============================================
+   FOOTER NOTE
+   ============================================ */
+.footer-note {
+  text-align: center;
+  padding: 80px 0 48px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.15);
+  letter-spacing: 0.08em;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 900px) {
+  .page {
+    padding: 0 32px;
+  }
+
+  .hero-brand {
+    font-size: clamp(3.5rem, 10vw, 8rem);
+  }
+
+  .components {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .palette {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .swatch-color {
+    aspect-ratio: 3 / 1;
+  }
+
+  .type-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .type-meta {
+    width: auto;
+  }
+
+  .spec-display {
+    font-size: 40px;
+  }
+
+  .weave-section {
+    margin-left: -32px;
+    margin-right: -32px;
+    padding: 64px 32px;
+  }
+
+  .weave-art {
+    height: 200px;
+  }
+}
+
+@media (max-width: 540px) {
+  .page {
+    padding: 0 20px;
+  }
+
+  .hero-brand {
+    font-size: clamp(2.8rem, 14vw, 5rem);
+  }
+
+  .spec-display {
+    font-size: 32px;
+  }
+
+  .spec-heading {
+    font-size: 26px;
+  }
+
+  .service-data {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .weave-section {
+    margin-left: -20px;
+    margin-right: -20px;
+    padding: 48px 20px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ==========================================
+       1. HERO
+       ========================================== -->
+  <section class="hero">
+    <img src="dxn_logomark_avatar.png" alt="DXN" class="hero-logomark">
+    <div class="hero-brand">
+      Dixon<br>
+      Strategic<br>
+      <em>Labs</em>
+    </div>
+    <p class="hero-tagline">Process design for organizations that share power.</p>
+    <span class="hero-badge">Est. 2003 &middot; Oakland, CA</span>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ==========================================
+       2. TYPOGRAPHY SPECIMEN
+       ========================================== -->
+  <section class="type-specimen">
+    <div class="type-row">
+      <div class="type-meta">Boska 900<br>64px / -0.04em</div>
+      <div class="type-sample">
+        <div class="spec-display">Synthesis</div>
+      </div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta">Boska 500<br>36px / -0.02em</div>
+      <div class="type-sample">
+        <div class="spec-heading">Competing perspectives, aligned action</div>
+      </div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta">Switzer 300<br>17px / 1.8</div>
+      <div class="type-sample">
+        <div class="spec-body">Leaders can't work in the problem and on the process at the same time. When I own the process, everyone else can contribute their full expertise. The result is clarity that moves.</div>
+      </div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta">Newsreader Italic<br>300 / 24px</div>
+      <div class="type-sample">
+        <div class="spec-editorial">"He made sense of what we were all struggling to articulate."</div>
+      </div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta">JetBrains Mono<br>400 / 14px</div>
+      <div class="type-sample">
+        <div class="spec-mono">designProcess({ discovery, synthesis, testing })</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ==========================================
+       3. COLOR PALETTE
+       ========================================== -->
+  <section class="palette">
+    <div class="swatch">
+      <div class="swatch-color" style="background: #08080f; border-color: rgba(232,228,220,0.1);"></div>
+      <div class="swatch-name">Near Black</div>
+      <div class="swatch-hex">#08080f</div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background: #e8e4dc;"></div>
+      <div class="swatch-name">Cream</div>
+      <div class="swatch-hex">#e8e4dc</div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background: #7c5cfc;"></div>
+      <div class="swatch-name">Violet</div>
+      <div class="swatch-hex">#7c5cfc</div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ==========================================
+       4. COMPONENT PATTERNS
+       ========================================== -->
+  <section class="components">
+    <div class="buttons-stack">
+      <button class="btn btn-primary">Start a Conversation</button>
+      <button class="btn btn-ghost">View Case Studies</button>
+      <button class="btn btn-text">Read the framework</button>
+    </div>
+    <div class="service-card">
+      <div class="service-label">01</div>
+      <div class="service-title">Strategic Transitions</div>
+      <div class="service-body">CEO succession. Merger integration. The 2-6 month journey from uncertainty to tested roadmap.</div>
+      <div class="service-divider"></div>
+      <div class="service-data">
+        <div class="service-datum">Duration: 2-6 mo</div>
+        <div class="service-datum">Phase: Discovery &rarr; Testing</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ==========================================
+       5. THE WEAVE — signature element
+       ========================================== -->
+  <section class="weave-section">
+    <div class="weave-art">
+      <div class="weave-line"></div>
+      <div class="weave-line"></div>
+      <div class="weave-line"></div>
+      <div class="weave-line"></div>
+      <div class="weave-line"></div>
+      <div class="weave-line"></div>
+      <div class="weave-line"></div>
+      <!-- Cross lines -->
+      <div class="weave-line cross"></div>
+      <div class="weave-line cross"></div>
+      <div class="weave-line cross"></div>
+      <div class="weave-line cross"></div>
+    </div>
+    <p class="weave-quote">Every engagement starts with competing perspectives and genuine uncertainty. The process transforms that into frameworks your team can execute.</p>
+  </section>
+
+  <!-- ==========================================
+       6. FOOTER NOTE
+       ========================================== -->
+  <div class="footer-note">Direction A &middot; The Weave</div>
+
+</div>
+
+</body>
+</html>

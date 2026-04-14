@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DXN Style Tile — Variation 3 · Indigo + Sage</title>
+  <link href="https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@300,400,500,600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --ground: #0d1117;
+      --surface: #161b22;
+      --elevated: #1c2333;
+      --text: #e6edf3;
+      --text-muted: rgba(230,237,243,0.5);
+      --indigo: #6366f1;
+      --sage: #86a877;
+      --lavender: #a5b4fc;
+      --magenta: #e879a8;
+      --warm-gold: #e5b94e;
+      --muted: #7d8590;
+      --border: rgba(230,237,243,0.06);
+      --ease-dxn: cubic-bezier(0.22, 1, 0.36, 1);
+      --duration: 200ms;
+    }
+
+    ::selection {
+      background: rgba(99,102,241,0.3);
+    }
+
+    html {
+      background: var(--ground);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Switzer', sans-serif;
+      font-weight: 400;
+      line-height: 1.6;
+      position: relative;
+    }
+
+    /* ========================================
+       GRAIN OVERLAY
+       ======================================== */
+    .grain-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.02;
+    }
+
+    /* ========================================
+       SECTION LABEL UTILITY
+       ======================================== */
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--indigo);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
+
+    .section-headline {
+      font-family: 'Newsreader', serif;
+      font-weight: 400;
+      font-size: 32px;
+      font-optical-sizing: auto;
+      font-variation-settings: 'opsz' 48;
+      line-height: 1.25;
+      color: var(--text);
+    }
+
+    /* ========================================
+       1. NAVIGATION BAR
+       ======================================== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 56px;
+      background: rgba(13,17,23,0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .navbar-logo {
+      width: 32px;
+      height: auto;
+      display: block;
+    }
+
+    .navbar-wordmark {
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text);
+      letter-spacing: 0.01em;
+    }
+
+    .navbar-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .navbar-links a {
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 400;
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color var(--duration) var(--ease-dxn);
+    }
+
+    .navbar-links a:hover {
+      color: var(--text);
+    }
+
+    /* ========================================
+       2. HERO
+       ======================================== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 40px;
+      position: relative;
+      overflow: hidden;
+      background: radial-gradient(ellipse 60% 50% at 50% 35%, rgba(99,102,241,0.06), transparent);
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          30deg,
+          rgba(99,102,241,0.06) 0px,
+          rgba(99,102,241,0.06) 3px,
+          transparent 3px,
+          transparent 51px
+        );
+      pointer-events: none;
+      mask-image: radial-gradient(ellipse 85% 75% at 50% 45%, black 20%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse 85% 75% at 50% 45%, black 20%, transparent 70%);
+      animation: weave-slide-left 1.0s var(--ease-dxn) 0.2s both, weave-drift 30s linear 1.2s infinite;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          -30deg,
+          rgba(134,168,119,0.03) 0px,
+          rgba(134,168,119,0.03) 3px,
+          transparent 3px,
+          transparent 51px
+        );
+      pointer-events: none;
+      mask-image: radial-gradient(ellipse 85% 75% at 50% 45%, black 20%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse 85% 75% at 50% 45%, black 20%, transparent 70%);
+      animation: weave-slide-right 1.0s var(--ease-dxn) 0.35s both, weave-drift 30s linear 1.35s infinite;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-logo {
+      width: 120px;
+      height: auto;
+      display: block;
+      border-radius: 4px;
+    }
+
+    .hero-wordmark {
+      margin-top: 20px;
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 500;
+      font-size: 15px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(165,180,252,0.6);
+    }
+
+    .hero-headline {
+      margin-top: 56px;
+      font-family: 'Newsreader', serif;
+      font-weight: 300;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-optical-sizing: auto;
+      font-variation-settings: 'opsz' 72;
+      line-height: 1.1;
+      color: var(--text);
+      max-width: 700px;
+    }
+
+    .hero-rule {
+      display: block;
+      width: 200px;
+      height: 1px;
+      background: rgba(99,102,241,0.2);
+      border: none;
+      margin: 20px auto;
+    }
+
+    .hero-subtitle {
+      font-family: 'Switzer', sans-serif;
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      max-width: 500px;
+    }
+
+    .hero-actions {
+      margin-top: 40px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* ========================================
+       BUTTONS (shared)
+       ======================================== */
+    .btn-primary {
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 500;
+      font-size: 13px;
+      letter-spacing: 0.02em;
+      background: var(--indigo);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 12px 28px;
+      cursor: pointer;
+      transition: opacity var(--duration) var(--ease-dxn);
+      text-decoration: none;
+      display: inline-block;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.85;
+    }
+
+    .btn-ghost {
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 500;
+      font-size: 13px;
+      letter-spacing: 0.02em;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid rgba(99,102,241,0.2);
+      border-radius: 4px;
+      padding: 11px 28px;
+      cursor: pointer;
+      transition: border-color var(--duration) var(--ease-dxn);
+      text-decoration: none;
+      display: inline-block;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-ghost:hover {
+      border-color: rgba(99,102,241,0.5);
+    }
+
+    .btn-text {
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 500;
+      font-size: 13px;
+      color: var(--magenta);
+      text-decoration: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: opacity var(--duration) var(--ease-dxn);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-text:hover {
+      opacity: 0.75;
+    }
+
+    /* ========================================
+       3. TRUST BAR
+       ======================================== */
+    .trust-bar {
+      background: var(--surface);
+      padding: 20px 40px;
+      text-align: center;
+    }
+
+    .trust-bar p {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--muted);
+      letter-spacing: 0.01em;
+    }
+
+    /* ========================================
+       4. THE APPROACH
+       ======================================== */
+    .section-approach {
+      padding: 120px 40px;
+      max-width: 1080px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .section-approach .section-headline {
+      margin-top: 32px;
+    }
+
+    .section-approach .section-body {
+      margin: 16px auto 0;
+      font-family: 'Switzer', sans-serif;
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text-muted);
+      max-width: 580px;
+    }
+
+    .process-grid {
+      margin-top: 48px;
+      display: grid;
+      grid-template-columns: 1.3fr 1fr 1fr;
+      gap: 24px;
+      text-align: left;
+    }
+
+    .process-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .process-card:nth-child(1) {
+      border-top: 2px solid var(--indigo);
+    }
+
+    .process-card-accent {
+      height: 2px;
+      background: repeating-linear-gradient(
+        90deg,
+        rgba(99,102,241,0.15) 0px,
+        rgba(99,102,241,0.15) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+    }
+
+    .process-card-inner {
+      padding: 28px 24px 24px;
+    }
+
+    .process-card-number {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--indigo);
+      letter-spacing: 0.05em;
+    }
+
+    .process-card-title {
+      margin-top: 12px;
+      font-family: 'Newsreader', serif;
+      font-weight: 500;
+      font-size: 20px;
+      font-optical-sizing: auto;
+      font-variation-settings: 'opsz' 48;
+      color: var(--text);
+    }
+
+    .process-card-desc {
+      margin-top: 8px;
+      font-family: 'Switzer', sans-serif;
+      font-weight: 300;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+    .process-card-footer {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .process-card-meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--muted);
+    }
+
+    /* ========================================
+       5. WEAVE DIVIDER
+       ======================================== */
+    .weave-divider {
+      margin: 0;
+      padding: 0 40px;
+    }
+
+    .weave-divider-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      height: 20px;
+      position: relative;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          transparent 0px,
+          transparent 2px,
+          rgba(99,102,241,0.12) 2px,
+          rgba(99,102,241,0.12) 3px,
+          transparent 3px,
+          transparent 6px
+        );
+      background-size: 100% 20px;
+      background-position: center;
+    }
+
+    .weave-divider-inner::after {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      width: 60px;
+      height: 60px;
+      transform: translateX(-50%) rotate(45deg);
+      background:
+        repeating-linear-gradient(
+          0deg,
+          transparent 0px,
+          transparent 2px,
+          rgba(134,168,119,0.10) 2px,
+          rgba(134,168,119,0.10) 3px,
+          transparent 3px,
+          transparent 6px
+        );
+    }
+
+    /* ========================================
+       6. PULL QUOTE
+       ======================================== */
+    .pull-quote {
+      padding: 100px 40px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .pull-quote blockquote {
+      font-family: 'Newsreader', serif;
+      font-weight: 400;
+      font-style: italic;
+      font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+      font-optical-sizing: auto;
+      font-variation-settings: 'opsz' 72;
+      line-height: 1.35;
+      color: var(--magenta);
+      max-width: 640px;
+    }
+
+    .pull-quote cite {
+      display: block;
+      margin-top: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-style: normal;
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--muted);
+    }
+
+    /* ========================================
+       7. TYPOGRAPHY SPECIMEN
+       ======================================== */
+    .type-specimen {
+      padding: 120px 40px;
+      max-width: 880px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .type-specimen .section-label {
+      margin-bottom: 48px;
+    }
+
+    .type-row {
+      padding: 40px 0;
+      border-bottom: 1px solid rgba(230,237,243,0.04);
+    }
+
+    .type-row:first-of-type {
+      padding-top: 0;
+    }
+
+    .type-row:last-of-type {
+      border-bottom: none;
+    }
+
+    .type-display {
+      font-family: 'Newsreader', serif;
+      font-weight: 600;
+      font-size: 56px;
+      font-optical-sizing: auto;
+      font-variation-settings: 'opsz' 72;
+      line-height: 1.1;
+      color: var(--text);
+    }
+
+    .type-editorial {
+      font-family: 'Newsreader', serif;
+      font-weight: 400;
+      font-style: italic;
+      font-size: 24px;
+      font-optical-sizing: auto;
+      font-variation-settings: 'opsz' 24;
+      line-height: 1.4;
+      color: var(--lavender);
+    }
+
+    .type-wordmark {
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 500;
+      font-size: 18px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text);
+    }
+
+    .type-body {
+      font-family: 'Switzer', sans-serif;
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 1.8;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .type-mono {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 400;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--warm-gold);
+    }
+
+    .type-spec-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--muted);
+      margin-top: 12px;
+      letter-spacing: 0.02em;
+    }
+
+    /* ========================================
+       8. COLOR PALETTE
+       ======================================== */
+    .palette {
+      padding: 80px 40px;
+      max-width: 880px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .palette .section-label {
+      margin-bottom: 48px;
+    }
+
+    .palette-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 80px);
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .palette-grid + .palette-grid {
+      margin-top: 20px;
+    }
+
+    .swatch {
+      text-align: center;
+    }
+
+    .swatch-block {
+      width: 80px;
+      height: 80px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+
+    .swatch-block-outline {
+      border: 1px solid rgba(230,237,243,0.1);
+    }
+
+    .swatch-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ========================================
+       9. THE WEAVE AT THREE SCALES
+       ======================================== */
+    .weave-scales {
+      padding: 120px 40px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .weave-scales .section-label {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .weave-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .weave-panel {
+      width: 100%;
+      height: 120px;
+      background: var(--surface);
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .weave-panel-label {
+      position: absolute;
+      left: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      z-index: 1;
+    }
+
+    .weave-panel-sublabel {
+      display: block;
+      margin-top: 4px;
+      color: rgba(125,133,144,0.5);
+      font-size: 9px;
+      letter-spacing: 0.02em;
+      text-transform: none;
+    }
+
+    .weave-macro {
+      background:
+        repeating-linear-gradient(
+          30deg,
+          rgba(99,102,241,0.12) 0px,
+          rgba(99,102,241,0.12) 4px,
+          transparent 4px,
+          transparent 44px
+        ),
+        repeating-linear-gradient(
+          -30deg,
+          rgba(134,168,119,0.08) 0px,
+          rgba(134,168,119,0.08) 4px,
+          transparent 4px,
+          transparent 44px
+        ),
+        var(--surface);
+    }
+
+    .weave-medium {
+      background:
+        repeating-linear-gradient(
+          30deg,
+          rgba(99,102,241,0.10) 0px,
+          rgba(99,102,241,0.10) 1.5px,
+          transparent 1.5px,
+          transparent 6.5px
+        ),
+        repeating-linear-gradient(
+          -30deg,
+          rgba(134,168,119,0.07) 0px,
+          rgba(134,168,119,0.07) 1.5px,
+          transparent 1.5px,
+          transparent 6.5px
+        ),
+        var(--surface);
+    }
+
+    .weave-micro {
+      background:
+        repeating-linear-gradient(
+          30deg,
+          rgba(99,102,241,0.08) 0px,
+          rgba(99,102,241,0.08) 1px,
+          transparent 1px,
+          transparent 9px
+        ),
+        repeating-linear-gradient(
+          -30deg,
+          rgba(134,168,119,0.05) 0px,
+          rgba(134,168,119,0.05) 1px,
+          transparent 1px,
+          transparent 9px
+        ),
+        var(--surface);
+    }
+
+    /* ========================================
+       10. COMPONENT PATTERNS
+       ======================================== */
+    .components {
+      padding: 120px 40px;
+      max-width: 880px;
+      margin: 0 auto;
+    }
+
+    .components .section-label {
+      margin-bottom: 48px;
+      text-align: center;
+    }
+
+    .component-group {
+      margin-bottom: 56px;
+    }
+
+    .component-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .component-group-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .component-row {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* Service card */
+    .service-card {
+      max-width: 420px;
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+      margin: 0 auto;
+    }
+
+    .service-card-accent {
+      height: 2px;
+      background: repeating-linear-gradient(
+        90deg,
+        rgba(99,102,241,0.15) 0px,
+        rgba(99,102,241,0.15) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+    }
+
+    .service-card-inner {
+      padding: 28px 24px;
+    }
+
+    .service-card-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--indigo);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .service-card-title {
+      margin-top: 12px;
+      font-family: 'Newsreader', serif;
+      font-weight: 600;
+      font-size: 22px;
+      font-optical-sizing: auto;
+      font-variation-settings: 'opsz' 48;
+      color: var(--text);
+    }
+
+    .service-card-desc {
+      margin-top: 8px;
+      font-family: 'Switzer', sans-serif;
+      font-weight: 300;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    .service-card-link {
+      display: inline-block;
+      margin-top: 20px;
+    }
+
+    /* Input field */
+    .input-field {
+      font-family: 'Switzer', sans-serif;
+      font-weight: 300;
+      font-size: 14px;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 11px 16px;
+      outline: none;
+      width: 280px;
+      transition: border-color var(--duration) var(--ease-dxn);
+    }
+
+    .input-field::placeholder {
+      color: var(--muted);
+      opacity: 0.5;
+    }
+
+    .input-field:focus {
+      border-color: var(--indigo);
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      padding: 4px 14px;
+      border-radius: 9999px;
+      border: 1px solid;
+    }
+
+    .badge-indigo {
+      color: var(--indigo);
+      border-color: rgba(99,102,241,0.3);
+    }
+
+    .badge-magenta {
+      color: var(--magenta);
+      border-color: rgba(232,121,168,0.3);
+    }
+
+    .badge-gold {
+      color: var(--warm-gold);
+      border-color: rgba(229,185,78,0.3);
+    }
+
+    /* Tab bar */
+    .tab-bar {
+      display: flex;
+      gap: 32px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0;
+      justify-content: center;
+    }
+
+    .tab-item {
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 500;
+      font-size: 13px;
+      letter-spacing: 0.02em;
+      color: var(--muted);
+      padding-bottom: 12px;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      transition: color var(--duration) var(--ease-dxn);
+      background: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+    }
+
+    .tab-item:hover {
+      color: var(--text);
+    }
+
+    .tab-item.active {
+      color: var(--text);
+      border-bottom-color: var(--indigo);
+    }
+
+    /* ========================================
+       11. FOOTER
+       ======================================== */
+    .footer {
+      background: var(--surface);
+      padding: 64px 40px;
+    }
+
+    .footer-grid {
+      max-width: 880px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 40px;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-brand-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .footer-logo {
+      width: 40px;
+      height: auto;
+    }
+
+    .footer-brand-name {
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .footer-brand-desc {
+      font-family: 'Switzer', sans-serif;
+      font-weight: 300;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .footer-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-nav a {
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 400;
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color var(--duration) var(--ease-dxn);
+    }
+
+    .footer-nav a:hover {
+      color: var(--text);
+    }
+
+    .footer-contact {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-contact span {
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 400;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .footer-bottom {
+      max-width: 880px;
+      margin: 0 auto;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-bottom span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      color: rgba(125,133,144,0.3);
+    }
+
+    /* ========================================
+       RESPONSIVE
+       ======================================== */
+    @media (max-width: 840px) {
+      .process-grid {
+        grid-template-columns: 1fr;
+        max-width: 480px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .palette-grid {
+        grid-template-columns: repeat(4, 80px);
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 8px;
+        align-items: center;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .navbar {
+        padding: 0 20px;
+      }
+
+      .navbar-links {
+        gap: 20px;
+      }
+
+      .hero {
+        padding: 80px 24px;
+      }
+
+      .type-display {
+        font-size: 40px;
+      }
+
+      .type-editorial {
+        font-size: 20px;
+      }
+
+      .section-approach,
+      .pull-quote,
+      .type-specimen,
+      .palette,
+      .weave-scales,
+      .components {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+
+      .footer {
+        padding: 48px 24px;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .hero-actions .btn-primary,
+      .hero-actions .btn-ghost {
+        width: 100%;
+        text-align: center;
+      }
+
+      .palette-grid {
+        grid-template-columns: repeat(3, 80px);
+      }
+    }
+    /* ========================================
+       WEAVE REVEAL (page load)
+       ======================================== */
+    .weave-reveal {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: var(--ground);
+      pointer-events: none;
+      animation: reveal-fade 0.6s var(--ease-dxn) 1.3s forwards;
+    }
+
+    .hero::before,
+    .hero::after {
+      z-index: 10001;
+    }
+
+    @keyframes weave-slide-left {
+      from { transform: translateX(-100%); }
+      to { transform: translateX(0); }
+    }
+
+    @keyframes weave-slide-right {
+      from { transform: translateX(100%); }
+      to { transform: translateX(0); }
+    }
+
+    @keyframes reveal-fade {
+      to { opacity: 0; visibility: hidden; }
+    }
+
+    /* ========================================
+       BUTTON HOVER — STRAND UNDERLINE
+       ======================================== */
+    .btn-primary::after,
+    .btn-ghost::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: var(--indigo);
+      transform: translateX(-101%);
+      transition: transform 0.4s var(--ease-dxn);
+    }
+
+    .btn-primary::after {
+      background: rgba(255,255,255,0.3);
+    }
+
+    .btn-primary:hover::after,
+    .btn-ghost:hover::after {
+      transform: translateX(0);
+    }
+
+    /* ========================================
+       LINK HOVER — WEAVE UNDERLINE
+       ======================================== */
+    .btn-text::before,
+    .btn-text::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 1px;
+    }
+
+    .btn-text::before {
+      left: 0;
+      background: var(--magenta);
+      transform: translateX(-101%);
+      transition: transform 0.35s var(--ease-dxn);
+    }
+
+    .btn-text::after {
+      right: 0;
+      bottom: 3px;
+      background: var(--magenta);
+      transform: translateX(101%);
+      transition: transform 0.35s var(--ease-dxn) 0.05s;
+    }
+
+    .btn-text:hover::before,
+    .btn-text:hover::after {
+      transform: translateX(0);
+    }
+
+    /* ========================================
+       PROCESS CARD STAGGER ON SCROLL
+       ======================================== */
+    .process-card {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+
+    @supports (animation-timeline: view()) {
+      .process-card {
+        animation: card-enter 0.6s var(--ease-dxn) both;
+        animation-timeline: view();
+      }
+
+      .process-card:nth-child(1) { animation-range: entry 0% entry 35%; }
+      .process-card:nth-child(2) { animation-range: entry 5% entry 40%; }
+      .process-card:nth-child(3) { animation-range: entry 10% entry 45%; }
+    }
+
+    @supports not (animation-timeline: view()) {
+      .process-card {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    @keyframes card-enter {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ========================================
+       HERO WEAVE DRIFT
+       ======================================== */
+    @keyframes weave-drift {
+      0% { background-position: 0 0; }
+      100% { background-position: 80px 80px; }
+    }
+
+    /* ========================================
+       MEGA WORD
+       ======================================== */
+    .mega-word {
+      font-family: 'Newsreader', serif;
+      font-weight: 200;
+      font-size: clamp(5rem, 12vw, 12rem);
+      font-variation-settings: 'opsz' 72;
+      line-height: 0.85;
+      letter-spacing: -0.04em;
+      color: rgba(230,237,243,0.06);
+      text-align: center;
+      margin-bottom: -24px;
+      user-select: none;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="weave-reveal"></div>
+
+  <!-- GRAIN OVERLAY -->
+  <svg class="grain-overlay" xmlns="http://www.w3.org/2000/svg">
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="4" stitchTiles="stitch" />
+    </filter>
+    <rect width="100%" height="100%" filter="url(#grain)" />
+  </svg>
+
+  <!-- 1. NAVIGATION BAR -->
+  <nav class="navbar">
+    <div class="navbar-left">
+      <img src="dxn-logomark-white.png" alt="DXN" class="navbar-logo">
+      <span class="navbar-wordmark">DXN</span>
+    </div>
+    <ul class="navbar-links">
+      <li><a href="#approach">Process</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- 2. HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <img src="dxn-logomark-white.png" alt="DXN logomark" class="hero-logo">
+      <p class="hero-wordmark">Dixon Strategic Labs</p>
+      <h1 class="hero-headline">Twenty years of weaving strategy together.</h1>
+      <hr class="hero-rule">
+      <p class="hero-subtitle">Process design for credit unions, nonprofits, and civic organizations.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">Start a conversation</a>
+        <a href="#approach" class="btn-ghost">See how it works</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. TRUST BAR -->
+  <div class="trust-bar">
+    <p>Advisor to credit unions representing $45B+ in assets &middot; Board Chair, Communitere International &middot; Former UN Innovation Lead</p>
+  </div>
+
+  <!-- 4. THE APPROACH -->
+  <section class="section-approach" id="approach">
+    <p class="section-label">The Approach</p>
+    <h2 class="section-headline">Structured collaborative intelligence.</h2>
+    <p class="section-body">Every organization has the expertise it needs. What's usually missing is the structure to surface it, reconcile it, and turn it into something the whole team can execute.</p>
+    <div class="process-grid">
+      <div class="process-card">
+        <div class="process-card-accent"></div>
+        <div class="process-card-inner">
+          <p class="process-card-number">01</p>
+          <h3 class="process-card-title">Discovery</h3>
+          <p class="process-card-desc">Stakeholder interviews, landscape scan, context mapping.</p>
+          <div class="process-card-footer">
+            <p class="process-card-meta">4-6 weeks</p>
+          </div>
+        </div>
+      </div>
+      <div class="process-card">
+        <div class="process-card-accent"></div>
+        <div class="process-card-inner">
+          <p class="process-card-number">02</p>
+          <h3 class="process-card-title">Synthesis</h3>
+          <p class="process-card-desc">Pattern recognition, framework design, strategic options.</p>
+          <div class="process-card-footer">
+            <p class="process-card-meta">2-4 weeks</p>
+          </div>
+        </div>
+      </div>
+      <div class="process-card">
+        <div class="process-card-accent"></div>
+        <div class="process-card-inner">
+          <p class="process-card-number">03</p>
+          <h3 class="process-card-title">Testing</h3>
+          <p class="process-card-desc">Pilot programs, measurement systems, iteration.</p>
+          <div class="process-card-footer">
+            <p class="process-card-meta">4-8 weeks</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. WEAVE DIVIDER -->
+  <div class="weave-divider">
+    <div class="weave-divider-inner"></div>
+  </div>
+
+  <!-- 6. PULL QUOTE -->
+  <section class="pull-quote">
+    <p class="mega-word">Synthesis</p>
+    <blockquote>&ldquo;He made sense of what we were all struggling to articulate.&rdquo;</blockquote>
+    <cite>Board member, Abound Credit Union</cite>
+  </section>
+
+  <!-- 5b. WEAVE DIVIDER -->
+  <div class="weave-divider">
+    <div class="weave-divider-inner"></div>
+  </div>
+
+  <!-- 7. TYPOGRAPHY SPECIMEN -->
+  <section class="type-specimen" id="about">
+    <p class="section-label">Typography System</p>
+
+    <div class="type-row">
+      <p class="type-display">Synthesis</p>
+      <p class="type-spec-label">Display &middot; Newsreader Variable &middot; wght 600, opsz 72</p>
+    </div>
+
+    <div class="type-row">
+      <p class="type-editorial">The process is invisible when it works well.</p>
+      <p class="type-spec-label">Editorial &middot; Newsreader Italic</p>
+    </div>
+
+    <div class="type-row">
+      <p class="type-wordmark">STRATEGIC TRANSITIONS</p>
+      <p class="type-spec-label">Wordmark &middot; Maven Pro</p>
+    </div>
+
+    <div class="type-row">
+      <p class="type-body">Process design is the practice of making collaboration intentional. It means structuring how groups think together, surface disagreements productively, and arrive at decisions that hold. The work is invisible when it works well, and painfully obvious when it doesn't.</p>
+      <p class="type-spec-label">Body &middot; Switzer Light</p>
+    </div>
+
+    <div class="type-row">
+      <p class="type-mono">discovery &rarr; synthesis &rarr; testing &rarr; roadmap</p>
+      <p class="type-spec-label">Data &middot; JetBrains Mono</p>
+    </div>
+  </section>
+
+  <!-- 8. COLOR PALETTE -->
+  <section class="palette">
+    <p class="section-label">Color Palette</p>
+    <div class="palette-grid">
+      <div class="swatch">
+        <div class="swatch-block swatch-block-outline" style="background: #0d1117;"></div>
+        <div class="swatch-label">#0d1117<br>Ground</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-block swatch-block-outline" style="background: #161b22;"></div>
+        <div class="swatch-label">#161b22<br>Surface</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-block swatch-block-outline" style="background: #1c2333;"></div>
+        <div class="swatch-label">#1c2333<br>Elevated</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-block" style="background: #e6edf3;"></div>
+        <div class="swatch-label">#e6edf3<br>Text</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-block" style="background: #7d8590;"></div>
+        <div class="swatch-label">#7d8590<br>Muted</div>
+      </div>
+    </div>
+    <div class="palette-grid">
+      <div class="swatch">
+        <div class="swatch-block" style="background: #6366f1;"></div>
+        <div class="swatch-label">#6366f1<br>Indigo</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-block" style="background: #86a877;"></div>
+        <div class="swatch-label">#86a877<br>Sage</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-block" style="background: #a5b4fc;"></div>
+        <div class="swatch-label">#a5b4fc<br>Lavender</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-block" style="background: #e879a8;"></div>
+        <div class="swatch-label">#e879a8<br>Magenta</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-block" style="background: #e5b94e;"></div>
+        <div class="swatch-label">#e5b94e<br>Warm Gold</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. THE WEAVE AT THREE SCALES -->
+  <section class="weave-scales" id="work">
+    <p class="section-label">The Weave</p>
+    <div class="weave-stack">
+      <div class="weave-panel weave-macro">
+        <span class="weave-panel-label">01 MACRO<span class="weave-panel-sublabel">Hero backgrounds, covers, wraps</span></span>
+      </div>
+      <div class="weave-panel weave-medium">
+        <span class="weave-panel-label">02 MEDIUM<span class="weave-panel-sublabel">Section dividers, card accents</span></span>
+      </div>
+      <div class="weave-panel weave-micro">
+        <span class="weave-panel-label">03 MICRO<span class="weave-panel-sublabel">Textures, favicon, loading states</span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9b. WEAVE IN CONTEXT -->
+  <section style="padding:120px 40px;max-width:1080px;margin:0 auto;">
+    <p class="section-label" style="text-align:center;margin-bottom:64px;">The Weave in Context</p>
+
+    <!-- MACRO: Full-width banner with weave background -->
+    <div style="position:relative;overflow:hidden;padding:80px 48px;margin-bottom:16px;">
+      <div style="position:absolute;inset:0;background:
+        repeating-linear-gradient(30deg,transparent,transparent 44px,rgba(99,102,241,0.08) 44px,rgba(99,102,241,0.08) 48px),
+        repeating-linear-gradient(30deg,transparent,transparent 92px,rgba(99,102,241,0.08) 92px,rgba(99,102,241,0.08) 96px),
+        repeating-linear-gradient(30deg,transparent,transparent 140px,rgba(99,102,241,0.08) 140px,rgba(99,102,241,0.08) 144px),
+        repeating-linear-gradient(-30deg,transparent,transparent 44px,rgba(134,168,119,0.04) 44px,rgba(134,168,119,0.04) 48px),
+        repeating-linear-gradient(-30deg,transparent,transparent 92px,rgba(134,168,119,0.04) 92px,rgba(134,168,119,0.04) 96px),
+        repeating-linear-gradient(-30deg,transparent,transparent 140px,rgba(134,168,119,0.04) 140px,rgba(134,168,119,0.04) 144px);
+      "></div>
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 50%,rgba(99,102,241,0.07),transparent);"></div>
+      <div style="position:relative;z-index:1;text-align:center;max-width:600px;margin:0 auto;">
+        <p style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--indigo);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:24px;">Macro · Banner Background</p>
+        <h2 style="font-family:'Newsreader',serif;font-weight:400;font-size:clamp(1.8rem,3.5vw,2.8rem);font-variation-settings:'opsz' 72;line-height:1.15;margin-bottom:16px;">Strategic transitions require designed processes.</h2>
+        <p style="font-family:'Switzer',sans-serif;font-weight:300;font-size:15px;color:var(--text-muted);line-height:1.7;">The macro weave creates a cool, luminous atmosphere behind hero content. Indigo "over" lines and sage "under" lines cross at 30 degrees for an elegant, less aggressive angle.</p>
+      </div>
+    </div>
+    <p style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);text-align:right;margin-bottom:80px;">±30deg · indigo at 8% · sage at 4% · radial glow center</p>
+
+    <!-- MEDIUM: Section divider between content blocks -->
+    <div style="max-width:680px;margin:0 auto 80px;">
+      <p style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--indigo);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:24px;">Medium · Section Divider</p>
+      <p style="font-family:'Newsreader',serif;font-weight:400;font-size:22px;font-variation-settings:'opsz' 48;color:var(--text);line-height:1.4;margin-bottom:32px;">The discovery phase surfaces what the organization already knows but hasn't yet articulated.</p>
+
+      <!-- Medium weave divider -->
+      <div style="position:relative;height:24px;margin:40px 0;background:
+        repeating-linear-gradient(0deg,transparent 0px,transparent 3px,rgba(99,102,241,0.10) 3px,rgba(99,102,241,0.10) 4px,transparent 4px,transparent 8px);background-size:100% 24px;">
+        <div style="position:absolute;top:-16px;left:38.2%;width:56px;height:56px;transform:rotate(45deg);background:
+          repeating-linear-gradient(0deg,transparent 0px,transparent 3px,rgba(134,168,119,0.08) 3px,rgba(134,168,119,0.08) 4px,transparent 4px,transparent 8px);"></div>
+      </div>
+
+      <p style="font-family:'Newsreader',serif;font-weight:400;font-size:22px;font-variation-settings:'opsz' 48;color:var(--text);line-height:1.4;margin-top:32px;">Synthesis transforms those raw inputs into frameworks your team can execute against with confidence.</p>
+      <p style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);text-align:right;margin-top:16px;">5 horizontal strands · crossing at inverse golden ratio (38.2%)</p>
+    </div>
+
+    <!-- MICRO: Card comparison with/without texture -->
+    <div style="max-width:680px;margin:0 auto;">
+      <p style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--indigo);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:24px;">Micro · Card Texture</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+        <div style="position:relative;overflow:hidden;border:1px solid var(--border);border-radius:4px;padding:32px;">
+          <div style="position:absolute;inset:0;background:
+            repeating-linear-gradient(30deg,transparent,transparent 14px,rgba(99,102,241,0.04) 14px,rgba(99,102,241,0.04) 15px),
+            repeating-linear-gradient(-30deg,transparent,transparent 14px,rgba(134,168,119,0.02) 14px,rgba(134,168,119,0.02) 15px);pointer-events:none;"></div>
+          <!-- top-edge accent -->
+          <div style="position:absolute;top:0;left:0;right:0;height:2px;background:repeating-linear-gradient(90deg,rgba(99,102,241,0.15) 0,rgba(99,102,241,0.15) 2px,transparent 2px,transparent 5px);"></div>
+          <div style="position:relative;z-index:1;">
+            <p style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--indigo);margin-bottom:12px;">WITH TEXTURE</p>
+            <h3 style="font-family:'Newsreader',serif;font-weight:500;font-size:18px;font-variation-settings:'opsz' 36;margin-bottom:8px;">Board Governance</h3>
+            <p style="font-family:'Switzer',sans-serif;font-weight:300;font-size:13px;color:var(--text-muted);line-height:1.6;">Assessment, alignment sessions, decision framework design.</p>
+          </div>
+        </div>
+        <div style="border:1px solid var(--border);border-radius:4px;padding:32px;">
+          <p style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:12px;">WITHOUT TEXTURE</p>
+          <h3 style="font-family:'Newsreader',serif;font-weight:500;font-size:18px;font-variation-settings:'opsz' 36;margin-bottom:8px;">Board Governance</h3>
+          <p style="font-family:'Switzer',sans-serif;font-weight:300;font-size:13px;color:var(--text-muted);line-height:1.6;">Assessment, alignment sessions, decision framework design.</p>
+        </div>
+      </div>
+      <p style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);text-align:right;margin-top:16px;">±30deg · 1px strands · 15px spacing · indigo 4% / sage 2%</p>
+    </div>
+  </section>
+
+  <!-- 10. COMPONENT PATTERNS -->
+  <section class="components">
+    <p class="section-label">Component Patterns</p>
+
+    <!-- 10a. Buttons -->
+    <div class="component-group">
+      <p class="component-group-label">Buttons</p>
+      <div class="component-row">
+        <button class="btn-primary">Start a conversation</button>
+        <button class="btn-ghost">See how it works</button>
+        <button class="btn-text">Learn more &rarr;</button>
+      </div>
+    </div>
+
+    <!-- 10b. Card -->
+    <div class="component-group">
+      <p class="component-group-label">Service Card</p>
+      <div class="service-card">
+        <div class="service-card-accent"></div>
+        <div class="service-card-inner">
+          <p class="service-card-label">Engagement</p>
+          <h3 class="service-card-title">Strategic Planning Facilitation</h3>
+          <p class="service-card-desc">A structured process to move your board and leadership team from diffuse priorities to a concrete, sequenced strategic plan. Includes stakeholder interviews, environmental scan, and facilitated workshops.</p>
+          <a href="#" class="btn-text service-card-link">Learn more &rarr;</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10c. Badges -->
+    <div class="component-group">
+      <p class="component-group-label">Badges</p>
+      <div class="component-row">
+        <span class="badge badge-indigo">Strategy</span>
+        <span class="badge badge-magenta">Facilitation</span>
+        <span class="badge badge-gold">Research</span>
+      </div>
+    </div>
+
+    <!-- 10d. Input -->
+    <div class="component-group">
+      <p class="component-group-label">Input</p>
+      <div class="component-row">
+        <input type="text" class="input-field" placeholder="Your email address">
+      </div>
+    </div>
+
+    <!-- 10e. Tab Bar -->
+    <div class="component-group">
+      <p class="component-group-label">Tab Bar</p>
+      <div class="tab-bar">
+        <button class="tab-item active">Overview</button>
+        <button class="tab-item">Process</button>
+        <button class="tab-item">Outcomes</button>
+        <button class="tab-item">Timeline</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. FOOTER -->
+  <footer class="footer" id="contact">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-brand-row">
+          <img src="dxn-logomark-white.png" alt="DXN" class="footer-logo">
+          <span class="footer-brand-name">Dixon Strategic Labs</span>
+        </div>
+        <p class="footer-brand-desc">Process design for mission-driven organizations.</p>
+      </div>
+      <div class="footer-nav">
+        <a href="#approach">Process</a>
+        <a href="#work">Work</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="footer-contact">
+        <span>Oakland, California</span>
+        <span>brent@dxn.is</span>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Dixon Strategic Labs</span>
+      <span>Variation 3 &middot; Indigo + Sage</span>
+    </div>
+  </footer>
+
+</body>
+</html>

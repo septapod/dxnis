@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tested Assumptions — Sketch Gallery</title>
+  <link rel="stylesheet" href="fonts/dsl-fonts.css">
+  <link rel="stylesheet" href="css/dsl-tokens.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-body);
+    }
+    .gallery-header {
+      text-align: center;
+      padding: 60px 24px 20px;
+    }
+    .gallery-header h1 {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .gallery-header p {
+      color: var(--color-text-dim);
+      font-size: 0.95rem;
+    }
+    .sketch-section {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+    .sketch-label {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .sketch-desc {
+      color: var(--color-text-dim);
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+      max-width: 60ch;
+    }
+    .sketch-container {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--color-border);
+      position: relative;
+    }
+    .sketch-container canvas { display: block; }
+    .progress-control {
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .progress-control label {
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+      white-space: nowrap;
+    }
+    .progress-control input[type="range"] {
+      flex: 1;
+      accent-color: var(--color-primary);
+    }
+    .progress-val {
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      color: var(--color-text-dim);
+      min-width: 3ch;
+    }
+    .divider {
+      max-width: 900px;
+      margin: 0 auto;
+      border: none;
+      border-top: 1px solid var(--color-border);
+    }
+  </style>
+</head>
+<body data-theme="dark">
+  <div class="gallery-header">
+    <h1>Tested Assumptions — Four Options</h1>
+    <p>Use the slider under each sketch to scrub through the scroll animation.</p>
+  </div>
+
+  <div class="sketch-section">
+    <div class="sketch-label" style="color: var(--color-primary);">A. Ripple Interference</div>
+    <div class="sketch-desc">Concentric rings from multiple sources. Where waves overlap constructively, bright teal points appear. The interference pattern reveals what's real.</div>
+    <div class="sketch-container" id="sketch-a"></div>
+    <div class="progress-control">
+      <label>Scroll progress:</label>
+      <input type="range" min="0" max="100" value="0" id="slider-a">
+      <span class="progress-val" id="val-a">0%</span>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="sketch-section">
+    <div class="sketch-label" style="color: var(--color-primary);">B. Focus Pulling</div>
+    <div class="sketch-desc">Blurry bokeh circles sharpen into crisp geometric forms as testing brings assumptions into focus.</div>
+    <div class="sketch-container" id="sketch-b"></div>
+    <div class="progress-control">
+      <label>Scroll progress:</label>
+      <input type="range" min="0" max="100" value="0" id="slider-b">
+      <span class="progress-val" id="val-b">0%</span>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="sketch-section">
+    <div class="sketch-label" style="color: var(--color-primary);">C. Crystal Growth</div>
+    <div class="sketch-desc">Branching crystalline structures grow from seed points. Each branch is an assumption being explored. The lattice is the validated foundation.</div>
+    <div class="sketch-container" id="sketch-c"></div>
+    <div class="progress-control">
+      <label>Scroll progress:</label>
+      <input type="range" min="0" max="100" value="0" id="slider-c">
+      <span class="progress-val" id="val-c">0%</span>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="sketch-section">
+    <div class="sketch-label" style="color: var(--color-primary);">D. Waveform Resolving</div>
+    <div class="sketch-desc">Chaotic oscilloscope waves settle into a clean, confident signal. Multiple frequencies finding harmony.</div>
+    <div class="sketch-container" id="sketch-d"></div>
+    <div class="progress-control">
+      <label>Scroll progress:</label>
+      <input type="range" min="0" max="100" value="0" id="slider-d">
+      <span class="progress-val" id="val-d">0%</span>
+    </div>
+  </div>
+
+  <div style="height: 80px;"></div>
+
+  <script>
+    function isDarkMode() { return true; }
+    function teal() { return [82, 144, 153]; }
+    function gold() { return [251, 226, 72]; }
+    function coral() { return [207, 90, 90]; }
+    function dim() { return [60, 60, 68]; }
+
+    var sliders = {};
+    function getSlider(id) { return (sliders[id] || 0) / 100; }
+
+    function wireSlider(sliderId, valId, key) {
+      var slider = document.getElementById(sliderId);
+      var val = document.getElementById(valId);
+      slider.addEventListener('input', function () {
+        sliders[key] = parseInt(slider.value);
+        val.textContent = slider.value + '%';
+      });
+      sliders[key] = 0;
+    }
+
+    wireSlider('slider-a', 'val-a', 'a');
+    wireSlider('slider-b', 'val-b', 'b');
+    wireSlider('slider-c', 'val-c', 'c');
+    wireSlider('slider-d', 'val-d', 'd');
+
+    // ========== A: RIPPLE INTERFERENCE ==========
+    new p5(function (p) {
+      var w, h;
+      var sources = [];
+      var SOURCE_COUNT = 5;
+
+      p.setup = function () {
+        var c = document.getElementById('sketch-a');
+        w = c.offsetWidth; h = c.offsetHeight;
+        p.createCanvas(w, h).style('display', 'block');
+        p.frameRate(24);
+        for (var i = 0; i < SOURCE_COUNT; i++) {
+          sources.push({
+            x: p.random(w * 0.15, w * 0.85),
+            y: p.random(h * 0.15, h * 0.85),
+            activateAt: i * 0.15
+          });
+        }
+      };
+
+      p.draw = function () {
+        p.clear();
+        var t = getSlider('a');
+        var tc = teal();
+        var gc = gold();
+        var dc = dim();
+        var maxRings = 8;
+        var ringSpacing = Math.min(w, h) * 0.08;
+
+        // Draw rings for each active source
+        for (var s = 0; s < sources.length; s++) {
+          var src = sources[s];
+          if (t < src.activateAt) continue;
+          var srcT = p.constrain(p.map(t, src.activateAt, src.activateAt + 0.3, 0, 1), 0, 1);
+
+          p.noFill();
+          var ringsToShow = Math.floor(maxRings * srcT);
+          for (var r = 1; r <= ringsToShow; r++) {
+            var radius = r * ringSpacing;
+            var alpha = p.map(r, 1, maxRings, 50 * srcT, 8 * srcT);
+            p.stroke(tc[0], tc[1], tc[2], alpha);
+            p.strokeWeight(p.lerp(1.5, 0.4, r / maxRings));
+            p.ellipse(src.x, src.y, radius * 2);
+          }
+
+          // Source dot
+          p.noStroke();
+          p.fill(tc[0], tc[1], tc[2], 120 * srcT);
+          p.ellipse(src.x, src.y, 5);
+        }
+
+        // Constructive interference: bright points where rings overlap
+        if (t > 0.2) {
+          var intT = p.constrain(p.map(t, 0.2, 0.7, 0, 1), 0, 1);
+          p.noStroke();
+          var step = 18;
+          for (var gx = 0; gx < w; gx += step) {
+            for (var gy = 0; gy < h; gy += step) {
+              var overlap = 0;
+              for (var si = 0; si < sources.length; si++) {
+                if (t < sources[si].activateAt) continue;
+                var d = p.dist(gx, gy, sources[si].x, sources[si].y);
+                var ringPhase = (d % ringSpacing) / ringSpacing;
+                if (ringPhase < 0.25 || ringPhase > 0.75) overlap++;
+              }
+              if (overlap >= 2) {
+                var bright = p.map(overlap, 2, SOURCE_COUNT, 40, 180) * intT;
+                p.fill(tc[0], tc[1], tc[2], bright);
+                p.ellipse(gx, gy, p.map(overlap, 2, SOURCE_COUNT, 3, 7));
+              }
+            }
+          }
+        }
+
+        // Gold glow at highest overlap region
+        if (t > 0.7) {
+          var glowT = p.constrain(p.map(t, 0.7, 0.9, 0, 1), 0, 1);
+          var cx = 0, cy = 0;
+          var active = 0;
+          for (var j = 0; j < sources.length; j++) {
+            if (t >= sources[j].activateAt) { cx += sources[j].x; cy += sources[j].y; active++; }
+          }
+          if (active > 0) {
+            cx /= active; cy /= active;
+            p.fill(gc[0], gc[1], gc[2], 20 * glowT);
+            p.ellipse(cx, cy, Math.min(w, h) * 0.3 * glowT);
+          }
+        }
+      };
+    }, document.getElementById('sketch-a'));
+
+    // ========== B: FOCUS PULLING ==========
+    new p5(function (p) {
+      var w, h;
+      var shapes = [];
+      var SHAPE_COUNT = 15;
+
+      p.setup = function () {
+        var c = document.getElementById('sketch-b');
+        w = c.offsetWidth; h = c.offsetHeight;
+        p.createCanvas(w, h).style('display', 'block');
+        p.frameRate(24);
+        for (var i = 0; i < SHAPE_COUNT; i++) {
+          var isValid = i < 8;
+          shapes.push({
+            x: p.random(w * 0.08, w * 0.92),
+            y: p.random(h * 0.08, h * 0.92),
+            size: p.random(15, 40),
+            sides: Math.floor(p.random(3, 7)),
+            focusAt: p.random(0.1, 0.6),
+            valid: isValid,
+            angle: p.random(p.TWO_PI)
+          });
+        }
+      };
+
+      p.draw = function () {
+        p.clear();
+        var t = getSlider('b');
+        var tc = teal();
+        var gc = gold();
+        var cc = coral();
+        var dc = dim();
+
+        for (var i = 0; i < shapes.length; i++) {
+          var sh = shapes[i];
+          var focusT = p.constrain(p.map(t, sh.focusAt, sh.focusAt + 0.3, 0, 1), 0, 1);
+
+          // Blur radius decreases as focus increases
+          var blur = p.lerp(sh.size * 1.2, 0, focusT);
+          var col = sh.valid ? tc : cc;
+          var alpha = p.lerp(30, sh.valid ? 200 : 100, focusT);
+
+          if (blur > 2) {
+            // Blurry: draw concentric fading circles (fake gaussian)
+            p.noStroke();
+            var layers = 5;
+            for (var l = layers; l >= 1; l--) {
+              var r = sh.size + blur * (l / layers);
+              var a = alpha * 0.15 / l;
+              p.fill(col[0], col[1], col[2], a);
+              p.ellipse(sh.x, sh.y, r * 2);
+            }
+          }
+
+          // Sharp shape emerges
+          if (focusT > 0.1) {
+            var sharpAlpha = p.map(focusT, 0.1, 0.8, 0, alpha);
+            p.noFill();
+            p.stroke(col[0], col[1], col[2], sharpAlpha);
+            p.strokeWeight(p.lerp(0.5, 1.8, focusT));
+            p.push();
+            p.translate(sh.x, sh.y);
+            p.rotate(sh.angle);
+            p.beginShape();
+            for (var v = 0; v < sh.sides; v++) {
+              var a2 = (p.TWO_PI / sh.sides) * v;
+              p.vertex(Math.cos(a2) * sh.size * focusT, Math.sin(a2) * sh.size * focusT);
+            }
+            p.endShape(p.CLOSE);
+            p.pop();
+
+            // Fill at high focus (validated only)
+            if (focusT > 0.7 && sh.valid) {
+              var fillAlpha = p.map(focusT, 0.7, 1, 0, 50);
+              p.noStroke();
+              p.fill(col[0], col[1], col[2], fillAlpha);
+              p.push();
+              p.translate(sh.x, sh.y);
+              p.rotate(sh.angle);
+              p.beginShape();
+              for (var v2 = 0; v2 < sh.sides; v2++) {
+                var a3 = (p.TWO_PI / sh.sides) * v2;
+                p.vertex(Math.cos(a3) * sh.size, Math.sin(a3) * sh.size);
+              }
+              p.endShape(p.CLOSE);
+              p.pop();
+            }
+
+            // Invalidated shapes dim and shrink at high focus
+            if (focusT > 0.6 && !sh.valid) {
+              // Already handled by lower alpha on coral
+            }
+          }
+        }
+      };
+    }, document.getElementById('sketch-b'));
+
+    // ========== C: CRYSTAL GROWTH ==========
+    new p5(function (p) {
+      var w, h;
+      var seeds = [];
+      var SEED_COUNT = 4;
+      var branches = [];
+
+      p.setup = function () {
+        var c = document.getElementById('sketch-c');
+        w = c.offsetWidth; h = c.offsetHeight;
+        p.createCanvas(w, h).style('display', 'block');
+        p.frameRate(24);
+
+        for (var s = 0; s < SEED_COUNT; s++) {
+          var sx = w * 0.2 + (s / (SEED_COUNT - 1)) * w * 0.6;
+          var sy = h * 0.5 + p.random(-h * 0.1, h * 0.1);
+          seeds.push({ x: sx, y: sy });
+
+          // Generate branches from each seed
+          var branchCount = Math.floor(p.random(4, 7));
+          for (var b = 0; b < branchCount; b++) {
+            var angle = (p.TWO_PI / branchCount) * b + p.random(-0.3, 0.3);
+            var len = p.random(30, 80);
+            var segments = [];
+            var bx = sx, by = sy;
+            var segCount = Math.floor(p.random(3, 6));
+            for (var seg = 0; seg < segCount; seg++) {
+              var segLen = len / segCount;
+              bx += Math.cos(angle) * segLen;
+              by += Math.sin(angle) * segLen;
+              angle += p.random(-0.4, 0.4);
+              segments.push({ x: bx, y: by });
+
+              // Sub-branch at some segments
+              if (p.random() > 0.5 && seg > 0) {
+                var subAngle = angle + (p.random() > 0.5 ? 0.6 : -0.6);
+                var subSegs = [];
+                var sbx = bx, sby = by;
+                for (var ss = 0; ss < 3; ss++) {
+                  sbx += Math.cos(subAngle) * segLen * 0.6;
+                  sby += Math.sin(subAngle) * segLen * 0.6;
+                  subAngle += p.random(-0.3, 0.3);
+                  subSegs.push({ x: sbx, y: sby });
+                }
+                branches.push({
+                  seedIdx: s,
+                  startX: bx, startY: by,
+                  segments: subSegs,
+                  growAt: 0.15 + s * 0.12 + seg * 0.06 + 0.1,
+                  isSub: true
+                });
+              }
+            }
+            branches.push({
+              seedIdx: s,
+              startX: sx, startY: sy,
+              segments: segments,
+              growAt: 0.05 + s * 0.12 + b * 0.03,
+              isSub: false
+            });
+          }
+        }
+      };
+
+      p.draw = function () {
+        p.clear();
+        var t = getSlider('c');
+        var tc = teal();
+        var gc = gold();
+
+        // Draw seeds
+        p.noStroke();
+        for (var s = 0; s < seeds.length; s++) {
+          var seedAlpha = p.constrain(t * 8, 0, 1) * 200;
+          p.fill(tc[0], tc[1], tc[2], seedAlpha);
+          p.ellipse(seeds[s].x, seeds[s].y, 6);
+          p.fill(tc[0], tc[1], tc[2], seedAlpha * 0.15);
+          p.ellipse(seeds[s].x, seeds[s].y, 18);
+        }
+
+        // Draw branches
+        for (var b = 0; b < branches.length; b++) {
+          var br = branches[b];
+          if (t < br.growAt) continue;
+          var growT = p.constrain(p.map(t, br.growAt, br.growAt + 0.15, 0, 1), 0, 1);
+          var segsToShow = Math.ceil(growT * br.segments.length);
+
+          var alpha = p.lerp(40, br.isSub ? 120 : 180, growT);
+          var weight = br.isSub ? 0.8 : 1.4;
+          p.stroke(tc[0], tc[1], tc[2], alpha);
+          p.strokeWeight(weight);
+
+          var prevX = br.startX, prevY = br.startY;
+          for (var seg = 0; seg < segsToShow; seg++) {
+            var pt = br.segments[seg];
+            p.line(prevX, prevY, pt.x, pt.y);
+
+            // Node at junction
+            p.noStroke();
+            p.fill(tc[0], tc[1], tc[2], alpha * 0.8);
+            p.ellipse(pt.x, pt.y, 3);
+            p.stroke(tc[0], tc[1], tc[2], alpha);
+            p.strokeWeight(weight);
+
+            prevX = pt.x;
+            prevY = pt.y;
+          }
+
+          // Tip glow at growth front
+          if (growT > 0.3 && growT < 0.95) {
+            var tipPt = br.segments[segsToShow - 1];
+            if (tipPt) {
+              p.noStroke();
+              p.fill(tc[0], tc[1], tc[2], 30);
+              p.ellipse(tipPt.x, tipPt.y, 12);
+            }
+          }
+        }
+
+        // Gold glow at center mass at high progress
+        if (t > 0.7) {
+          var glowT = p.constrain(p.map(t, 0.7, 0.9, 0, 1), 0, 1);
+          var cx = 0, cy = 0;
+          for (var j = 0; j < seeds.length; j++) { cx += seeds[j].x; cy += seeds[j].y; }
+          cx /= seeds.length; cy /= seeds.length;
+          p.noStroke();
+          p.fill(gc[0], gc[1], gc[2], 12 * glowT);
+          p.ellipse(cx, cy, Math.min(w, h) * 0.5 * glowT);
+        }
+      };
+    }, document.getElementById('sketch-c'));
+
+    // ========== D: WAVEFORM RESOLVING ==========
+    new p5(function (p) {
+      var w, h;
+      var WAVE_COUNT = 4;
+      var waves = [];
+
+      p.setup = function () {
+        var c = document.getElementById('sketch-d');
+        w = c.offsetWidth; h = c.offsetHeight;
+        p.createCanvas(w, h).style('display', 'block');
+        p.frameRate(24);
+
+        for (var i = 0; i < WAVE_COUNT; i++) {
+          waves.push({
+            freq: p.random(1.5, 4),
+            amp: p.random(0.3, 0.8),
+            phase: p.random(p.TWO_PI),
+            noiseScale: p.random(0.5, 1.5),
+            noiseSeed: p.random(1000),
+            baseY: h * (0.25 + (i / (WAVE_COUNT - 1)) * 0.5),
+            targetFreq: 2.0,
+            targetAmp: 0.4,
+            targetPhase: 0
+          });
+        }
+      };
+
+      p.draw = function () {
+        p.clear();
+        var t = getSlider('d');
+        var tc = teal();
+        var gc = gold();
+        var dc = dim();
+
+        for (var i = 0; i < waves.length; i++) {
+          var wave = waves[i];
+          var freq = p.lerp(wave.freq, wave.targetFreq, t);
+          var amp = p.lerp(wave.amp, wave.targetAmp, t);
+          var phase = p.lerp(wave.phase, wave.targetPhase, t);
+          var noiseAmt = p.lerp(wave.noiseScale, 0, t);
+          var waveH = h * 0.08;
+
+          // Draw wave
+          p.noFill();
+          var alpha = p.lerp(60, 200, t);
+          var weight = p.lerp(1, 2, t);
+          p.stroke(tc[0], tc[1], tc[2], alpha);
+          p.strokeWeight(weight);
+          p.beginShape();
+          var points = 120;
+          for (var x = 0; x <= points; x++) {
+            var frac = x / points;
+            var px = w * 0.05 + frac * w * 0.9;
+            var signal = Math.sin(frac * p.TWO_PI * freq + phase) * amp * waveH;
+            var noise = (p.noise(wave.noiseSeed + frac * 5 + t * 0.5) - 0.5) * waveH * noiseAmt * 2;
+            var py = wave.baseY + signal + noise;
+            p.curveVertex(px, py);
+          }
+          p.endShape();
+        }
+
+        // At high progress: waves converge to same baseline, single clean wave
+        if (t > 0.6) {
+          var mergeT = p.constrain(p.map(t, 0.6, 0.95, 0, 1), 0, 1);
+
+          // Composite wave (average of all converged waves)
+          p.noFill();
+          p.stroke(gc[0], gc[1], gc[2], 120 * mergeT);
+          p.strokeWeight(2.5 * mergeT);
+          p.beginShape();
+          var centerY = h * 0.5;
+          for (var cx = 0; cx <= 120; cx++) {
+            var cfrac = cx / 120;
+            var cpx = w * 0.05 + cfrac * w * 0.9;
+            var cpy = centerY + Math.sin(cfrac * p.TWO_PI * 2) * h * 0.06;
+            p.curveVertex(cpx, cpy);
+          }
+          p.endShape();
+
+          // Glow along the clean wave
+          if (mergeT > 0.5) {
+            p.stroke(gc[0], gc[1], gc[2], 20 * mergeT);
+            p.strokeWeight(8);
+            p.beginShape();
+            for (var gx = 0; gx <= 60; gx++) {
+              var gfrac = gx / 60;
+              var gpx = w * 0.05 + gfrac * w * 0.9;
+              var gpy = centerY + Math.sin(gfrac * p.TWO_PI * 2) * h * 0.06;
+              p.curveVertex(gpx, gpy);
+            }
+            p.endShape();
+          }
+        }
+      };
+    }, document.getElementById('sketch-d'));
+  </script>
+</body>
+</html>

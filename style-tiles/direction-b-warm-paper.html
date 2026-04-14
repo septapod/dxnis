@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Direction B: The Blueprint — Dixon Strategic Labs</title>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  :root {
+    --charcoal: #111114;
+    --warm-white: #f0ede6;
+    --amber: #e5a93e;
+    --cool-gray: #555560;
+    --border: rgba(240, 237, 230, 0.08);
+    --border-dashed: rgba(240, 237, 230, 0.15);
+    --grid-line: rgba(240, 237, 230, 0.03);
+  }
+
+  html {
+    font-size: 16px;
+  }
+
+  body {
+    background-color: var(--charcoal);
+    color: var(--warm-white);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    min-height: 100vh;
+    background-image:
+      linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+    background-size: 48px 48px;
+    background-position: 0 0;
+  }
+
+  .page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 48px;
+  }
+
+  .rule {
+    width: 100%;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .label {
+    font-family: 'Fira Code', monospace;
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--amber);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+  }
+
+  .crosshair {
+    font-family: 'Fira Code', monospace;
+    color: var(--warm-white);
+    opacity: 0.10;
+    font-size: 14px;
+    user-select: none;
+  }
+
+  .dim {
+    font-family: 'Fira Code', monospace;
+    font-size: 9px;
+    font-weight: 400;
+    color: var(--warm-white);
+    opacity: 0.15;
+  }
+
+  /* ========================
+     HERO
+     ======================== */
+
+  .hero {
+    padding-top: 48px;
+    padding-bottom: 0;
+    min-height: 500px;
+  }
+
+  .hero-logo {
+    width: 56px;
+    height: 56px;
+    filter: sepia(1) saturate(3) hue-rotate(10deg) brightness(0.9);
+    display: block;
+  }
+
+  .hero-title {
+    font-family: 'Schibsted Grotesk', sans-serif;
+    font-weight: 900;
+    font-size: clamp(3rem, 6vw, 5rem);
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    line-height: 1.0;
+    color: var(--warm-white);
+    margin-top: 32px;
+    padding-left: 48px;
+  }
+
+  .hero-columns {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 48px;
+    padding: 32px 0;
+  }
+
+  .hero-tagline {
+    flex: 1;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 300;
+    font-size: 22px;
+    color: var(--warm-white);
+    opacity: 0.6;
+    line-height: 1.5;
+    padding-left: 48px;
+  }
+
+  .hero-meta {
+    font-family: 'Fira Code', monospace;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--warm-white);
+    opacity: 0.2;
+    text-align: right;
+    line-height: 2.0;
+    white-space: pre;
+    flex-shrink: 0;
+  }
+
+  /* ========================
+     TYPE SPECIMEN
+     ======================== */
+
+  .section {
+    padding-top: 80px;
+  }
+
+  .type-specimen {
+    display: grid;
+    grid-template-columns: 1fr 1px 1.5fr 1px 1fr 1px 1fr;
+    gap: 0;
+    align-items: start;
+  }
+
+  .type-specimen-col {
+    padding: 0 32px;
+  }
+
+  .type-specimen-col:first-child {
+    padding-left: 0;
+  }
+
+  .type-specimen-col:last-child {
+    padding-right: 0;
+  }
+
+  .type-divider {
+    width: 1px;
+    align-self: stretch;
+    background: rgba(240, 237, 230, 0.06);
+  }
+
+  .type-specimen-col .label {
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .specimen-display {
+    font-family: 'Schibsted Grotesk', sans-serif;
+    font-weight: 900;
+    font-size: 72px;
+    line-height: 1.0;
+    color: var(--warm-white);
+  }
+
+  .specimen-body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--warm-white);
+  }
+
+  .specimen-data {
+    font-family: 'Fira Code', monospace;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--amber);
+  }
+
+  .specimen-caption {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 200;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--warm-white);
+    opacity: 0.4;
+  }
+
+  /* ========================
+     PALETTE
+     ======================== */
+
+  .palette {
+    display: flex;
+    gap: 24px;
+  }
+
+  .palette-swatch {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .palette-block {
+    width: 120px;
+    height: 120px;
+    border: 1px solid var(--border);
+    border-radius: 0;
+  }
+
+  .palette-hex {
+    font-family: 'Fira Code', monospace;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--warm-white);
+    opacity: 0.5;
+  }
+
+  .palette-name {
+    font-family: 'Fira Code', monospace;
+    font-size: 10px;
+    font-weight: 300;
+    color: var(--warm-white);
+    opacity: 0.25;
+  }
+
+  /* ========================
+     PROCESS DIAGRAM
+     ======================== */
+
+  .process {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    position: relative;
+  }
+
+  .process-registration {
+    display: flex;
+    align-items: center;
+    align-self: center;
+  }
+
+  .process-phase {
+    width: 220px;
+    border: 1px solid var(--border);
+    border-radius: 0;
+    padding: 24px;
+    flex-shrink: 0;
+  }
+
+  .process-phase-number {
+    font-family: 'Fira Code', monospace;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--amber);
+    margin-bottom: 8px;
+  }
+
+  .process-phase-name {
+    font-family: 'Schibsted Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    text-transform: uppercase;
+    color: var(--warm-white);
+    letter-spacing: 0.02em;
+    margin-bottom: 8px;
+  }
+
+  .process-phase-desc {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 300;
+    font-size: 13px;
+    color: var(--warm-white);
+    opacity: 0.5;
+    line-height: 1.5;
+  }
+
+  .process-connector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    min-width: 80px;
+    align-self: center;
+    gap: 6px;
+  }
+
+  .process-duration {
+    font-family: 'Fira Code', monospace;
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--warm-white);
+    opacity: 0.25;
+  }
+
+  .process-line {
+    width: 100%;
+    height: 0;
+    border-top: 1px dashed var(--border-dashed);
+  }
+
+  /* ========================
+     COMPONENTS
+     ======================== */
+
+  .components {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    font-family: 'Schibsted Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background: var(--amber);
+    color: var(--charcoal);
+    border: none;
+    border-radius: 0;
+    padding: 14px 32px;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .btn-ghost {
+    display: inline-block;
+    font-family: 'Schibsted Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background: transparent;
+    color: var(--warm-white);
+    border: 1px solid rgba(240, 237, 230, 0.15);
+    border-radius: 0;
+    padding: 14px 32px;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .card {
+    border: 1px solid var(--border);
+    border-radius: 0;
+    padding: 32px;
+    position: relative;
+    max-width: 400px;
+  }
+
+  .card-dim {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+  }
+
+  .card-heading {
+    font-family: 'Schibsted Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--warm-white);
+    margin-bottom: 12px;
+  }
+
+  .card-body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    color: var(--warm-white);
+    opacity: 0.5;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .card-tags {
+    font-family: 'Fira Code', monospace;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--amber);
+    opacity: 0.6;
+  }
+
+  /* ========================
+     FOOTER
+     ======================== */
+
+  .footer {
+    padding: 80px 0 48px;
+    text-align: center;
+  }
+
+  .footer-text {
+    font-family: 'Fira Code', monospace;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--warm-white);
+    opacity: 0.15;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ====== HERO ====== -->
+  <section class="hero">
+    <img src="dxn_logomark_avatar.png" alt="DXN" class="hero-logo">
+    <h1 class="hero-title">Dixon Strategic Labs</h1>
+    <div style="margin-top: 24px;"><div class="rule"></div></div>
+    <div class="hero-columns">
+      <p class="hero-tagline">I design the process. You bring the expertise.</p>
+      <div class="hero-meta">LAT  37.8044°N
+LNG  122.2712°W
+EST  2003
+REV  2026.03</div>
+    </div>
+    <div class="rule"></div>
+  </section>
+
+  <!-- ====== TYPE SPECIMEN ====== -->
+  <section class="section">
+    <div class="type-specimen">
+      <div class="type-specimen-col">
+        <span class="label">Display</span>
+        <div class="specimen-display">Process</div>
+      </div>
+      <div class="type-divider"></div>
+      <div class="type-specimen-col">
+        <span class="label">Body</span>
+        <p class="specimen-body">Strategy sessions that produce experiments, not slide decks.</p>
+      </div>
+      <div class="type-divider"></div>
+      <div class="type-specimen-col">
+        <span class="label">Data</span>
+        <p class="specimen-data">$45B+ across cooperative finance</p>
+      </div>
+      <div class="type-divider"></div>
+      <div class="type-specimen-col">
+        <span class="label">Caption</span>
+        <p class="specimen-caption">Oakland, California &middot; est. 2003</p>
+      </div>
+    </div>
+  </section>
+
+  <div style="padding-top: 80px;"><div class="rule"></div></div>
+
+  <!-- ====== PALETTE ====== -->
+  <section class="section">
+    <div class="palette">
+      <div class="palette-swatch">
+        <div class="palette-block" style="background: #111114;"></div>
+        <span class="palette-hex">#111114</span>
+        <span class="palette-name">Charcoal</span>
+      </div>
+      <div class="palette-swatch">
+        <div class="palette-block" style="background: #f0ede6;"></div>
+        <span class="palette-hex">#f0ede6</span>
+        <span class="palette-name">Warm White</span>
+      </div>
+      <div class="palette-swatch">
+        <div class="palette-block" style="background: #e5a93e;"></div>
+        <span class="palette-hex">#e5a93e</span>
+        <span class="palette-name">Amber</span>
+      </div>
+      <div class="palette-swatch">
+        <div class="palette-block" style="background: #555560;"></div>
+        <span class="palette-hex">#555560</span>
+        <span class="palette-name">Cool Gray</span>
+      </div>
+    </div>
+  </section>
+
+  <div style="padding-top: 80px;"><div class="rule"></div></div>
+
+  <!-- ====== PROCESS DIAGRAM ====== -->
+  <section class="section">
+    <div class="process">
+      <span class="crosshair process-registration">+</span>
+      <div style="width: 16px; flex-shrink: 0;"></div>
+      <div class="process-phase">
+        <div class="process-phase-number">01</div>
+        <div class="process-phase-name">Discovery</div>
+        <p class="process-phase-desc">Stakeholder interviews, data audit, landscape scan.</p>
+      </div>
+      <div class="process-connector">
+        <span class="process-duration">4-6 wks</span>
+        <div class="process-line"></div>
+      </div>
+      <div class="process-phase">
+        <div class="process-phase-number">02</div>
+        <div class="process-phase-name">Synthesis</div>
+        <p class="process-phase-desc">Pattern recognition, framework design, strategic options.</p>
+      </div>
+      <div class="process-connector">
+        <span class="process-duration">2-4 wks</span>
+        <div class="process-line"></div>
+      </div>
+      <div class="process-phase">
+        <div class="process-phase-number">03</div>
+        <div class="process-phase-name">Testing</div>
+        <p class="process-phase-desc">Pilot programs, measurement systems, iteration cycles.</p>
+      </div>
+      <div style="width: 16px; flex-shrink: 0;"></div>
+      <span class="crosshair process-registration">+</span>
+    </div>
+  </section>
+
+  <div style="padding-top: 80px;"><div class="rule"></div></div>
+
+  <!-- ====== COMPONENT PATTERNS ====== -->
+  <section class="section">
+    <div class="components">
+      <div class="buttons">
+        <button class="btn-primary">Start a Conversation</button>
+        <button class="btn-ghost">View Case Studies</button>
+      </div>
+      <div class="card">
+        <span class="dim card-dim">W:340px H:auto</span>
+        <h3 class="card-heading">Board Retreat Process</h3>
+        <p class="card-body">6-8 stakeholder interviews. 1 synthesis document. 2-day facilitated session. Tested framework.</p>
+        <div class="card-tags">DURATION: 3 MO &middot; PHASE: COMPLETE</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== FOOTER ====== -->
+  <footer class="footer">
+    <span class="footer-text"><span class="crosshair" style="opacity: 0.15;">+</span> Direction B &middot; The Blueprint</span>
+  </footer>
+
+</div>
+</body>
+</html>

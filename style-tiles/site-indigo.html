@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dixon Strategic Labs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@300,400,500,600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --ground: #0d1117;
+      --surface: #161b22;
+      --elevated: #1c2333;
+      --text: #e6edf3;
+      --text-muted: rgba(230,237,243,0.5);
+      --indigo: #6366f1;
+      --sage: #86a877;
+      --lavender: #a5b4fc;
+      --magenta: #e879a8;
+      --warm-gold: #e5b94e;
+      --muted: #7d8590;
+      --border: rgba(230,237,243,0.06);
+      --ease-dxn: cubic-bezier(0.22, 1, 0.36, 1);
+      --duration: 200ms;
+    }
+
+    ::selection {
+      background: rgba(99,102,241,0.3);
+    }
+
+    html {
+      background: var(--ground);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Switzer', sans-serif;
+      font-weight: 300;
+      line-height: 1.6;
+      position: relative;
+    }
+
+    /* ========================================
+       GRAIN OVERLAY
+       ======================================== */
+    .grain-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.015;
+    }
+
+    /* ========================================
+       ANIMATIONS
+       ======================================== */
+
+    /* 1. Reveal fade */
+    @keyframes reveal-fade {
+      0% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { opacity: 0; pointer-events: none; }
+    }
+
+    /* 2. Drift animation for hero background */
+    @keyframes drift {
+      0% { transform: translate(0, 0); }
+      50% { transform: translate(12px, -8px); }
+      100% { transform: translate(0, 0); }
+    }
+
+    /* 3. Card stagger fade-in */
+    @keyframes cardFadeUp {
+      0% { opacity: 0; transform: translateY(24px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ========================================
+       REVEAL OVERLAY
+       ======================================== */
+    .reveal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: #0d1117;
+      pointer-events: none;
+      animation: reveal-fade 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
+    }
+
+    /* ========================================
+       1. HEADER / NAVIGATION
+       ======================================== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 56px;
+      background: rgba(13,17,23,0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .navbar-logo {
+      width: 28px;
+      height: auto;
+      display: block;
+    }
+
+    .navbar-wordmark {
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text);
+      letter-spacing: 0.01em;
+    }
+
+    .navbar-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .navbar-links a {
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 400;
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color var(--duration) var(--ease-dxn);
+    }
+
+    .navbar-links a:hover {
+      color: var(--text);
+    }
+
+    .btn-nav {
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 500;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      color: #fff;
+      background: var(--indigo);
+      border: none;
+      border-radius: 4px;
+      padding: 7px 18px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all var(--duration) var(--ease-dxn);
+    }
+
+    .btn-nav:hover {
+      background: #818cf8;
+      transform: translateY(-1px);
+    }
+
+    /* ========================================
+       2. HERO
+       ======================================== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 40px 96px;
+      overflow: hidden;
+    }
+
+    /* Radial glow */
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 35%, rgba(99,102,241,0.06), transparent);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+    }
+
+    .hero-logo {
+      width: 96px;
+      height: auto;
+      display: block;
+      margin: 0 auto 24px;
+    }
+
+    .hero-wordmark {
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      color: var(--lavender);
+      opacity: 0.6;
+      text-transform: uppercase;
+      margin-bottom: 40px;
+    }
+
+    .hero-headline {
+      font-family: 'Newsreader', serif;
+      font-weight: 300;
+      font-optical-sizing: auto;
+      font-variation-settings: 'opsz' 72;
+      font-size: clamp(3rem, 6vw, 5rem);
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+
+    .hero-rule {
+      width: 200px;
+      height: 1px;
+      background: rgba(99,102,241,0.2);
+      border: none;
+      margin: 32px auto;
+    }
+
+    .hero-subtitle {
+      font-family: 'Switzer', sans-serif;
+      font-weight: 300;
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      max-width: 520px;
+      margin: 0 auto 40px;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      letter-spacing: 0.03em;
+      color: #fff;
+      background: var(--indigo);
+      border: none;
+      border-radius: 4px;
+      padding: 14px 36px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all var(--duration) var(--ease-dxn);
+    }
+
+    .btn-primary:hover {
+      background: #818cf8;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(99,102,241,0.25);
+    }
+
+    .btn-ghost {
+      display: inline-block;
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      letter-spacing: 0.03em;
+      color: var(--muted);
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 13px 36px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all var(--duration) var(--ease-dxn);
+    }
+
+    .btn-ghost:hover {
+      color: var(--text);
+      border-color: rgba(230,237,243,0.15);
+      transform: translateY(-2px);
+    }
+
+    /* ========================================
+       WEAVE DIVIDER
+       ======================================== */
+    .weave-divider {
+      position: relative;
+      height: 40px;
+      margin: 0 40px;
+      background:
+        repeating-linear-gradient(30deg, transparent, transparent 18px, rgba(99,102,241,0.06) 18px, rgba(99,102,241,0.06) 20px),
+        repeating-linear-gradient(-30deg, transparent, transparent 18px, rgba(134,168,119,0.04) 18px, rgba(134,168,119,0.04) 20px);
+      mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
+    }
+
+    .weave-divider::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 40px;
+      height: 40px;
+      transform: translate(-50%, -50%) rotate(45deg);
+      background:
+        repeating-linear-gradient(0deg, transparent 0px, transparent 2px, rgba(99,102,241,0.1) 2px, rgba(99,102,241,0.1) 3px, transparent 3px, transparent 6px);
+      border: 1px solid rgba(99,102,241,0.08);
+      border-radius: 2px;
+    }
+
+    section[id] {
+      scroll-margin-top: 72px;
+    }
+
+    /* ========================================
+       SECTION UTILITIES
+       ======================================== */
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--indigo);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .section-headline {
+      font-family: 'Newsreader', serif;
+      font-weight: 400;
+      font-optical-sizing: auto;
+      font-variation-settings: 'opsz' 48;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      line-height: 1.25;
+      color: var(--text);
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto 56px;
+    }
+
+    /* ========================================
+       3. SERVICES
+       ======================================== */
+    .services {
+      padding: 120px 40px;
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr 1fr;
+      gap: 20px;
+    }
+
+    .service-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 40px 32px;
+      position: relative;
+      overflow: hidden;
+      animation: cardFadeUp 0.8s var(--ease-dxn) both;
+      transition: border-color var(--duration) var(--ease-dxn), transform var(--duration) var(--ease-dxn);
+    }
+
+    .service-card:hover {
+      border-color: rgba(99,102,241,0.15);
+      transform: translateY(-2px);
+    }
+
+    .service-card:nth-child(1) { animation-delay: 0.1s; }
+    .service-card:nth-child(2) { animation-delay: 0.25s; }
+    .service-card:nth-child(3) { animation-delay: 0.4s; }
+
+    /* Top-edge weave accent */
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background:
+        repeating-linear-gradient(30deg, transparent, transparent 8px, rgba(134,168,119,0.3) 8px, rgba(134,168,119,0.3) 10px),
+        repeating-linear-gradient(-30deg, transparent, transparent 8px, rgba(99,102,241,0.15) 8px, rgba(99,102,241,0.15) 10px);
+    }
+
+    /* First card: indigo top border */
+    .service-card:first-child::before {
+      background:
+        repeating-linear-gradient(30deg, transparent, transparent 8px, rgba(99,102,241,0.4) 8px, rgba(99,102,241,0.4) 10px),
+        repeating-linear-gradient(-30deg, transparent, transparent 8px, rgba(99,102,241,0.2) 8px, rgba(99,102,241,0.2) 10px);
+    }
+
+    .service-card-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--indigo);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 16px;
+    }
+
+    .service-card-title {
+      font-family: 'Newsreader', serif;
+      font-weight: 500;
+      font-optical-sizing: auto;
+      font-variation-settings: 'opsz' 36;
+      font-size: 22px;
+      line-height: 1.3;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    .service-card-desc {
+      font-family: 'Switzer', sans-serif;
+      font-weight: 300;
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .service-card-link {
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 500;
+      font-size: 13px;
+      color: var(--indigo);
+      text-decoration: none;
+      transition: color var(--duration) var(--ease-dxn);
+    }
+
+    .service-card-link:hover {
+      color: var(--lavender);
+    }
+
+    /* ========================================
+       4. TESTIMONIAL
+       ======================================== */
+    .testimonial {
+      padding: 96px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mega-word {
+      font-family: 'Newsreader', serif;
+      font-weight: 300;
+      font-optical-sizing: auto;
+      font-variation-settings: 'opsz' 72;
+      font-size: 12vw;
+      line-height: 0.85;
+      color: rgba(230,237,243,0.03);
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      margin-bottom: -40px;
+      position: relative;
+      z-index: 0;
+      user-select: none;
+    }
+
+
+    /* ========================================
+       5. ABOUT
+       ======================================== */
+    .about {
+      padding: 120px 40px;
+      max-width: 720px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .about-headline {
+      font-family: 'Newsreader', serif;
+      font-weight: 400;
+      font-optical-sizing: auto;
+      font-variation-settings: 'opsz' 48;
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      line-height: 1.25;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+
+    .about-body {
+      font-family: 'Switzer', sans-serif;
+      font-weight: 300;
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.8;
+      margin-bottom: 40px;
+    }
+
+    .credential-badges {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .credential-badge {
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 500;
+      font-size: 12px;
+      letter-spacing: 0.03em;
+      padding: 6px 16px;
+      border-radius: 100px;
+      white-space: nowrap;
+    }
+
+    .credential-badge.badge-indigo {
+      color: var(--indigo);
+      border: 1px solid rgba(99,102,241,0.3);
+      background: rgba(99,102,241,0.08);
+    }
+
+    .credential-badge.badge-sage {
+      color: var(--sage);
+      border: 1px solid rgba(134,168,119,0.3);
+      background: rgba(134,168,119,0.08);
+    }
+
+    .credential-badge.badge-magenta {
+      color: var(--magenta);
+      border: 1px solid rgba(232,121,168,0.3);
+      background: rgba(232,121,168,0.08);
+    }
+
+    .credential-badge.badge-gold {
+      color: var(--warm-gold);
+      border: 1px solid rgba(229,185,78,0.3);
+      background: rgba(229,185,78,0.08);
+    }
+
+    /* ========================================
+       6. NEWSLETTER
+       ======================================== */
+    .newsletter {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 96px 40px;
+      text-align: center;
+    }
+
+    .newsletter-title {
+      font-family: 'Newsreader', serif;
+      font-weight: 400;
+      font-optical-sizing: auto;
+      font-variation-settings: 'opsz' 48;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      line-height: 1.3;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    .newsletter-body {
+      font-family: 'Switzer', sans-serif;
+      font-weight: 300;
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      max-width: 480px;
+      margin: 0 auto 32px;
+    }
+
+    .newsletter-form {
+      display: flex;
+      gap: 12px;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    .newsletter-input {
+      flex: 1;
+      font-family: 'Switzer', sans-serif;
+      font-weight: 300;
+      font-size: 14px;
+      color: var(--text);
+      background: var(--ground);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 12px 16px;
+      outline: none;
+      transition: border-color var(--duration) var(--ease-dxn);
+    }
+
+    .newsletter-input::placeholder {
+      color: var(--muted);
+    }
+
+    .newsletter-input:focus {
+      border-color: var(--indigo);
+    }
+
+    .newsletter-btn {
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 500;
+      font-size: 13px;
+      letter-spacing: 0.03em;
+      color: #fff;
+      background: var(--indigo);
+      border: none;
+      border-radius: 4px;
+      padding: 12px 24px;
+      cursor: pointer;
+      transition: all var(--duration) var(--ease-dxn);
+      white-space: nowrap;
+    }
+
+    .newsletter-btn:hover {
+      background: #818cf8;
+      transform: translateY(-1px);
+    }
+
+    /* ========================================
+       7. CONTACT
+       ======================================== */
+    .contact {
+      padding: 120px 40px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .contact-intro h2 {
+      font-family: 'Newsreader', serif;
+      font-weight: 400;
+      font-optical-sizing: auto;
+      font-variation-settings: 'opsz' 48;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      line-height: 1.3;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .contact-intro p {
+      font-family: 'Switzer', sans-serif;
+      font-weight: 300;
+      font-size: 16px;
+      color: var(--text);
+      opacity: 0.7;
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .contact-detail {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .contact-detail a {
+      color: var(--indigo);
+      text-decoration: none;
+      transition: color var(--duration) var(--ease-dxn);
+    }
+
+    .contact-detail a:hover {
+      color: var(--lavender);
+    }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .form-input,
+    .form-textarea {
+      font-family: 'Switzer', sans-serif;
+      font-weight: 300;
+      font-size: 14px;
+      color: var(--text);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 12px 16px;
+      outline: none;
+      width: 100%;
+      transition: border-color var(--duration) var(--ease-dxn);
+    }
+
+    .form-input:focus,
+    .form-textarea:focus {
+      border-color: var(--indigo);
+    }
+
+    .form-textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .form-submit {
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      letter-spacing: 0.03em;
+      color: #fff;
+      background: var(--indigo);
+      border: none;
+      border-radius: 4px;
+      padding: 14px 32px;
+      cursor: pointer;
+      transition: all var(--duration) var(--ease-dxn);
+      align-self: flex-start;
+    }
+
+    .form-submit:hover {
+      background: #818cf8;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(99,102,241,0.25);
+    }
+
+    /* ========================================
+       8. CLOSING QUOTE
+       ======================================== */
+    .closing-quote {
+      padding: 96px 40px;
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .closing-quote blockquote {
+      font-family: 'Newsreader', serif;
+      font-weight: 400;
+      font-style: italic;
+      font-optical-sizing: auto;
+      font-variation-settings: 'opsz' 48;
+      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+      line-height: 1.5;
+      color: var(--lavender);
+      opacity: 0.5;
+      margin-bottom: 16px;
+    }
+
+    .closing-quote cite {
+      font-family: 'Switzer', sans-serif;
+      font-weight: 400;
+      font-size: 13px;
+      color: var(--muted);
+      font-style: normal;
+    }
+
+    /* ========================================
+       9. FOOTER
+       ======================================== */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 80px 40px 32px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      gap: 40px;
+      max-width: 1120px;
+      margin: 0 auto 48px;
+    }
+
+    .footer-brand-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .footer-logo {
+      width: 24px;
+      height: auto;
+    }
+
+    .footer-brand-name {
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .footer-brand-desc {
+      font-family: 'Switzer', sans-serif;
+      font-weight: 300;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .footer-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-nav a {
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 400;
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color var(--duration) var(--ease-dxn);
+    }
+
+    .footer-nav a:hover {
+      color: var(--text);
+    }
+
+    .footer-contact {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-contact span {
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 400;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-bottom span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ========================================
+       RESPONSIVE
+       ======================================== */
+    /* ========================================
+       CLIENT LOGOS
+       ======================================== */
+    .clients-section {
+      padding: 32px 40px;
+      background: var(--surface);
+      overflow: hidden;
+    }
+    .clients-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--indigo);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .logo-strip {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .logo-placeholder {
+      width: 80px;
+      height: 36px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      opacity: 0.4;
+    }
+
+    /* ========================================
+       TESTIMONIAL CAROUSEL
+       ======================================== */
+    .testimonial-track {
+      display: flex;
+      gap: 24px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding: 0 40px 24px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--indigo) var(--surface);
+      position: relative;
+      z-index: 1;
+      margin-top: 48px;
+    }
+
+    .testimonial-track::-webkit-scrollbar {
+      height: 4px;
+    }
+    .testimonial-track::-webkit-scrollbar-track {
+      background: var(--surface);
+    }
+    .testimonial-track::-webkit-scrollbar-thumb {
+      background: var(--indigo);
+      border-radius: 4px;
+    }
+
+    .testimonial-track::before,
+    .testimonial-track::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 24px;
+      width: 60px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .testimonial-track::before {
+      left: 0;
+      background: linear-gradient(to right, #0d1117, transparent);
+    }
+
+    .testimonial-track::after {
+      right: 0;
+      background: linear-gradient(to left, #0d1117, transparent);
+    }
+
+    .testimonial-slide {
+      flex: 0 0 min(480px, 85vw);
+      scroll-snap-align: start;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 36px 32px;
+      min-height: 160px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .testimonial-image {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      border: 2px solid var(--border);
+    }
+
+    .testimonial-quote {
+      font-family: 'Newsreader', serif;
+      font-weight: 400;
+      font-style: italic;
+      font-variation-settings: 'opsz' 14;
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .testimonial-author {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .testimonial-author strong {
+      color: var(--text);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    /* ========================================
+       PHOTO-HERO ABOUT INTRO
+       ======================================== */
+    .photo-hero-about {
+      padding: 96px 40px;
+      background: var(--surface);
+      text-align: center;
+    }
+    .photo-hero-img {
+      width: 100%;
+      max-width: 480px;
+      height: 400px;
+      object-fit: cover;
+      border-radius: 4px;
+      margin: 0 auto 32px;
+      display: block;
+      filter: grayscale(20%) contrast(1.05);
+      border: 1px solid var(--border);
+    }
+    .photo-hero-name {
+      font-family: 'Newsreader', serif;
+      font-weight: 400;
+      font-optical-sizing: auto;
+      font-variation-settings: 'opsz' 48;
+      font-size: 36px;
+      line-height: 1.3;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .photo-hero-tagline {
+      font-family: 'Switzer', sans-serif;
+      font-weight: 300;
+      font-size: 18px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* ========================================
+       ABOUT LINK
+       ======================================== */
+    .about-link {
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      color: var(--indigo);
+      text-decoration: none;
+      transition: color var(--duration) var(--ease-dxn);
+    }
+    .about-link:hover {
+      color: var(--lavender);
+    }
+
+    /* ========================================
+       LEFT-ALIGN MULTI-LINE TEXT
+       ======================================== */
+    .hero-subtitle, .hero-body {
+      text-align: left;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .about-body {
+      text-align: left;
+    }
+
+    .service-card-desc {
+      text-align: left;
+    }
+
+    .newsletter-body {
+      text-align: left;
+    }
+
+    .contact-form {
+      text-align: left;
+    }
+
+    .photo-hero-tagline {
+      text-align: left;
+    }
+
+    /* ========================================
+       RESPONSIVE
+       ======================================== */
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 0 20px;
+      }
+
+      .navbar-links {
+        display: none;
+      }
+
+      .hero {
+        padding: 96px 24px 72px;
+      }
+
+      .hero-logo {
+        width: 80px;
+      }
+
+      .services {
+        padding: 96px 24px;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .testimonial {
+        padding: 72px 24px;
+      }
+
+      .mega-word {
+        font-size: 18vw;
+      }
+
+      .about {
+        padding: 96px 24px;
+      }
+
+      .credential-badges {
+        gap: 8px;
+      }
+
+      .newsletter {
+        padding: 72px 24px;
+      }
+
+      .newsletter-form {
+        flex-direction: column;
+      }
+
+      .contact {
+        padding: 96px 24px;
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 48px;
+      }
+
+      .closing-quote {
+        padding: 72px 24px;
+      }
+
+      .footer {
+        padding: 48px 24px 24px;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+      }
+
+      .weave-divider {
+        margin: 0 24px;
+      }
+
+      .clients-section {
+        padding: 24px 24px;
+      }
+
+      .testimonial-track {
+        padding: 0 24px 24px;
+      }
+
+      .photo-hero-about {
+        padding: 72px 24px;
+      }
+
+      .photo-hero-img {
+        height: 280px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- REVEAL OVERLAY -->
+  <div class="reveal-overlay"></div>
+
+  <!-- GRAIN OVERLAY -->
+  <svg class="grain-overlay" viewBox="0 0 512 512" preserveAspectRatio="none">
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/>
+    </filter>
+    <rect width="100%" height="100%" filter="url(#grain)"/>
+  </svg>
+
+  <!-- 1. NAVIGATION -->
+  <nav class="navbar">
+    <div class="navbar-left">
+      <img src="dxn-logomark-white.png" alt="DXN logomark" class="navbar-logo">
+      <span class="navbar-wordmark">DXN</span>
+    </div>
+    <ul class="navbar-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#newsletter">Newsletter</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="#contact" class="btn-nav">Get Started</a></li>
+    </ul>
+  </nav>
+
+  <!-- 2. HERO -->
+  <section class="hero">
+    <div id="hero-canvas-container" style="position:absolute;inset:0;z-index:0;"></div>
+    <div class="hero-content">
+      <img src="dxn-logomark-white.png" alt="DXN logomark" class="hero-logo">
+      <p class="hero-wordmark">Dixon Strategic Labs</p>
+      <h1 class="hero-headline">Strategic facilitation that brings your people together.</h1>
+      <hr class="hero-rule">
+      <p class="hero-subtitle">Collaborations begin with many more opinions than participants. Misalignment breaks collaborations. I help leadership teams transform diverse opinions into a co-owned plan by prioritizing, measuring, and cultivating alignment.</p>
+      <p class="hero-subtitle" style="margin-bottom: 40px;">I run the process so your team can focus on the decisions.</p>
+      <a href="#contact" class="btn-primary">Let's Talk</a>
+    </div>
+  </section>
+
+  <!-- 3. CLIENT LOGOS -->
+  <section class="clients-section">
+    <p class="clients-label">Trusted By</p>
+    <div class="logo-strip">
+      <div class="logo-placeholder"></div>
+      <div class="logo-placeholder"></div>
+      <div class="logo-placeholder"></div>
+      <div class="logo-placeholder"></div>
+      <div class="logo-placeholder"></div>
+      <div class="logo-placeholder"></div>
+      <div class="logo-placeholder"></div>
+      <div class="logo-placeholder"></div>
+    </div>
+  </section>
+
+  <!-- 4. SERVICES -->
+  <section class="services" id="services">
+    <p class="section-label">Services</p>
+    <h2 class="section-headline">Services</h2>
+    <div class="services-grid">
+      <div class="service-card">
+        <p class="service-card-label">Engagement</p>
+        <h3 class="service-card-title">Speaking</h3>
+        <p class="service-card-desc">Keynotes and workshops for conferences and leadership events.</p>
+        <a href="#contact" class="service-card-link">Learn more &rarr;</a>
+      </div>
+      <div class="service-card">
+        <p class="service-card-label">Engagement</p>
+        <h3 class="service-card-title">Facilitation</h3>
+        <p class="service-card-desc">Strategic planning sessions, retreats, and critical decisions.</p>
+        <a href="#contact" class="service-card-link">Learn more &rarr;</a>
+      </div>
+      <div class="service-card">
+        <p class="service-card-label">Engagement</p>
+        <h3 class="service-card-title">Advisory</h3>
+        <p class="service-card-desc">Executive coaching and strategic counsel.</p>
+        <a href="#contact" class="service-card-link">Learn more &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- WEAVE DIVIDER -->
+  <div class="weave-divider"></div>
+
+  <!-- 5. TESTIMONIALS -->
+  <section class="testimonial">
+    <div class="testimonial-track">
+      <div class="testimonial-slide">
+        <img src="ray.jpg" alt="Ray Springsteen" class="testimonial-image">
+        <div>
+          <p class="testimonial-quote">"Brent led the most strategic strategic planning sessions we've ever had."</p>
+          <p class="testimonial-author"><strong>Ray Springsteen</strong>CEO, Abound Credit Union</p>
+        </div>
+      </div>
+      <div class="testimonial-slide">
+        <img src="nancy.jpg" alt="Nancy Giordano" class="testimonial-image">
+        <div>
+          <p class="testimonial-quote">"I know many intelligent people, good people, creative people, and visionary people. At the intersection of all these groups is Brent."</p>
+          <p class="testimonial-author"><strong>Nancy Giordano</strong>Founder &amp; Strategic Futurist, Play Big Inc.</p>
+        </div>
+      </div>
+      <div class="testimonial-slide">
+        <img src="mb.png" alt="Mary Beth Spuck" class="testimonial-image">
+        <div>
+          <p class="testimonial-quote">"Well, I think this is the best strategic planning discussion we've ever had."</p>
+          <p class="testimonial-author"><strong>Mary Beth Spuck</strong>CEO, Resource One Credit Union</p>
+        </div>
+      </div>
+      <div class="testimonial-slide">
+        <img src="ronaldo.jpg" alt="Ronaldo Hardy" class="testimonial-image">
+        <div>
+          <p class="testimonial-quote">"Brent is an innovative, forward thinking leader, who inspires the next wave of leadership. I credit Brent as one of the reasons I have found success at such an early age."</p>
+          <p class="testimonial-author"><strong>Ronaldo Hardy</strong>CEO, Balance Financial Wellness</p>
+        </div>
+      </div>
+      <div class="testimonial-slide">
+        <img src="steve.jpg" alt="Stephen Pagenstecher" class="testimonial-image">
+        <div>
+          <p class="testimonial-quote">"We needed a leader that could be engaging, approachable, and attentive, and Brent delivered."</p>
+          <p class="testimonial-author"><strong>Stephen Pagenstecher</strong>VP of Member Experience, Point West Credit Union</p>
+        </div>
+      </div>
+      <div class="testimonial-slide">
+        <img src="dr-phil.jpg" alt="Dr. Philipp Khallerhoff" class="testimonial-image">
+        <div>
+          <p class="testimonial-quote">"Brent supervised my team at Singularity University, and we received $250,000 in funding for our idea from Richmond Global."</p>
+          <p class="testimonial-author"><strong>Dr. Philipp Khallerhoff</strong>CEO, Protos Asset Management</p>
+        </div>
+      </div>
+      <div class="testimonial-slide">
+        <img src="george.jpg" alt="George Hofheimer" class="testimonial-image">
+        <div>
+          <p class="testimonial-quote">"Brent is that unique individual who possess a well-spring of creativity AND a desire to get things done...Also, he makes me laugh."</p>
+          <p class="testimonial-author"><strong>George Hofheimer</strong>Founder, Hofheimer Strategy Advisors</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WEAVE DIVIDER -->
+  <div class="weave-divider"></div>
+
+  <!-- 6. PHOTO-HERO ABOUT INTRO -->
+  <section class="photo-hero-about">
+    <img src="brent-speaking.jpg" alt="Brent Dixon speaking" class="photo-hero-img">
+    <p class="photo-hero-name">Brent Dixon</p>
+    <p class="photo-hero-tagline">provides strategic facilitation for credit unions navigating critical decisions.</p>
+  </section>
+
+  <!-- 7. ABOUT -->
+  <section class="about" id="about">
+    <p class="section-label">About</p>
+    <p class="about-body">Brent Dixon founded Dixon Strategic Labs in 2022 to guide leaders through strategic crossroads. He works with credit unions and community financial institutions across North America to align teams, chart growth paths, and ship results.</p>
+    <p class="about-body">He has built and led programs, prototypes, and pilots with Filene Research Institute, the United Nations, and Singularity University.</p>
+    <p class="about-body">He lives in Oakland, California with his son and a bossy cat named Bug.</p>
+    <a href="#contact" class="about-link">Get in Touch &rarr;</a>
+  </section>
+
+  <!-- WEAVE DIVIDER -->
+  <div class="weave-divider"></div>
+
+  <!-- 8. NEWSLETTER -->
+  <section class="newsletter" id="newsletter">
+    <h2 class="newsletter-title">AI for FIs</h2>
+    <p class="section-label" style="margin-bottom: 12px;">Weekly insights on AI for credit unions</p>
+    <p class="newsletter-body">Practical news, insights, and tools for credit union leaders navigating AI adoption. Subscribe to get it in your inbox every week.</p>
+    <div class="newsletter-form">
+      <input type="email" class="newsletter-input" placeholder="Your email address">
+      <button class="newsletter-btn">Subscribe</button>
+    </div>
+  </section>
+
+  <!-- WEAVE DIVIDER -->
+  <div class="weave-divider"></div>
+
+  <!-- 9. CONTACT -->
+  <section class="contact" id="contact">
+    <p class="section-label">Get in Touch</p>
+    <div class="contact-grid">
+      <div class="contact-intro">
+        <h2>Send Me a Message</h2>
+        <form class="contact-form">
+          <div>
+            <label class="form-label">Name *</label>
+            <input type="text" class="form-input" placeholder="Your name" required>
+          </div>
+          <div>
+            <label class="form-label">Email *</label>
+            <input type="email" class="form-input" placeholder="you@organization.com" required>
+          </div>
+          <div>
+            <label class="form-label">Organization</label>
+            <input type="text" class="form-input" placeholder="Your organization">
+          </div>
+          <div>
+            <label class="form-label">Message *</label>
+            <textarea class="form-textarea" placeholder="Tell me about what you're working on..." required></textarea>
+          </div>
+          <button type="submit" class="form-submit">Send Message</button>
+        </form>
+      </div>
+      <div>
+        <h2 style="font-family:'Newsreader',serif;font-weight:400;font-optical-sizing:auto;font-variation-settings:'opsz' 48;font-size:clamp(1.6rem,3vw,2.2rem);line-height:1.3;color:var(--text);margin-bottom:16px;">Book a Call</h2>
+        <p style="font-family:'Switzer',sans-serif;font-weight:300;font-size:15px;color:var(--text-muted);line-height:1.7;margin-bottom:24px;">Prefer to schedule a time to talk? Book a 30-minute discovery call directly.</p>
+        <a href="#" class="btn-ghost">Schedule a Call</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- WEAVE DIVIDER -->
+  <div class="weave-divider"></div>
+
+  <!-- 10. CLOSING QUOTE -->
+  <section class="closing-quote">
+    <blockquote>"No matter the problem, community is the answer."</blockquote>
+    <cite>Margaret Wheatley</cite>
+  </section>
+
+  <!-- 11. FOOTER -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-brand-row">
+          <img src="dxn-logomark-white.png" alt="DXN" class="footer-logo">
+          <span class="footer-brand-name">Dixon Strategic Labs</span>
+        </div>
+        <p class="footer-brand-desc">Process design for mission-driven organizations.</p>
+      </div>
+      <div class="footer-nav">
+        <a href="#services">Services</a>
+        <a href="#about">About</a>
+        <a href="#newsletter">Newsletter</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="footer-contact">
+        <span>Oakland, California</span>
+        <span>brent@dxn.is</span>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Dixon Strategic Labs LLC</span>
+      <span>Indigo + Sage</span>
+    </div>
+  </footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+<script>
+const heroParticlesIndigo = (p) => {
+  let cells = [];
+  let cellCount = 200;
+  let canvas;
+  let isMouseInHero = false;
+  let prefersReducedMotion = false;
+  let flashChance = 0.006;
+  let prevMouseX = -1;
+  let prevMouseY = -1;
+  let mouseSpeedSmooth = 0;
+  let mouseInitialized = false;
+
+  const FLASH_RISE = 6;
+  const FLASH_HOLD = 3;
+  const FLASH_FALL = 18;
+  const FLASH_COOLDOWN_MIN = 45;
+  const FLASH_COOLDOWN_MAX = 180;
+
+  const primaryColor = { r: 99, g: 102, b: 241 };
+  const dimColor = { r: 60, g: 62, b: 150 };
+  const accentColor = { r: 165, g: 180, b: 252 };
+
+  class Cell {
+    constructor() { this.reset(); }
+
+    reset() {
+      this.x = p.random(p.width);
+      this.y = p.random(p.height);
+      this.vx = p.random(-0.3, 0.3);
+      this.vy = p.random(-0.3, 0.3);
+      this.ax = 0;
+      this.ay = 0;
+      this.baseRadius = p.random(1.2, 2.0);
+      this.maxSpeed = p.random(1.8, 3.5);
+      this.colorSet = Math.random() < 0.20 ? 'accent' : 'primary';
+      this.life = p.random(300, 600);
+      this.age = 0;
+      this.glowState = 'idle';
+      this.glowTimer = 0;
+      this.glowIntensity = 0;
+      this.flashPeak = 1.0;
+      this.flashCooldown = Math.floor(Math.random() * FLASH_COOLDOWN_MAX);
+      this.alignment = 0;
+      this.orbitDirection = Math.random() < 0.5 ? 1 : -1;
+      this.baseBrightness = Math.random() < 0.7 ? p.random(0.55, 0.75) : p.random(0.75, 1.0);
+      this.noiseOffsetX = p.random(1000);
+      this.noiseOffsetY = p.random(1000);
+    }
+
+    applyForce(fx, fy) { this.ax += fx; this.ay += fy; }
+
+    wander() {
+      const timeShift = p.frameCount * 0.003;
+      const angle = p.noise(this.noiseOffsetX + timeShift, this.noiseOffsetY + timeShift) * p.TWO_PI * 2;
+      this.applyForce(p.cos(angle) * 0.14, p.sin(angle) * 0.14);
+    }
+
+    attractToMouse(mx, my) {
+      const dx = mx - this.x;
+      const dy = my - this.y;
+      const distSq = dx * dx + dy * dy;
+      const influenceRadius = 600;
+      const baseOrbitRadius = 100;
+
+      if (distSq < influenceRadius * influenceRadius && distSq > 4) {
+        const dist = p.sqrt(distSq);
+        const normalizedDist = dist / influenceRadius;
+        const falloff = Math.pow(1 - normalizedDist, 2.5);
+
+        const radialX = dx / dist;
+        const radialY = dy / dist;
+        const tangentX = -radialY * this.orbitDirection;
+        const tangentY = radialX * this.orbitDirection;
+
+        const angle = Math.atan2(dy, dx);
+        const weaveOffset = Math.sin(angle * 2) * 24 * this.orbitDirection;
+        const orbitRadius = baseOrbitRadius + weaveOffset;
+
+        let attractionStrength;
+        if (dist > orbitRadius) {
+          const pullIntensity = Math.pow(1 - (dist - orbitRadius) / (influenceRadius - orbitRadius), 1.5);
+          attractionStrength = 0.65 * pullIntensity;
+        } else {
+          attractionStrength = -0.28 * (1 - dist / orbitRadius);
+        }
+
+        let orbitStrength = 0.65 * falloff;
+
+        // Mouse velocity: only dampen at very high speeds
+        if (mouseSpeedSmooth > 12) {
+          const speedDamp = 0.4;
+          attractionStrength *= speedDamp;
+          orbitStrength *= speedDamp;
+        }
+
+        this.applyForce(
+          radialX * attractionStrength + tangentX * orbitStrength,
+          radialY * attractionStrength + tangentY * orbitStrength
+        );
+        this.alignment = p.lerp(this.alignment, falloff, 0.2);
+      } else {
+        this.alignment = p.lerp(this.alignment, 0, 0.03);
+      }
+    }
+
+    updateGlow() {
+      if (this.glowState === 'idle') {
+        if (this.flashCooldown > 0) { this.flashCooldown--; }
+        else if (Math.random() < flashChance) {
+          this.glowState = 'rising'; this.glowTimer = FLASH_RISE;
+          this.glowIntensity = 0; this.flashPeak = Math.random() < 0.6 ? 1.0 : 0.55;
+        }
+      } else if (this.glowState === 'rising') {
+        this.glowTimer--;
+        this.glowIntensity = (1 - this.glowTimer / FLASH_RISE) * this.flashPeak;
+        if (this.glowTimer <= 0) { this.glowState = 'hold'; this.glowTimer = FLASH_HOLD; this.glowIntensity = this.flashPeak; }
+      } else if (this.glowState === 'hold') {
+        this.glowTimer--;
+        if (this.glowTimer <= 0) { this.glowState = 'falling'; this.glowTimer = FLASH_FALL; }
+      } else if (this.glowState === 'falling') {
+        this.glowTimer--;
+        this.glowIntensity = (this.glowTimer / FLASH_FALL) * this.flashPeak;
+        if (this.glowTimer <= 0) {
+          this.glowState = 'idle'; this.glowIntensity = 0;
+          this.flashCooldown = Math.floor(FLASH_COOLDOWN_MIN + Math.random() * (FLASH_COOLDOWN_MAX - FLASH_COOLDOWN_MIN));
+        }
+      }
+    }
+
+    update(mouseActive, mx, my) {
+      this.updateGlow();
+      this.wander();
+      if (mouseActive) this.attractToMouse(mx, my);
+      this.vx += this.ax; this.vy += this.ay;
+      const speed = p.sqrt(this.vx * this.vx + this.vy * this.vy);
+      const currentMaxSpeed = this.maxSpeed + this.alignment * 0.5;
+      if (speed > currentMaxSpeed) { this.vx = (this.vx / speed) * currentMaxSpeed; this.vy = (this.vy / speed) * currentMaxSpeed; }
+      this.x += this.vx; this.y += this.vy;
+      this.vx *= 0.97; this.vy *= 0.97;
+      this.ax = 0; this.ay = 0;
+      this.age++;
+      if (this.x < -20) this.x = p.width + 20;
+      if (this.x > p.width + 20) this.x = -20;
+      if (this.y < -20) this.y = p.height + 20;
+      if (this.y > p.height + 20) this.y = -20;
+      if (this.age > this.life) this.reset();
+    }
+
+    show() {
+      const color = this.colorSet === 'accent' ? accentColor : primaryColor;
+      let baseAlpha = 95;
+      if (this.age < 30) baseAlpha = p.map(this.age, 0, 30, 0, baseAlpha);
+      else if (this.age > this.life - 60) baseAlpha = p.map(this.age, this.life - 60, this.life, baseAlpha, 0);
+
+      const idleAlpha = 1.2 * this.baseBrightness;
+      const alphaScale = idleAlpha + (3.5 - idleAlpha) * this.glowIntensity;
+      const radiusScale = 1 + (1.8 - 1) * this.glowIntensity;
+
+      let finalAlpha = baseAlpha * alphaScale;
+      let finalRadius = (this.baseRadius * radiusScale) * (1 + this.alignment * 0.5);
+
+      if (this.alignment > 0.15) {
+        const angle = Math.atan2(this.y - p.mouseY, this.x - p.mouseX);
+        const cosAngle = Math.cos(angle);
+        const isOver = this.orbitDirection === 1 ? cosAngle > 0 : cosAngle < 0;
+        const crossingFactor = Math.abs(cosAngle);
+        const weaveBrightness = isOver ? 1.0 + (1.0 - crossingFactor) * 0.3 : 0.35 + crossingFactor * 0.65;
+        const weaveAmount = Math.min(1, this.alignment * 2);
+        finalAlpha *= (1.0 + (weaveBrightness - 1.0) * weaveAmount);
+        if (!isOver) finalRadius *= (1.0 - 0.15 * weaveAmount);
+      }
+
+      p.noStroke();
+      p.fill(color.r, color.g, color.b, finalAlpha);
+      p.circle(this.x, this.y, finalRadius * 2);
+    }
+  }
+
+  p.setup = () => {
+    prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const container = document.getElementById('hero-canvas-container');
+    if (!container) return;
+    canvas = p.createCanvas(container.offsetWidth, container.offsetHeight);
+    canvas.parent('hero-canvas-container');
+
+    if (p.width < 768) { cellCount = 120; flashChance = 0.012; }
+    else if (p.width < 1024) { cellCount = 200; flashChance = 0.009; }
+    else { cellCount = 300; flashChance = 0.006; }
+
+    if (prefersReducedMotion) cellCount = Math.floor(cellCount * 0.3);
+    for (let i = 0; i < cellCount; i++) cells.push(new Cell());
+    
+    p.background(13, 17, 23);
+  };
+
+  p.draw = () => {
+    p.blendMode(p.BLEND);
+    p.background(13, 17, 23);
+    p.blendMode(p.ADD);
+
+    isMouseInHero = p.mouseX >= 0 && p.mouseX <= p.width && p.mouseY >= 0 && p.mouseY <= p.height;
+
+    // Initialize prev mouse on first real mouse movement to avoid speed spike
+    if (!mouseInitialized && (p.mouseX !== 0 || p.mouseY !== 0)) {
+      prevMouseX = p.mouseX;
+      prevMouseY = p.mouseY;
+      mouseInitialized = true;
+    }
+    if (mouseInitialized) {
+      const mdx = p.mouseX - prevMouseX;
+      const mdy = p.mouseY - prevMouseY;
+      mouseSpeedSmooth = mouseSpeedSmooth * 0.85 + Math.sqrt(mdx*mdx + mdy*mdy) * 0.15;
+      prevMouseX = p.mouseX; prevMouseY = p.mouseY;
+    }
+
+    const breathX = Math.sin(p.frameCount * 0.0035) * 0.05;
+    const breathY = Math.cos(p.frameCount * 0.0025) * 0.03;
+
+    for (let cell of cells) {
+      cell.applyForce(breathX, breathY);
+      cell.update(isMouseInHero, p.mouseX, p.mouseY);
+      cell.show();
+    }
+
+    p.blendMode(p.BLEND);
+    // Connection lines between orbiting particles
+    let orbiting = [];
+    for (let cell of cells) { if (cell.alignment > 0.15) orbiting.push(cell); }
+    if (orbiting.length > 1) {
+      p.strokeWeight(1);
+      let lc = 0;
+      const maxConn = 25;
+      const connR = 110;
+      const connRSq = connR * connR;
+      for (let i = 0; i < orbiting.length && lc < maxConn; i++) {
+        for (let j = i+1; j < orbiting.length && lc < maxConn; j++) {
+          const dx = orbiting[i].x - orbiting[j].x;
+          const dy = orbiting[i].y - orbiting[j].y;
+          const dSq = dx*dx + dy*dy;
+          if (dSq < connRSq) {
+            const d = Math.sqrt(dSq);
+            const a = (1 - d/connR) * 60 * Math.min(orbiting[i].alignment, orbiting[j].alignment);
+            p.stroke(99, 102, 241, a);
+            p.line(orbiting[i].x, orbiting[i].y, orbiting[j].x, orbiting[j].y);
+            lc++;
+          }
+        }
+      }
+      p.noStroke();
+    }
+  };
+
+  p.windowResized = () => {
+    const container = document.getElementById('hero-canvas-container');
+    if (container) {
+      p.resizeCanvas(container.offsetWidth, container.offsetHeight);
+      let target = p.width < 768 ? 70 : (p.width < 1024 ? 120 : 180);
+      if (prefersReducedMotion) target = Math.floor(target * 0.3);
+      if (cells.length > target) cells = cells.slice(0, target);
+      else while (cells.length < target) cells.push(new Cell());
+      p.background(13, 17, 23);
+    }
+  };
+
+  p.mousePressed = () => {
+    if (!isMouseInHero || prefersReducedMotion) return;
+    for (let cell of cells) {
+      const dx = cell.x - p.mouseX; const dy = cell.y - p.mouseY;
+      const dSq = dx*dx + dy*dy;
+      if (dSq < 22500 && dSq > 0) {
+        const d = p.sqrt(dSq); const f = (1 - d/150) * 2;
+        cell.vx += (dx/d)*f; cell.vy += (dy/d)*f;
+      }
+    }
+  };
+};
+
+new p5(heroParticlesIndigo);
+</script>
+</body>
+</html>

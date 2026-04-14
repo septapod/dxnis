@@ -1,0 +1,1943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dixon Strategic Labs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;500;600;700&family=Fraunces:ital,opsz,wght,WONK@0,9..144,100..900,0..1;1,9..144,100..900,0..1&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --ground: #141417;
+      --surface: #1e1e22;
+      --elevated: #28282e;
+      --text: #e8e6ee;
+      --text-muted: rgba(232,230,238,0.5);
+      --amber: #d4a042;
+      --stone: #6e6d78;
+      --border: rgba(232,230,238,0.06);
+      --ease-dxn: cubic-bezier(0.22, 1, 0.36, 1);
+      --duration: 200ms;
+    }
+
+    ::selection {
+      background: rgba(212,160,66,0.3);
+    }
+
+    html {
+      background: var(--ground);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Fraunces', serif;
+      font-weight: 300;
+      font-variation-settings: 'opsz' 14, 'WONK' 0;
+      line-height: 1.6;
+      position: relative;
+    }
+
+    section[id] {
+      scroll-margin-top: 72px;
+    }
+
+    /* ========================================
+       GRAIN OVERLAY
+       ======================================== */
+    .grain-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.015;
+    }
+
+    /* ========================================
+       WEAVE REVEAL (page load animation)
+       ======================================== */
+    .weave-reveal {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: #141417;
+      pointer-events: none;
+      animation: reveal-fade 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
+    }
+
+    @keyframes reveal-fade {
+      to { opacity: 0; visibility: hidden; }
+    }
+
+
+    /* ========================================
+       SECTION UTILITIES
+       ======================================== */
+    .section-label {
+      font-family: 'Fira Code', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--amber);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
+
+    .section-headline {
+      font-family: 'Fraunces', serif;
+      font-weight: 400;
+      font-size: 32px;
+      font-variation-settings: 'WONK' 1, 'opsz' 144;
+      line-height: 1.25;
+      color: var(--text);
+    }
+
+    /* ========================================
+       1. NAVIGATION BAR
+       ======================================== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 56px;
+      background: rgba(20,20,23,0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .navbar-logo {
+      width: 28px;
+      height: auto;
+      display: block;
+    }
+
+    .navbar-wordmark {
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      color: var(--text);
+      letter-spacing: 0.01em;
+    }
+
+    .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .navbar-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .navbar-links a {
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 400;
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      color: var(--stone);
+      text-decoration: none;
+      transition: color var(--duration) var(--ease-dxn);
+      position: relative;
+    }
+
+    .navbar-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--amber) 0px,
+        var(--amber) 3px,
+        transparent 3px,
+        transparent 6px
+      );
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.35s var(--ease-dxn);
+    }
+
+    .navbar-links a:hover {
+      color: var(--text);
+    }
+
+    .navbar-links a:hover::after {
+      transform: scaleX(1);
+    }
+
+    /* ========================================
+       BUTTONS
+       ======================================== */
+    .btn-primary {
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 500;
+      font-size: 13px;
+      letter-spacing: 0.02em;
+      background: var(--amber);
+      color: var(--ground);
+      border: none;
+      border-radius: 2px;
+      padding: 12px 28px;
+      cursor: pointer;
+      transition: opacity var(--duration) var(--ease-dxn);
+      text-decoration: none;
+      display: inline-block;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.85;
+    }
+
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: var(--ground);
+      transform: translateX(-101%);
+      transition: transform 0.4s var(--ease-dxn);
+    }
+
+    .btn-primary:hover::after {
+      transform: translateX(0);
+    }
+
+    .btn-primary-sm {
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 500;
+      font-size: 12px;
+      letter-spacing: 0.02em;
+      background: var(--amber);
+      color: var(--ground);
+      border: none;
+      border-radius: 2px;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: opacity var(--duration) var(--ease-dxn);
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary-sm:hover {
+      opacity: 0.85;
+    }
+
+    .btn-ghost {
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 500;
+      font-size: 13px;
+      letter-spacing: 0.02em;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid rgba(212,160,66,0.25);
+      border-radius: 2px;
+      padding: 11px 28px;
+      cursor: pointer;
+      transition: border-color var(--duration) var(--ease-dxn);
+      text-decoration: none;
+      display: inline-block;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-ghost:hover {
+      border-color: rgba(212,160,66,0.5);
+    }
+
+    .btn-ghost::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: var(--amber);
+      transform: translateX(-101%);
+      transition: transform 0.4s var(--ease-dxn);
+    }
+
+    .btn-ghost:hover::after {
+      transform: translateX(0);
+    }
+
+    .btn-text {
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 500;
+      font-size: 13px;
+      color: var(--amber);
+      text-decoration: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-text::before,
+    .btn-text::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 1px;
+      background: var(--amber);
+    }
+
+    .btn-text::before {
+      bottom: 0;
+      left: 0;
+      transform: translateX(-101%);
+      transition: transform 0.35s var(--ease-dxn);
+    }
+
+    .btn-text::after {
+      right: 0;
+      bottom: 3px;
+      transform: translateX(101%);
+      transition: transform 0.35s var(--ease-dxn) 0.05s;
+    }
+
+    .btn-text:hover::before,
+    .btn-text:hover::after {
+      transform: translateX(0);
+    }
+
+    /* ========================================
+       2. HERO
+       ======================================== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 40px;
+      position: relative;
+      overflow: hidden;
+      background: radial-gradient(ellipse 70% 50% at 50% 40%, rgba(212,160,66,0.04), transparent);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-logo {
+      width: 96px;
+      height: auto;
+      display: block;
+    }
+
+    .hero-wordmark {
+      margin-top: 20px;
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(232,230,238,0.4);
+    }
+
+    .hero-headline {
+      margin-top: 48px;
+      font-family: 'Fraunces', serif;
+      font-weight: 400;
+      font-size: clamp(3rem, 6vw, 5rem);
+      font-variation-settings: 'WONK' 1, 'opsz' 144;
+      line-height: 1.15;
+      color: var(--text);
+      max-width: 800px;
+    }
+
+    .hero-subtitle {
+      margin-top: 24px;
+      font-family: 'Fraunces', serif;
+      font-weight: 300;
+      font-variation-settings: 'opsz' 14, 'WONK' 0;
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text-muted);
+      max-width: 560px;
+      text-align: left;
+    }
+
+    .hero-cta {
+      margin-top: 40px;
+    }
+
+    /* ========================================
+       3. SERVICES
+       ======================================== */
+    .section-services {
+      padding: 120px 40px;
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    .section-services .section-headline {
+      margin-top: 20px;
+    }
+
+    .services-grid {
+      margin-top: 48px;
+      display: grid;
+      grid-template-columns: 1.3fr 1fr 1fr;
+      gap: 24px;
+    }
+
+    .service-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 32px 28px 28px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color var(--duration) var(--ease-dxn), transform var(--duration) var(--ease-dxn);
+    }
+
+    .service-card:hover {
+      border-color: rgba(212,160,66,0.15);
+      transform: translateY(-2px);
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 3px;
+      background:
+        repeating-linear-gradient(
+          180deg,
+          transparent 0px,
+          transparent 3px,
+          rgba(212,160,66,0.20) 3px,
+          rgba(212,160,66,0.20) 5px,
+          transparent 5px,
+          transparent 8px
+        );
+    }
+
+    .service-card:first-child {
+      border-top: 2px solid var(--amber);
+    }
+
+    .service-card:first-child::before {
+      background:
+        repeating-linear-gradient(
+          180deg,
+          transparent 0px,
+          transparent 3px,
+          rgba(212,160,66,0.30) 3px,
+          rgba(212,160,66,0.30) 5px,
+          transparent 5px,
+          transparent 8px
+        );
+    }
+
+    .service-card-number {
+      font-family: 'Fira Code', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--amber);
+      letter-spacing: 0.05em;
+    }
+
+    .service-card-title {
+      margin-top: 12px;
+      font-family: 'Fraunces', serif;
+      font-weight: 600;
+      font-size: 20px;
+      font-variation-settings: 'WONK' 1, 'opsz' 48;
+      color: var(--text);
+    }
+
+    .service-card-desc {
+      margin-top: 8px;
+      font-family: 'Fraunces', serif;
+      font-weight: 300;
+      font-variation-settings: 'opsz' 14, 'WONK' 0;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      text-align: left;
+    }
+
+    /* Scroll-driven stagger */
+    .service-card {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+
+    @supports (animation-timeline: view()) {
+      .service-card {
+        animation: card-enter 0.6s var(--ease-dxn) both;
+        animation-timeline: view();
+      }
+      .service-card:nth-child(1) { animation-range: entry 0% entry 35%; }
+      .service-card:nth-child(2) { animation-range: entry 5% entry 40%; }
+      .service-card:nth-child(3) { animation-range: entry 10% entry 45%; }
+    }
+
+    @supports not (animation-timeline: view()) {
+      .service-card {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    @keyframes card-enter {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ========================================
+       WEAVE DIVIDER
+       ======================================== */
+    .weave-divider {
+      margin: 0;
+      height: 20px;
+      position: relative;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          transparent 0px,
+          transparent 2px,
+          rgba(212,160,66,0.15) 2px,
+          rgba(212,160,66,0.15) 3px,
+          transparent 3px,
+          transparent 6px
+        );
+      background-size: 100% 20px;
+      background-position: center;
+    }
+
+    .weave-divider::after {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      width: 40px;
+      height: 40px;
+      transform: translateX(-50%) rotate(45deg);
+      background:
+        repeating-linear-gradient(
+          0deg,
+          transparent 0px,
+          transparent 2px,
+          rgba(212,160,66,0.12) 2px,
+          rgba(212,160,66,0.12) 3px,
+          transparent 3px,
+          transparent 6px
+        );
+    }
+
+    /* ========================================
+       4. TESTIMONIAL
+       ======================================== */
+    .testimonial {
+      padding: 100px 40px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .testimonial::before,
+    .testimonial::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 80px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .testimonial::before {
+      left: 0;
+      background: linear-gradient(to right, var(--ground), transparent);
+    }
+    .testimonial::after {
+      right: 0;
+      background: linear-gradient(to left, var(--ground), transparent);
+    }
+
+    .mega-word {
+      font-family: 'Fraunces', serif;
+      font-weight: 200;
+      font-size: clamp(5rem, 12vw, 12rem);
+      font-variation-settings: 'WONK' 1, 'opsz' 144;
+      line-height: 0.85;
+      letter-spacing: -0.04em;
+      color: rgba(232,230,238,0.06);
+      text-align: center;
+      margin-bottom: -24px;
+      user-select: none;
+    }
+
+    .testimonial blockquote {
+      font-family: 'Fraunces', serif;
+      font-weight: 400;
+      font-style: italic;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-variation-settings: 'WONK' 1, 'opsz' 144;
+      line-height: 1.35;
+      color: var(--amber);
+      max-width: 640px;
+    }
+
+    .testimonial cite {
+      display: block;
+      margin-top: 16px;
+      font-family: 'Fira Code', monospace;
+      font-style: normal;
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--stone);
+    }
+
+    @supports (animation-timeline: view()) {
+      .testimonial blockquote {
+        animation: weight-shift 1s linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 40%;
+      }
+    }
+
+    @keyframes weight-shift {
+      from {
+        font-variation-settings: 'WONK' 1, 'opsz' 72;
+        font-weight: 200;
+        opacity: 0.4;
+      }
+      to {
+        font-variation-settings: 'WONK' 1, 'opsz' 144;
+        font-weight: 500;
+        opacity: 1;
+      }
+    }
+
+    /* ========================================
+       5. ABOUT
+       ======================================== */
+    .section-about {
+      padding: 120px 40px;
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 64px;
+      margin-top: 20px;
+    }
+
+    .about-subhead {
+      margin-top: 12px;
+      font-family: 'Fraunces', serif;
+      font-weight: 300;
+      font-variation-settings: 'opsz' 14, 'WONK' 0;
+      font-size: 18px;
+      line-height: 1.5;
+      color: var(--text-muted);
+    }
+
+    .about-body {
+      margin-top: 32px;
+    }
+
+    .about-body p {
+      font-family: 'Fraunces', serif;
+      font-weight: 300;
+      font-variation-settings: 'opsz' 14, 'WONK' 0;
+      font-size: 16px;
+      line-height: 1.8;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .about-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .about-cta {
+      margin-top: 32px;
+    }
+
+    .credentials-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 32px 28px;
+      position: relative;
+      overflow: hidden;
+      align-self: start;
+      margin-top: 68px;
+    }
+
+    .credentials-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 3px;
+      background:
+        repeating-linear-gradient(
+          180deg,
+          transparent 0px,
+          transparent 3px,
+          rgba(212,160,66,0.20) 3px,
+          rgba(212,160,66,0.20) 5px,
+          transparent 5px,
+          transparent 8px
+        );
+    }
+
+    .credentials-card ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .credentials-card li {
+      font-family: 'Fira Code', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--stone);
+      line-height: 1.5;
+      padding-left: 14px;
+      position: relative;
+    }
+
+    .credentials-card li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 6px;
+      width: 4px;
+      height: 4px;
+      background: var(--amber);
+      border-radius: 1px;
+    }
+
+    /* ========================================
+       6. NEWSLETTER
+       ======================================== */
+    .section-newsletter {
+      background: var(--surface);
+      padding: 80px 40px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .newsletter-inner {
+      max-width: 600px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .newsletter-tagline {
+      font-family: 'Fira Code', monospace;
+      font-size: 11px;
+      color: var(--stone);
+      margin-top: 4px;
+    }
+
+    .newsletter-title {
+      margin-top: 16px;
+      font-family: 'Fraunces', serif;
+      font-weight: 400;
+      font-size: 28px;
+      font-variation-settings: 'WONK' 1, 'opsz' 144;
+      color: var(--text);
+    }
+
+    .newsletter-desc {
+      margin-top: 12px;
+      font-family: 'Fraunces', serif;
+      font-weight: 300;
+      font-variation-settings: 'opsz' 14, 'WONK' 0;
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      text-align: left;
+    }
+
+    .newsletter-form {
+      margin-top: 32px;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .newsletter-input {
+      font-family: 'Fraunces', serif;
+      font-weight: 300;
+      font-variation-settings: 'opsz' 14, 'WONK' 0;
+      font-size: 14px;
+      background: var(--ground);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 12px 16px;
+      outline: none;
+      width: 280px;
+      transition: border-color var(--duration) var(--ease-dxn);
+    }
+
+    .newsletter-input::placeholder {
+      color: var(--stone);
+      opacity: 0.5;
+    }
+
+    .newsletter-input:focus {
+      border-color: rgba(212,160,66,0.3);
+    }
+
+    /* ========================================
+       7. CONTACT
+       ======================================== */
+    .section-contact {
+      padding: 120px 40px;
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    .section-contact .section-headline {
+      margin-bottom: 8px;
+    }
+
+    .contact-subtitle {
+      font-family: 'Fraunces', serif;
+      font-weight: 400;
+      font-size: 20px;
+      font-variation-settings: 'WONK' 1, 'opsz' 48;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 64px;
+      margin-top: 48px;
+    }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-label {
+      font-family: 'Fira Code', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--stone);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .form-input {
+      font-family: 'Fraunces', serif;
+      font-weight: 300;
+      font-variation-settings: 'opsz' 14, 'WONK' 0;
+      font-size: 14px;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 12px 16px;
+      outline: none;
+      transition: border-color var(--duration) var(--ease-dxn);
+    }
+
+    .form-input::placeholder {
+      color: var(--stone);
+      opacity: 0.4;
+    }
+
+    .form-input:focus {
+      border-color: rgba(212,160,66,0.3);
+    }
+
+    .form-textarea {
+      font-family: 'Fraunces', serif;
+      font-weight: 300;
+      font-variation-settings: 'opsz' 14, 'WONK' 0;
+      font-size: 14px;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 12px 16px;
+      outline: none;
+      resize: vertical;
+      min-height: 120px;
+      transition: border-color var(--duration) var(--ease-dxn);
+    }
+
+    .form-textarea::placeholder {
+      color: var(--stone);
+      opacity: 0.4;
+    }
+
+    .form-textarea:focus {
+      border-color: rgba(212,160,66,0.3);
+    }
+
+    .schedule-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 40px 32px;
+      align-self: start;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .schedule-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 3px;
+      background:
+        repeating-linear-gradient(
+          180deg,
+          transparent 0px,
+          transparent 3px,
+          rgba(212,160,66,0.20) 3px,
+          rgba(212,160,66,0.20) 5px,
+          transparent 5px,
+          transparent 8px
+        );
+    }
+
+    .schedule-card-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 400;
+      font-size: 22px;
+      font-variation-settings: 'WONK' 1, 'opsz' 48;
+      color: var(--text);
+    }
+
+    .schedule-card-body {
+      margin-top: 16px;
+      font-family: 'Fraunces', serif;
+      font-weight: 300;
+      font-variation-settings: 'opsz' 14, 'WONK' 0;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-muted);
+      text-align: left;
+    }
+
+    .schedule-card-cta {
+      margin-top: 28px;
+    }
+
+    /* ========================================
+       8. CLOSING QUOTE
+       ======================================== */
+    .closing-quote {
+      padding: 120px 40px;
+      text-align: center;
+    }
+
+    .closing-quote blockquote {
+      font-family: 'Fraunces', serif;
+      font-weight: 400;
+      font-style: italic;
+      font-size: 24px;
+      font-variation-settings: 'WONK' 1, 'opsz' 72;
+      line-height: 1.4;
+      color: rgba(110,109,120,0.6);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .closing-quote cite {
+      display: block;
+      margin-top: 16px;
+      font-family: 'Fira Code', monospace;
+      font-style: normal;
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--stone);
+    }
+
+    /* ========================================
+       9. FOOTER
+       ======================================== */
+    .footer {
+      background: var(--surface);
+      padding: 80px 40px 48px;
+    }
+
+    .footer-grid {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 40px;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-brand-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .footer-logo {
+      width: 36px;
+      height: auto;
+    }
+
+    .footer-brand-name {
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .footer-brand-tagline {
+      font-family: 'Fraunces', serif;
+      font-weight: 300;
+      font-variation-settings: 'opsz' 14, 'WONK' 0;
+      font-size: 13px;
+      color: var(--stone);
+      line-height: 1.5;
+    }
+
+    .footer-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-nav-label {
+      font-family: 'Fira Code', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--amber);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 4px;
+    }
+
+    .footer-nav a {
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 400;
+      font-size: 13px;
+      color: var(--stone);
+      text-decoration: none;
+      transition: color var(--duration) var(--ease-dxn);
+    }
+
+    .footer-nav a:hover {
+      color: var(--text);
+    }
+
+    .footer-contact {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-contact-label {
+      font-family: 'Fira Code', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--amber);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 4px;
+    }
+
+    .footer-contact span {
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 400;
+      font-size: 13px;
+      color: var(--stone);
+    }
+
+    .footer-bottom {
+      max-width: 1120px;
+      margin: 0 auto;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-bottom span {
+      font-family: 'Fira Code', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      color: rgba(110,109,120,0.3);
+    }
+
+    /* ========================================
+       RESPONSIVE
+       ======================================== */
+    @media (max-width: 840px) {
+      .services-grid {
+        grid-template-columns: 1fr;
+        max-width: 480px;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .credentials-card {
+        margin-top: 0;
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .navbar {
+        padding: 0 20px;
+      }
+
+      .navbar-links {
+        gap: 20px;
+      }
+
+      .navbar-wordmark {
+        display: none;
+      }
+
+      .hero {
+        padding: 80px 24px;
+      }
+
+      .hero-headline {
+        font-size: clamp(2rem, 7vw, 3rem);
+      }
+
+      .section-services,
+      .section-about,
+      .section-contact,
+      .testimonial,
+      .closing-quote {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+
+      .section-newsletter {
+        padding: 64px 24px;
+      }
+
+      .newsletter-form {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .newsletter-input {
+        width: 100%;
+      }
+
+      .footer {
+        padding: 48px 24px;
+      }
+
+      .hero-cta .btn-primary {
+        width: 100%;
+        text-align: center;
+      }
+
+      .mega-word {
+        font-size: clamp(3rem, 15vw, 8rem);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .navbar-links {
+        gap: 16px;
+      }
+
+      .navbar-right .btn-primary-sm {
+        display: none;
+      }
+
+      .services-grid {
+        max-width: 100%;
+      }
+    }
+
+    /* ========================================
+       CLIENT LOGOS
+       ======================================== */
+    .clients-section {
+      padding: 32px 40px;
+      background: var(--surface);
+      overflow: hidden;
+    }
+    .clients-label {
+      font-family: 'Fira Code', monospace;
+      font-size: 10px;
+      color: var(--amber);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .logo-strip {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .logo-placeholder {
+      width: 80px;
+      height: 36px;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      opacity: 0.4;
+    }
+
+    /* ========================================
+       TESTIMONIAL CAROUSEL
+       ======================================== */
+    .testimonial-track {
+      display: flex;
+      gap: 24px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding: 0 40px 24px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--amber) var(--surface);
+    }
+
+    .testimonial-track::-webkit-scrollbar {
+      height: 4px;
+    }
+    .testimonial-track::-webkit-scrollbar-track {
+      background: var(--surface);
+    }
+    .testimonial-track::-webkit-scrollbar-thumb {
+      background: var(--amber);
+      border-radius: 2px;
+    }
+
+    .testimonial-slide {
+      flex: 0 0 min(480px, 85vw);
+      scroll-snap-align: start;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 36px 32px;
+      min-height: 160px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .testimonial-image {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      border: 2px solid var(--border);
+    }
+
+    .testimonial-quote {
+      font-family: 'Fraunces', serif;
+      font-weight: 300;
+      font-variation-settings: 'opsz' 14, 'WONK' 0;
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--text);
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    .testimonial-author {
+      font-family: 'Fira Code', monospace;
+      font-size: 11px;
+      color: var(--stone);
+      text-align: left;
+    }
+
+    .testimonial-author strong {
+      color: var(--text);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    /* ========================================
+       PHOTO-HERO ABOUT INTRO
+       ======================================== */
+    .photo-hero {
+      background: var(--surface);
+      padding: 100px 40px;
+    }
+    .photo-hero-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    .photo-hero-img {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+      border-radius: 2px;
+      filter: grayscale(20%) contrast(1.05);
+      border: 1px solid var(--border);
+    }
+    .photo-hero-text h2 {
+      font-family: 'Fraunces', serif;
+      font-weight: 400;
+      font-size: 36px;
+      font-variation-settings: 'WONK' 1, 'opsz' 144;
+      color: var(--text);
+    }
+    .photo-hero-text p {
+      margin-top: 12px;
+      font-family: 'Fraunces', serif;
+      font-weight: 300;
+      font-variation-settings: 'opsz' 14, 'WONK' 0;
+      font-size: 18px;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 840px) {
+      .photo-hero-inner {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .photo-hero {
+        padding: 64px 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="weave-reveal"></div>
+
+  <!-- GRAIN OVERLAY -->
+  <svg class="grain-overlay" xmlns="http://www.w3.org/2000/svg">
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="4" stitchTiles="stitch" />
+    </filter>
+    <rect width="100%" height="100%" filter="url(#grain)" />
+  </svg>
+
+  <!-- 1. NAVIGATION -->
+  <nav class="navbar">
+    <div class="navbar-left">
+      <img src="dxn-logomark-white.png" alt="DXN" class="navbar-logo">
+      <span class="navbar-wordmark">Dixon Strategic Labs</span>
+    </div>
+    <div class="navbar-right">
+      <ul class="navbar-links">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <a href="#contact" class="btn-primary-sm">Get Started</a>
+    </div>
+  </nav>
+
+  <!-- 2. HERO -->
+  <section class="hero">
+    <div id="hero-canvas-container" style="position:absolute;inset:0;z-index:0;"></div>
+    <div class="hero-content">
+      <img src="dxn-logomark-white.png" alt="DXN logomark" class="hero-logo">
+      <p class="hero-wordmark">Dixon Strategic Labs</p>
+      <h1 class="hero-headline">Strategic facilitation that brings your people together.</h1>
+      <p class="hero-subtitle">Collaborations begin with many more opinions than participants. Misalignment breaks collaborations. I help leadership teams transform diverse opinions into a co-owned plan by prioritizing, measuring, and cultivating alignment.</p>
+      <p class="hero-subtitle" style="margin-top:16px;color:var(--text);">I run the process so your team can focus on the decisions.</p>
+      <div class="hero-cta">
+        <a href="#contact" class="btn-primary">Let's Talk</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. CLIENT LOGOS -->
+  <section class="clients-section">
+    <p class="clients-label">Trusted by credit unions and mission-driven organizations across North America</p>
+    <div class="logo-strip">
+      <div class="logo-placeholder"></div>
+      <div class="logo-placeholder"></div>
+      <div class="logo-placeholder"></div>
+      <div class="logo-placeholder"></div>
+      <div class="logo-placeholder"></div>
+      <div class="logo-placeholder"></div>
+      <div class="logo-placeholder"></div>
+      <div class="logo-placeholder"></div>
+    </div>
+  </section>
+
+  <!-- 4. SERVICES -->
+  <section class="section-services" id="services">
+    <p class="section-label">Services</p>
+    <h2 class="section-headline">Services</h2>
+    <div class="services-grid">
+      <div class="service-card">
+        <p class="service-card-number">01</p>
+        <h3 class="service-card-title">Speaking</h3>
+        <p class="service-card-desc">Keynotes and workshops for conferences and leadership events.</p>
+      </div>
+      <div class="service-card">
+        <p class="service-card-number">02</p>
+        <h3 class="service-card-title">Facilitation</h3>
+        <p class="service-card-desc">Strategic planning sessions, retreats, and critical decisions.</p>
+      </div>
+      <div class="service-card">
+        <p class="service-card-number">03</p>
+        <h3 class="service-card-title">Advisory</h3>
+        <p class="service-card-desc">Executive coaching and strategic counsel.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WEAVE DIVIDER -->
+  <div class="weave-divider"></div>
+
+  <!-- 5. TESTIMONIALS -->
+  <section class="testimonial">
+    <p class="section-label">Testimonials</p>
+    <div class="testimonial-track">
+      <div class="testimonial-slide">
+        <img src="ray.jpg" alt="Ray Springsteen" class="testimonial-image">
+        <div>
+          <p class="testimonial-quote">"Brent led the most <em>strategic</em> strategic planning sessions we've ever had."</p>
+          <div class="testimonial-author"><strong>Ray Springsteen</strong>CEO, Abound Credit Union</div>
+        </div>
+      </div>
+      <div class="testimonial-slide">
+        <img src="nancy.jpg" alt="Nancy Giordano" class="testimonial-image">
+        <div>
+          <p class="testimonial-quote">"I know many intelligent people, good people, creative people, and visionary people. At the intersection of all these groups is Brent."</p>
+          <div class="testimonial-author"><strong>Nancy Giordano</strong>Founder &amp; Strategic Futurist, Play Big Inc.</div>
+        </div>
+      </div>
+      <div class="testimonial-slide">
+        <img src="mb.png" alt="Mary Beth Spuck" class="testimonial-image">
+        <div>
+          <p class="testimonial-quote">"Well, I think this is the best strategic planning discussion we've ever had."</p>
+          <div class="testimonial-author"><strong>Mary Beth Spuck</strong>CEO, Resource One Credit Union</div>
+        </div>
+      </div>
+      <div class="testimonial-slide">
+        <img src="ronaldo.jpg" alt="Ronaldo Hardy" class="testimonial-image">
+        <div>
+          <p class="testimonial-quote">"Brent is an innovative, forward thinking leader, who inspires the next wave of leadership. I credit Brent as one of the reasons I have found success at such an early age."</p>
+          <div class="testimonial-author"><strong>Ronaldo Hardy</strong>CEO, Balance Financial Wellness</div>
+        </div>
+      </div>
+      <div class="testimonial-slide">
+        <img src="steve.jpg" alt="Stephen Pagenstecher" class="testimonial-image">
+        <div>
+          <p class="testimonial-quote">"We needed a leader that could be engaging, approachable, and attentive, and Brent delivered."</p>
+          <div class="testimonial-author"><strong>Stephen Pagenstecher</strong>VP of Member Experience, Point West Credit Union</div>
+        </div>
+      </div>
+      <div class="testimonial-slide">
+        <img src="dr-phil.jpg" alt="Dr. Philipp Khallerhoff" class="testimonial-image">
+        <div>
+          <p class="testimonial-quote">"Brent supervised my team at Singularity University, and we received $250,000 in funding for our idea from Richmond Global."</p>
+          <div class="testimonial-author"><strong>Dr. Philipp Khallerhoff</strong>CEO, Protos Asset Management</div>
+        </div>
+      </div>
+      <div class="testimonial-slide">
+        <img src="george.jpg" alt="George Hofheimer" class="testimonial-image">
+        <div>
+          <p class="testimonial-quote">"Brent is that unique individual who possess a well-spring of creativity AND a desire to get things done...Also, he makes me laugh."</p>
+          <div class="testimonial-author"><strong>George Hofheimer</strong>Founder, Hofheimer Strategy Advisors</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WEAVE DIVIDER -->
+  <div class="weave-divider"></div>
+
+  <!-- 6. PHOTO-HERO ABOUT INTRO -->
+  <section class="photo-hero">
+    <div class="photo-hero-inner">
+      <img src="brent-speaking.jpg" alt="Brent Dixon speaking" class="photo-hero-img">
+      <div class="photo-hero-text">
+        <h2>Brent Dixon</h2>
+        <p>provides strategic facilitation for credit unions navigating critical decisions.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. ABOUT -->
+  <section class="section-about" id="about">
+    <p class="section-label">About</p>
+    <div class="about-grid">
+      <div>
+        <h2 class="section-headline">Brent Dixon</h2>
+        <div class="about-body">
+          <p>Brent Dixon founded Dixon Strategic Labs in 2022 to guide leaders through strategic crossroads. He works with credit unions and community financial institutions across North America to align teams, chart growth paths, and ship results.</p>
+          <p>He has built and led programs, prototypes, and pilots with Filene Research Institute, the United Nations, and Singularity University.</p>
+          <p>He lives in Oakland, California with his son and a bossy cat named Bug.</p>
+        </div>
+        <div class="about-cta">
+          <a href="#contact" class="btn-text">Get in Touch &rarr;</a>
+        </div>
+      </div>
+      <div class="credentials-card">
+        <ul>
+          <li>20+ years in cooperative finance</li>
+          <li>Former UN Innovation Lead</li>
+          <li>Board Chair, Communitere International</li>
+          <li>Teaching Fellow, Singularity University</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- WEAVE DIVIDER -->
+  <div class="weave-divider"></div>
+
+  <!-- 8. NEWSLETTER -->
+  <section class="section-newsletter">
+    <div class="newsletter-inner">
+      <p class="section-label">Newsletter</p>
+      <h2 class="newsletter-title">AI for FIs</h2>
+      <p class="newsletter-desc" style="font-style:italic;color:var(--text);font-size:16px;">Weekly insights on AI for credit unions</p>
+      <p class="newsletter-desc">Practical news, insights, and tools for credit union leaders navigating AI adoption. Subscribe to get it in your inbox every week.</p>
+      <div class="newsletter-form">
+        <input type="email" class="newsletter-input" placeholder="your@email.com">
+        <button class="btn-primary" type="button">Subscribe</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- WEAVE DIVIDER -->
+  <div class="weave-divider"></div>
+
+  <!-- 9. CONTACT -->
+  <section class="section-contact" id="contact">
+    <p class="section-label">Contact</p>
+    <h2 class="section-headline">Get in Touch</h2>
+    <div class="contact-grid">
+      <div>
+        <h3 class="schedule-card-title" style="margin-bottom:24px;">Send Me a Message</h3>
+        <form class="contact-form" onsubmit="return false;">
+          <div class="form-group">
+            <label class="form-label">Name *</label>
+            <input type="text" class="form-input" placeholder="Your name" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email *</label>
+            <input type="email" class="form-input" placeholder="your@email.com" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Organization</label>
+            <input type="text" class="form-input" placeholder="Your organization">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Message *</label>
+            <textarea class="form-textarea" placeholder="Tell me about your project or challenge." required></textarea>
+          </div>
+          <div>
+            <button class="btn-primary" type="submit">Send Message</button>
+          </div>
+        </form>
+      </div>
+      <div class="schedule-card">
+        <h3 class="schedule-card-title">Book a Call</h3>
+        <p class="schedule-card-body">Prefer to schedule a time to talk? Book a 30-minute discovery call directly.</p>
+        <div class="schedule-card-cta">
+          <a href="#" class="btn-ghost">Schedule a Call</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. CLOSING QUOTE -->
+  <section class="closing-quote">
+    <blockquote>"No matter the problem, community is the answer."</blockquote>
+    <cite>Margaret Wheatley</cite>
+  </section>
+
+  <!-- 11. FOOTER -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-brand-row">
+          <img src="dxn-logomark-white.png" alt="DXN" class="footer-logo">
+          <span class="footer-brand-name">Dixon Strategic Labs</span>
+        </div>
+        <p class="footer-brand-tagline">Strategic facilitation for credit unions and mission-driven organizations.</p>
+      </div>
+      <div class="footer-nav">
+        <p class="footer-nav-label">Navigation</p>
+        <a href="#services">Services</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="footer-contact">
+        <p class="footer-contact-label">Location</p>
+        <span>Oakland, California</span>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Dixon Strategic Labs LLC</span>
+    </div>
+  </footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+<script>
+const heroParticlesAmber = (p) => {
+  let cells = [];
+  let cellCount = 200;
+  let canvas;
+  let isMouseInHero = false;
+  let prefersReducedMotion = false;
+  let flashChance = 0.006;
+  let prevMouseX = -1;
+  let prevMouseY = -1;
+  let mouseSpeedSmooth = 0;
+  let mouseInitialized = false;
+
+  const FLASH_RISE = 10;
+  const FLASH_HOLD = 6;
+  const FLASH_FALL = 30;
+  const FLASH_COOLDOWN_MIN = 45;
+  const FLASH_COOLDOWN_MAX = 180;
+
+  const primaryColor = { r: 212, g: 160, b: 66 };
+  const dimColor = { r: 140, g: 105, b: 45 };
+  const accentColor = { r: 196, g: 93, b: 62 };
+
+  class Cell {
+    constructor() { this.reset(); }
+
+    reset() {
+      this.x = p.random(p.width);
+      this.y = p.random(p.height);
+      this.vx = p.random(-0.3, 0.3);
+      this.vy = p.random(-0.3, 0.3);
+      this.ax = 0;
+      this.ay = 0;
+      this.baseRadius = p.random(1.8, 3.0);
+      this.maxSpeed = p.random(1.5, 3.0);
+      this.colorSet = Math.random() < 0.25 ? 'accent' : 'primary';
+      this.life = p.random(300, 600);
+      this.age = 0;
+      this.glowState = 'idle';
+      this.glowTimer = 0;
+      this.glowIntensity = 0;
+      this.flashPeak = 1.0;
+      this.flashCooldown = Math.floor(Math.random() * FLASH_COOLDOWN_MAX);
+      this.alignment = 0;
+      this.orbitDirection = Math.random() < 0.5 ? 1 : -1;
+      this.baseBrightness = Math.random() < 0.7 ? p.random(0.55, 0.75) : p.random(0.75, 1.0);
+      this.noiseOffsetX = p.random(1000);
+      this.noiseOffsetY = p.random(1000);
+    }
+
+    applyForce(fx, fy) { this.ax += fx; this.ay += fy; }
+
+    wander() {
+      const timeShift = p.frameCount * 0.003;
+      const angle = p.noise(this.noiseOffsetX + timeShift, this.noiseOffsetY + timeShift) * p.TWO_PI * 2;
+      this.applyForce(p.cos(angle) * 0.14, p.sin(angle) * 0.14);
+    }
+
+    attractToMouse(mx, my) {
+      const dx = mx - this.x;
+      const dy = my - this.y;
+      const distSq = dx * dx + dy * dy;
+      const influenceRadius = 600;
+      const baseOrbitRadius = 110;
+
+      if (distSq < influenceRadius * influenceRadius && distSq > 4) {
+        const dist = p.sqrt(distSq);
+        const normalizedDist = dist / influenceRadius;
+        const falloff = Math.pow(1 - normalizedDist, 2.5);
+
+        const radialX = dx / dist;
+        const radialY = dy / dist;
+        const tangentX = -radialY * this.orbitDirection;
+        const tangentY = radialX * this.orbitDirection;
+
+        const angle = Math.atan2(dy, dx);
+        const weaveOffset = Math.sin(angle * 2) * 30 * this.orbitDirection;
+        const orbitRadius = baseOrbitRadius + weaveOffset;
+
+        let attractionStrength;
+        if (dist > orbitRadius) {
+          const pullIntensity = Math.pow(1 - (dist - orbitRadius) / (influenceRadius - orbitRadius), 1.5);
+          attractionStrength = 0.65 * pullIntensity;
+        } else {
+          attractionStrength = -0.28 * (1 - dist / orbitRadius);
+        }
+
+        let orbitStrength = 0.65 * falloff;
+
+        // Mouse velocity: only dampen at very high speeds
+        if (mouseSpeedSmooth > 12) {
+          const speedDamp = 0.4;
+          attractionStrength *= speedDamp;
+          orbitStrength *= speedDamp;
+        }
+
+        this.applyForce(
+          radialX * attractionStrength + tangentX * orbitStrength,
+          radialY * attractionStrength + tangentY * orbitStrength
+        );
+        this.alignment = p.lerp(this.alignment, falloff, 0.2);
+      } else {
+        this.alignment = p.lerp(this.alignment, 0, 0.03);
+      }
+    }
+
+    updateGlow() {
+      if (this.glowState === 'idle') {
+        if (this.flashCooldown > 0) { this.flashCooldown--; }
+        else if (Math.random() < flashChance) {
+          this.glowState = 'rising'; this.glowTimer = FLASH_RISE;
+          this.glowIntensity = 0; this.flashPeak = Math.random() < 0.6 ? 1.0 : 0.55;
+        }
+      } else if (this.glowState === 'rising') {
+        this.glowTimer--;
+        this.glowIntensity = (1 - this.glowTimer / FLASH_RISE) * this.flashPeak;
+        if (this.glowTimer <= 0) { this.glowState = 'hold'; this.glowTimer = FLASH_HOLD; this.glowIntensity = this.flashPeak; }
+      } else if (this.glowState === 'hold') {
+        this.glowTimer--;
+        if (this.glowTimer <= 0) { this.glowState = 'falling'; this.glowTimer = FLASH_FALL; }
+      } else if (this.glowState === 'falling') {
+        this.glowTimer--;
+        this.glowIntensity = (this.glowTimer / FLASH_FALL) * this.flashPeak;
+        if (this.glowTimer <= 0) {
+          this.glowState = 'idle'; this.glowIntensity = 0;
+          this.flashCooldown = Math.floor(FLASH_COOLDOWN_MIN + Math.random() * (FLASH_COOLDOWN_MAX - FLASH_COOLDOWN_MIN));
+        }
+      }
+    }
+
+    update(mouseActive, mx, my) {
+      this.updateGlow();
+      this.wander();
+      if (mouseActive) this.attractToMouse(mx, my);
+      this.vx += this.ax; this.vy += this.ay;
+      const speed = p.sqrt(this.vx * this.vx + this.vy * this.vy);
+      const currentMaxSpeed = this.maxSpeed + this.alignment * 0.5;
+      if (speed > currentMaxSpeed) { this.vx = (this.vx / speed) * currentMaxSpeed; this.vy = (this.vy / speed) * currentMaxSpeed; }
+      this.x += this.vx; this.y += this.vy;
+      this.vx *= 0.97; this.vy *= 0.97;
+      this.ax = 0; this.ay = 0;
+      this.age++;
+      if (this.x < -20) this.x = p.width + 20;
+      if (this.x > p.width + 20) this.x = -20;
+      if (this.y < -20) this.y = p.height + 20;
+      if (this.y > p.height + 20) this.y = -20;
+      if (this.age > this.life) this.reset();
+    }
+
+    show() {
+      const color = this.colorSet === 'accent' ? accentColor : primaryColor;
+      let baseAlpha = 140;
+      if (this.age < 30) baseAlpha = p.map(this.age, 0, 30, 0, baseAlpha);
+      else if (this.age > this.life - 60) baseAlpha = p.map(this.age, this.life - 60, this.life, baseAlpha, 0);
+
+      const idleAlpha = 1.2 * this.baseBrightness;
+      const alphaScale = idleAlpha + (3.5 - idleAlpha) * this.glowIntensity;
+      const radiusScale = 1 + (1.8 - 1) * this.glowIntensity;
+
+      let finalAlpha = baseAlpha * alphaScale;
+      let finalRadius = (this.baseRadius * radiusScale) * (1 + this.alignment * 0.5);
+
+      if (this.alignment > 0.15) {
+        const angle = Math.atan2(this.y - p.mouseY, this.x - p.mouseX);
+        const cosAngle = Math.cos(angle);
+        const isOver = this.orbitDirection === 1 ? cosAngle > 0 : cosAngle < 0;
+        const crossingFactor = Math.abs(cosAngle);
+        const weaveBrightness = isOver ? 1.0 + (1.0 - crossingFactor) * 0.3 : 0.35 + crossingFactor * 0.65;
+        const weaveAmount = Math.min(1, this.alignment * 2);
+        finalAlpha *= (1.0 + (weaveBrightness - 1.0) * weaveAmount);
+        if (!isOver) finalRadius *= (1.0 - 0.15 * weaveAmount);
+      }
+
+      p.noStroke();
+      p.fill(color.r, color.g, color.b, finalAlpha);
+      p.circle(this.x, this.y, finalRadius * 2);
+    }
+  }
+
+  p.setup = () => {
+    prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const container = document.getElementById('hero-canvas-container');
+    if (!container) return;
+    canvas = p.createCanvas(container.offsetWidth, container.offsetHeight);
+    canvas.parent('hero-canvas-container');
+
+    if (p.width < 768) { cellCount = 120; flashChance = 0.012; }
+    else if (p.width < 1024) { cellCount = 200; flashChance = 0.009; }
+    else { cellCount = 300; flashChance = 0.006; }
+
+    if (prefersReducedMotion) cellCount = Math.floor(cellCount * 0.3);
+    for (let i = 0; i < cellCount; i++) cells.push(new Cell());
+    
+    p.background(20, 20, 23);
+  };
+
+  p.draw = () => {
+    p.blendMode(p.BLEND);
+    p.background(20, 20, 23);
+
+    isMouseInHero = p.mouseX >= 0 && p.mouseX <= p.width && p.mouseY >= 0 && p.mouseY <= p.height;
+
+    // Initialize prev mouse on first real mouse movement to avoid speed spike
+    if (!mouseInitialized && (p.mouseX !== 0 || p.mouseY !== 0)) {
+      prevMouseX = p.mouseX;
+      prevMouseY = p.mouseY;
+      mouseInitialized = true;
+    }
+    if (mouseInitialized) {
+      const mdx = p.mouseX - prevMouseX;
+      const mdy = p.mouseY - prevMouseY;
+      mouseSpeedSmooth = mouseSpeedSmooth * 0.85 + Math.sqrt(mdx*mdx + mdy*mdy) * 0.15;
+      prevMouseX = p.mouseX; prevMouseY = p.mouseY;
+    }
+
+    const breathX = Math.sin(p.frameCount * 0.003) * 0.06;
+    const breathY = Math.cos(p.frameCount * 0.002) * 0.04;
+
+    for (let cell of cells) {
+      cell.applyForce(breathX, breathY);
+      cell.update(isMouseInHero, p.mouseX, p.mouseY);
+      cell.show();
+    }
+
+    // Connection lines between orbiting particles
+    let orbiting = [];
+    for (let cell of cells) { if (cell.alignment > 0.15) orbiting.push(cell); }
+    if (orbiting.length > 1) {
+      p.strokeWeight(1);
+      let lc = 0;
+      const maxConn = 25;
+      const connR = 110;
+      const connRSq = connR * connR;
+      for (let i = 0; i < orbiting.length && lc < maxConn; i++) {
+        for (let j = i+1; j < orbiting.length && lc < maxConn; j++) {
+          const dx = orbiting[i].x - orbiting[j].x;
+          const dy = orbiting[i].y - orbiting[j].y;
+          const dSq = dx*dx + dy*dy;
+          if (dSq < connRSq) {
+            const d = Math.sqrt(dSq);
+            const a = (1 - d/connR) * 60 * Math.min(orbiting[i].alignment, orbiting[j].alignment);
+            p.stroke(212, 160, 66, a);
+            p.line(orbiting[i].x, orbiting[i].y, orbiting[j].x, orbiting[j].y);
+            lc++;
+          }
+        }
+      }
+      p.noStroke();
+    }
+  };
+
+  p.windowResized = () => {
+    const container = document.getElementById('hero-canvas-container');
+    if (container) {
+      p.resizeCanvas(container.offsetWidth, container.offsetHeight);
+      let target = p.width < 768 ? 70 : (p.width < 1024 ? 120 : 180);
+      if (prefersReducedMotion) target = Math.floor(target * 0.3);
+      if (cells.length > target) cells = cells.slice(0, target);
+      else while (cells.length < target) cells.push(new Cell());
+      p.background(20, 20, 23);
+    }
+  };
+
+  p.mousePressed = () => {
+    if (!isMouseInHero || prefersReducedMotion) return;
+    for (let cell of cells) {
+      const dx = cell.x - p.mouseX; const dy = cell.y - p.mouseY;
+      const dSq = dx*dx + dy*dy;
+      if (dSq < 22500 && dSq > 0) {
+        const d = p.sqrt(dSq); const f = (1 - d/150) * 2;
+        cell.vx += (dx/d)*f; cell.vy += (dy/d)*f;
+      }
+    }
+  };
+};
+
+new p5(heroParticlesAmber);
+</script>
+</body>
+</html>

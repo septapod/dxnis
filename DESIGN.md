@@ -1,16 +1,16 @@
 ---
 name: DSL Design System
-version: 2.0
+version: 3.0
 project: Dixon Strategic Labs (dxn.is)
 format: Stitch DESIGN.md (9 sections)
-status: Baseline snapshot of current site, 2026-04-11. Evolves from here.
+status: Updated 2026-04-14. Reflects color palette tightening, framework section, typography change, CTA warmth, and section restructuring.
 ---
 
 # DSL Design System
 
 The design source of truth for Dixon Strategic Labs and dxn.is. Any coding agent working on this project should read this file before generating UI. Tokens, patterns, and philosophy live here. When the site evolves, this doc evolves with it.
 
-This is v2.0, the first Stitch-format version. It documents the current visual system as a baseline. Future changes are tracked as versioned edits to this file rather than scattered notes in other places.
+This is v3.0. Major updates from v2.0: typography changed to Plus Jakarta Sans / Inter / Fraunces, color palette tightened (82 orphan rgba values consolidated to tokens), CTA buttons use coral in light mode, "How I Work" replaced with "What I look for" framework section with p5.js scroll-driven sketches, beliefs section commented out pending content.
 
 ---
 
@@ -22,12 +22,14 @@ This is v2.0, the first Stitch-format version. It documents the current visual s
 
 **Density.** Medium. Paragraph max-width is capped at 70 characters for readability. Sections breathe with generous vertical spacing (up to 128px between major sections). The grid is dense enough to feel precise, not so dense that it feels cramped.
 
-**Interactive flourishes.** Three specific moves that give the site personality without being gimmicky:
-1. A p5.js particle canvas in the hero. Subtle motion, not showy.
-2. A custom cursor with a follower element on desktop.
-3. A logo marquee (continuous horizontal scroll) in the clients section.
+**Interactive flourishes.** Five signature moves:
+1. A grainy gradient bloom in the hero (CSS radial gradients with SVG noise overlay, mouse-reactive positions). Gold, coral, teal layers on dark; warm washes on light.
+2. Three p5.js scroll-driven sketches in the services section (Alignment Network, Radial Pulse, Gravitational Pair). Scroll position IS the animation frame.
+3. Three p5.js scroll-driven sketches in the framework section (converging arrows, priority grid clearing, forking branch). Different visual vocabulary from services (structural/diagnostic vs organic/living).
+4. A custom cursor with a follower element on desktop.
+5. A logo marquee (continuous horizontal scroll) in the clients section.
 
-These are design-signature moves, not decoration. They should be preserved across evolutions unless explicitly retired.
+These are design-signature moves. They should be preserved across evolutions unless explicitly retired.
 
 ---
 
@@ -52,25 +54,33 @@ Retired: indigo (`#6366f1`). Teal replaced it across the system. Do not reintrod
 |-------|-----|-------|
 | `--color-bg` | `#09090B` | Page background |
 | `--color-surface` | `#111114` | Cards, panels |
-| `--color-surface-elevated` | `#1A1A1F` | Modals, dropdowns |
+| `--color-surface-elevated` | `#1A1A1F` | Modals, dropdowns, framework section bg |
 | `--color-surface-hover` | `#242429` | Hover states on surfaces |
 | `--color-border` | `#2A2A32` | Default borders |
 | `--color-border-hover` | `#3A3A44` | Hover and focus borders |
 | `--color-text` | `#FAFAFA` | Primary text, headings |
 | `--color-text-body` | `#E8E8ED` | Body paragraphs |
 | `--color-text-dim` | `#8A8A96` | Captions, secondary text |
-| `--color-text-muted` | `#55555F` | Tertiary, timestamps, disabled |
-| `--color-primary` | `#437481` | Primary interactive |
-| `--color-accent` | `#FBE248` | Accent highlight |
+| `--color-text-muted` | `#78787F` | Tertiary, timestamps, disabled |
+| `--color-primary` | `#529099` | Primary interactive (teal) |
+| `--color-primary-hover` | `#3A7A87` | Primary hover state |
+| `--color-cta` | `#529099` | CTA button fill (teal in dark mode) |
+| `--color-cta-hover` | `#3A7A87` | CTA button hover |
+| `--color-accent` | `#FBE248` | Accent highlight (gold) |
 | `--color-accent-coral` | `#CF5A5A` | Coral accent |
-| `--color-accent-teal` | `#437481` | Teal accent |
+| `--color-accent-teal` | `#529099` | Teal accent |
 | `--color-alert` | `#CF5A5A` | Alerts and errors |
+| `--color-success` | `#22c55e` | Form success states |
+| `--color-danger` | `#ef4444` | Form error states |
+| `--color-surface-gold` | `rgba(251,226,72,0.04)` | Testimonials section tint |
+| `--color-surface-coral` | `rgba(207,90,90,0.04)` | Newsletter section tint |
+| `--color-surface-teal` | `rgba(67,116,129,0.04)` | Footer / how-i-work tint |
 
 ### Light theme
 
 | Token | Hex | Usage |
 |-------|-----|-------|
-| `--color-bg` | `#FAFAF8` | Page background |
+| `--color-bg` | `#FAFAF8` | Page background (warm off-white) |
 | `--color-surface` | `#FFFFFF` | Cards, panels |
 | `--color-surface-elevated` | `#F4F4F2` | Modals, dropdowns |
 | `--color-surface-hover` | `#EBEBEA` | Hover states on surfaces |
@@ -79,14 +89,22 @@ Retired: indigo (`#6366f1`). Teal replaced it across the system. Do not reintrod
 | `--color-text` | `#0A0A0A` | Primary text, headings |
 | `--color-text-body` | `#2D2D2D` | Body paragraphs |
 | `--color-text-dim` | `#6B6B6B` | Captions, secondary text |
-| `--color-text-muted` | `#999999` | Tertiary, timestamps, disabled |
-| `--color-primary` | `#2D5A66` | Primary interactive |
-| `--color-accent` | `#B89500` | Accent highlight |
+| `--color-text-muted` | `#6E6E6E` | Tertiary, timestamps, disabled |
+| `--color-primary` | `#2D5A66` | Primary interactive (teal, for links and non-CTA elements) |
+| `--color-primary-hover` | `#1E4650` | Primary hover state |
+| `--color-cta` | `#B84545` | CTA button fill (coral in light mode) |
+| `--color-cta-hover` | `#9A3838` | CTA button hover (darker coral) |
+| `--color-accent` | `#7D6400` | Accent highlight (darkened gold for WCAG) |
 | `--color-accent-coral` | `#B84545` | Coral accent |
 | `--color-accent-teal` | `#3A6370` | Teal accent |
 | `--color-alert` | `#B84545` | Alerts and errors |
+| `--color-success` | `#16a34a` | Form success states |
+| `--color-danger` | `#dc2626` | Form error states |
+| `--color-surface-gold` | `#F6F4EC` | Testimonials section tint |
+| `--color-surface-coral` | `#F5EDEA` | Newsletter / framework section tint |
+| `--color-surface-teal` | `#ECF3F6` | Footer tint |
 
-Light theme brand colors are darkened from their universal values to maintain WCAG contrast ratios on a light background. Dark theme uses the pure brand values.
+Light theme brand colors are darkened from their universal values to maintain WCAG contrast ratios. CTA buttons use coral in light mode (warmer, higher conversion performance in B2B) while teal remains the primary interactive color for links and non-button elements.
 
 <!-- DSL:COLORS:END -->
 
@@ -106,27 +124,27 @@ Light theme brand colors are darkened from their universal values to maintain WC
 
 | Role | Family | Weights | Hosting | Usage |
 |------|--------|---------|---------|-------|
-| Display | Satoshi | 400, 500, 700 | Self-hosted woff2 | Headings, hero text, nav |
-| Body | Karla | 300, 400, 500, 600, 700 | Google Fonts | Paragraphs, UI text, labels |
-| Serif accent | Lora | 400, 500, 600, 400i, 500i | Google Fonts | Pull quotes, editorial flourishes |
-| Monospace | JetBrains Mono | 400, 500 | Google Fonts (not currently linked on dxn.is but reserved in tokens) | Code, metrics, data |
+| Display | Plus Jakarta Sans | 400, 500, 600, 700, 800 | Self-hosted woff2 | Headings, hero text, nav, framework headlines |
+| Body | Inter | 300, 400, 500, 600, 700 | Self-hosted woff2 | Paragraphs, UI text, labels, buttons |
+| Serif accent | Fraunces | 400, 500, 600, 400i | Self-hosted woff2 | Outcome quote, editorial moments |
 
-Satoshi is self-hosted in `fonts/Satoshi-*.woff2` with `@font-face` declarations in `fonts/dsl-fonts.css`.
+All three are self-hosted in `fonts/` with `@font-face` declarations in `fonts/dsl-fonts.css`.
 
-**Why Satoshi.** The previous display font was Montserrat. CUCollaborate (a CU consulting peer) uses Montserrat, so Satoshi differentiates DSL immediately. Do not revert to Montserrat.
+**Why this pairing.** Plus Jakarta Sans has warm geometric character that signals personal approachability without sacrificing professional seriousness. Inter is the most readable UI body font available. Fraunces adds warmth and personality for pull quotes. Previous pairing (Satoshi/Karla/Lora) was replaced 2026-04-12.
 
 ### Full hierarchy table
 
 | Element | Family | Weight | Size | Line height | Letter spacing | Bottom margin |
 |---------|--------|--------|------|-------------|----------------|---------------|
-| h1 | Satoshi | 700 | `clamp(1.5rem, 3.5vw, 3rem)` | 1.2 | -0.01em | 32px |
-| h2 | Satoshi | 700 | `clamp(2rem, 4vw, 3.5rem)` | 1.1 | -0.01em | 32px |
-| h2 (section labels) | Satoshi | 600 | `clamp(1.5rem, 3vw, 2.5rem)` | 1.1 | 0.1em UPPERCASE | 32px |
-| h3 | Satoshi | 600 | `clamp(1.5rem, 2.5vw, 2rem)` | 1.2 | -0.01em | 16px |
-| h4-h6 | Satoshi | 700 | inherit | 1.1 | -0.01em | 24px |
-| body p | Karla | 400 | 1.125rem (18px) | 1.75 | default | 24px |
-| nav links | Karla | 500 | 1rem (16px) | default | 0.03em | default |
-| button | Karla | 500 | 0.95rem (15.2px) | default | 0.02em | default |
+| h1 (hero) | Plus Jakarta Sans | 700 | `clamp(2.5rem, 5vw, 4rem)` | 1.1 | -0.02em | 32px |
+| h2 | Plus Jakarta Sans | 700 | `clamp(2rem, 3.5vw, 3rem)` | 1.15 | -0.015em | 32px |
+| h2 (section kicker) | Inter | 600 | 0.8rem | 1.2 | 0.12em UPPERCASE | 16px |
+| h3 | Plus Jakarta Sans | 600 | `clamp(1.4rem, 2.5vw, 1.8rem)` | 1.2 | -0.01em | 16px |
+| body p | Inter | 400 | 1rem-1.05rem | 1.75-1.8 | default | 24px |
+| nav links | Inter | 500 | 1rem | default | 0.03em | default |
+| button | Inter | 500 | 0.95rem | default | 0.02em | default |
+| outcome quote | Fraunces | italic | `clamp(1.1rem, 2vw, 1.4rem)` | 1.6 | default | default |
+| framework headline | Plus Jakarta Sans | 700 | `clamp(1.5rem, 3vw, 2.2rem)` | 1.15 | -0.01em | 24px |
 
 **Reading column.** Body paragraphs are capped at `max-width: 70ch` for comfortable reading. This is a hard rule. Never let text run edge-to-edge on desktop.
 
@@ -141,26 +159,31 @@ Satoshi is self-hosted in `fonts/Satoshi-*.woff2` with `@font-face` declarations
 **Base button (`.btn`).**
 - Padding: 14px 32px
 - Border: 1px solid current text color
-- Border radius: **0 (square corners)**. This is a deliberate choice that echoes the Swiss grid philosophy. Do not round buttons.
+- Border radius: **0 (square corners)**. Deliberate Swiss grid choice.
 - Background: transparent
-- Font: Karla 0.95rem, weight 500, letter-spacing 0.02em
-- Transition: 0.3s cubic-bezier
+- Font: Inter 0.95rem, weight 500, letter-spacing 0.02em
+- Transition: `all var(--transition-quick)`
 
-**Base button hover.**
+**Base button hover (dark mode).**
 - Background fills with accent gold
 - Border becomes accent gold
 - Text color inverts to background color
 - Transform: translateY(-2px)
-- Box shadow: `0 8px 24px rgba(251, 226, 72, 0.2)` (gold glow)
-- A gradient underline (coral to teal) sweeps in from left via `::before` pseudo-element
+- Gold glow shadow
+- Gradient underline (coral to teal) sweeps in via `::before`
+
+**Base button hover (light mode).**
+- Background fills with `--color-cta` (coral `#B84545`)
+- Border becomes coral
+- Text: white
+- Transform: translateY(-1px)
+- Warm coral shadow: `0 8px 24px rgba(184, 69, 69, 0.25)`
 
 **Primary button (`.btn-primary`).**
-- Background: accent gold (filled by default)
-- Border: accent gold
-- Text: background color (inverted)
-- Hover: background shifts to accent teal, text color returns to primary text color
+- Dark mode: accent gold fill, teal hover
+- Light mode: coral fill (`--color-cta`), darker coral hover (`--color-cta-hover`), scale(1.02) on hover
 
-**Button philosophy.** The hover interaction (gold fill plus gradient underline sweep plus translateY lift) is the signature interactive moment on the site. Treat it as load-bearing. When adding new button styles, follow this pattern rather than inventing a new hover.
+**CTA color rationale.** Light mode uses coral for CTAs because warm colors outperform cool in B2B conversion research, and coral creates visual tension against the warm off-white background. Dark mode keeps the gold/teal pattern. The `--color-cta` token is separate from `--color-primary` to avoid side effects on links, borders, and other elements that use `--color-primary`.
 
 ### Cards
 
@@ -301,7 +324,7 @@ Buttons are a deliberate exception. They use radius 0 (square corners) to echo t
 - Use square-corner buttons (radius 0). The square is load-bearing.
 - Use the gradient-underline sweep as the signature button hover.
 - Cap paragraph width at 70ch for readability.
-- Use Satoshi for display, Karla for body, Lora for editorial pull quotes.
+- Use Plus Jakarta Sans for display, Inter for body, Fraunces for editorial quotes.
 - Preserve the dark theme as the default. Light theme is a toggle, not the primary surface.
 - Use the p5.js particle hero, custom cursor, and logo marquee as the three signature interactive moves.
 - Scale type with `clamp()` so it responds fluidly to viewport width.
@@ -310,7 +333,8 @@ Buttons are a deliberate exception. They use radius 0 (square corners) to echo t
 
 ### Don't
 
-- Do not use Montserrat. CUCollaborate uses it. Satoshi is the differentiator.
+- Do not use Montserrat. CUCollaborate uses it. Plus Jakarta Sans is the differentiator.
+- Do not use Satoshi, Karla, or Lora. These were retired in v3.0.
 - Do not reintroduce indigo. It was retired in favor of teal.
 - Do not round buttons. Square corners are the Swiss grid signature.
 - Do not let body text run wider than 70ch.
@@ -374,9 +398,11 @@ Quick-reference block for coding agents generating new UI for dxn.is.
 ```
 Dark bg: #09090B
 Dark surface: #111114
-Primary (teal): #437481
+Primary (teal): #529099
+CTA (dark): #529099 / CTA (light): #B84545
 Accent (gold): #FBE248
 Alert (coral): #CF5A5A
+Success: #22c55e / Danger: #ef4444
 Text: #FAFAFA
 Body: #E8E8ED
 Dim: #8A8A96
@@ -385,9 +411,9 @@ Dim: #8A8A96
 ### Typography reference
 
 ```
-Display: 'Satoshi', system-ui, sans-serif (headings)
-Body: 'Karla', system-ui, sans-serif (paragraphs and UI)
-Serif: 'Lora', Georgia, serif (pull quotes only)
+Display: 'Plus Jakarta Sans', system-ui, sans-serif (headings)
+Body: 'Inter', system-ui, sans-serif (paragraphs and UI)
+Serif: 'Fraunces', Georgia, serif (pull quotes only)
 ```
 
 ### Ready-to-use prompts
@@ -405,9 +431,10 @@ Serif: 'Lora', Georgia, serif (pull quotes only)
 
 ## Change log
 
-- **v1.0** (pre-2026-04-11): Original DSL Design System doc. Typography, colors, spacing, radii, theme toggle, basic component patterns.
-- **v2.0** (2026-04-11): Rewrite in Stitch DESIGN.md format (9 sections). Added visual theme and atmosphere, full typography hierarchy table, component state patterns, layout grid specifics, elevation layer map, do's and don'ts list, responsive breakpoints, and agent prompt guide. Based on extraction from `index.html`, `css/styles.css`, and `css/dsl-tokens.css` as of 2026-04-11. All content is descriptive of the current site, not prescriptive of changes. Future edits will evolve this baseline rather than replace it.
-- **v2.1** (2026-04-11): Resolved four open tensions same day. Hero layout cleared for adaptation in the next design pass. Testimonial carousel locked to four featured (Ray, Mary Beth, Ronaldo, George). Custom cursor confirmed as part of the signature design language. JetBrains Mono reservation removed. Tablet grid discrepancy deferred to v2.1 layout pass. Typographic exploration track opened as separate workstream.
+- **v1.0** (pre-2026-04-11): Original DSL Design System doc.
+- **v2.0** (2026-04-11): Rewrite in Stitch DESIGN.md format (9 sections).
+- **v2.1** (2026-04-11): Resolved four open tensions. Testimonial carousel locked to 4. Custom cursor confirmed. JetBrains Mono removed.
+- **v3.0** (2026-04-14): Major update. Typography changed to Plus Jakarta Sans / Inter / Fraunces (replaced Satoshi / Karla / Lora). Color palette tightened: 82 orphan rgba values consolidated, new tokens for CTA, functional colors, surface tints, and hover states. Light-mode CTA buttons changed from teal to coral (`--color-cta` token). Hero bloom reduced from 4 to 3 layers (dropped purple, all layers use exact brand RGB values). "How I Work" section replaced with "What I look for" framework section (Alignment, Priorities, Evidence) with three p5.js scroll-driven sketches. Beliefs section commented out pending interview content. Testimonials moved to after services. Outcome pull-quote added between hero and services. Framework section gets elevated background (`--color-surface-elevated` in dark, coral tint in light).
 
 ## Open tensions (resolution log)
 

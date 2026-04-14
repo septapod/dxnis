@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Direction C · Warm Ground — DXN Style Tile</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,WONK@0,9..144,100..900,0..1;1,9..144,100..900,0..1&family=DM+Serif+Display:ital@0;1&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@200,300,400,500,600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --off-white: #f5f0e8;
+      --near-black: #1a1a1f;
+      --teal: #0d7c6e;
+      --warm-gray: #8a857a;
+      --border: rgba(26, 26, 31, 0.1);
+      --radius: 4px;
+    }
+
+    body {
+      background-color: var(--off-white);
+      background-image: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.03) 0px,
+        rgba(0, 0, 0, 0.03) 1px,
+        transparent 1px,
+        transparent 6px
+      );
+      color: var(--near-black);
+      font-family: 'Switzer', sans-serif;
+      font-weight: 300;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 48px;
+    }
+
+    /* Section divider: 3 parallel lines, 4px apart, 1px each */
+    .divider {
+      width: 100%;
+      height: 12px;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(26, 26, 31, 0.08) 0px,
+        rgba(26, 26, 31, 0.08) 1px,
+        transparent 1px,
+        transparent 5px
+      );
+      background-size: 100% 12px;
+      background-repeat: no-repeat;
+    }
+
+    /* Subtle inner divider: 2 lines, lighter */
+    .divider-subtle {
+      width: 100%;
+      height: 7px;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(26, 26, 31, 0.05) 0px,
+        rgba(26, 26, 31, 0.05) 1px,
+        transparent 1px,
+        transparent 5px
+      );
+      background-size: 100% 7px;
+      background-repeat: no-repeat;
+      margin: 28px 0;
+    }
+
+    /* ——— HERO ——— */
+    .hero {
+      padding: 120px 0 80px;
+    }
+
+    .hero-logo {
+      width: 64px;
+      height: auto;
+      display: block;
+    }
+
+    .hero-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 400;
+      font-size: clamp(3.5rem, 8vw, 6rem);
+      font-variation-settings: 'WONK' 1, 'opsz' 144;
+      color: var(--near-black);
+      letter-spacing: -0.03em;
+      line-height: 0.95;
+      margin-top: 24px;
+    }
+
+    .hero-title span {
+      display: block;
+    }
+
+    .hero-tagline {
+      font-family: 'Switzer', sans-serif;
+      font-weight: 300;
+      font-size: 18px;
+      color: var(--warm-gray);
+      max-width: 520px;
+      line-height: 1.7;
+      margin-top: 20px;
+    }
+
+    .hero-link {
+      display: inline-block;
+      margin-top: 32px;
+      font-family: 'Switzer', sans-serif;
+      font-weight: 500;
+      font-size: 15px;
+      color: var(--teal);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-thickness: 1px;
+    }
+
+    .hero-link:hover {
+      text-decoration-thickness: 2px;
+    }
+
+    /* ——— TYPE SPECIMEN ——— */
+    .type-specimen {
+      padding: 64px 0;
+    }
+
+    .type-row-display {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 48px;
+      font-variation-settings: 'WONK' 1;
+      color: var(--near-black);
+      line-height: 1.15;
+    }
+
+    .type-row-subhead {
+      font-family: 'Fraunces', serif;
+      font-weight: 400;
+      font-size: 28px;
+      color: rgba(26, 26, 31, 0.7);
+      line-height: 1.3;
+    }
+
+    .type-row-body {
+      font-family: 'Switzer', sans-serif;
+      font-weight: 300;
+      font-size: 17px;
+      line-height: 1.8;
+      color: var(--warm-gray);
+      max-width: 640px;
+    }
+
+    .type-row-quote {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 22px;
+      color: var(--teal);
+      line-height: 1.5;
+    }
+
+    .type-row-mono {
+      font-family: 'Fira Code', monospace;
+      font-weight: 400;
+      font-size: 13px;
+      color: rgba(138, 133, 122, 0.5);
+      letter-spacing: 0.02em;
+    }
+
+    /* ——— PALETTE ——— */
+    .palette {
+      padding: 64px 0;
+    }
+
+    .palette-row {
+      display: flex;
+      gap: 48px;
+      align-items: flex-start;
+    }
+
+    .swatch {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .swatch-circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+    }
+
+    .swatch-circle--off-white {
+      background-color: var(--off-white);
+      box-shadow: inset 0 0 0 1px rgba(26, 26, 31, 0.12);
+    }
+
+    .swatch-circle--near-black {
+      background-color: var(--near-black);
+    }
+
+    .swatch-circle--teal {
+      background-color: var(--teal);
+    }
+
+    .swatch-circle--warm-gray {
+      background-color: var(--warm-gray);
+    }
+
+    .swatch-name {
+      font-family: 'Fira Code', monospace;
+      font-weight: 400;
+      font-size: 11px;
+      color: var(--near-black);
+      text-align: center;
+    }
+
+    .swatch-hex {
+      font-family: 'Fira Code', monospace;
+      font-weight: 400;
+      font-size: 11px;
+      color: var(--warm-gray);
+      text-align: center;
+      margin-top: -6px;
+    }
+
+    /* ——— SERVICE PATTERN ——— */
+    .services {
+      padding: 64px 0;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .service-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 40px;
+      background: #eee9df;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .service-number {
+      font-family: 'Fira Code', monospace;
+      font-weight: 400;
+      font-size: 11px;
+      color: var(--teal);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .service-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 600;
+      font-size: 24px;
+      color: var(--near-black);
+      margin-top: 12px;
+      line-height: 1.2;
+    }
+
+    .service-desc {
+      font-family: 'Switzer', sans-serif;
+      font-weight: 300;
+      font-size: 15px;
+      color: var(--warm-gray);
+      line-height: 1.7;
+      margin-top: 12px;
+      flex: 1;
+    }
+
+    .service-meta-rule {
+      height: 1px;
+      background: var(--border);
+      margin-top: 28px;
+      margin-bottom: 16px;
+    }
+
+    .service-meta {
+      font-family: 'Fira Code', monospace;
+      font-weight: 400;
+      font-size: 12px;
+      color: var(--warm-gray);
+    }
+
+    /* ——— PULL QUOTE ——— */
+    .pull-quote-section {
+      padding: 80px 0;
+      text-align: center;
+    }
+
+    .pull-quote-text {
+      font-family: 'Fraunces', serif;
+      font-weight: 400;
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: var(--near-black);
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.3;
+      padding: 40px 0;
+    }
+
+    .pull-quote-attr {
+      font-family: 'Switzer', sans-serif;
+      font-weight: 300;
+      font-size: 14px;
+      color: var(--teal);
+    }
+
+    /* ——— COMPONENT STRIP ——— */
+    .components {
+      padding: 64px 0;
+    }
+
+    .component-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      font-family: 'Switzer', sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      background: var(--teal);
+      color: var(--off-white);
+      border: none;
+      border-radius: var(--radius);
+      padding: 12px 24px;
+      cursor: pointer;
+      letter-spacing: 0.01em;
+    }
+
+    .btn-ghost {
+      font-family: 'Switzer', sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      background: transparent;
+      color: var(--near-black);
+      border: 1px solid rgba(26, 26, 31, 0.15);
+      border-radius: var(--radius);
+      padding: 12px 24px;
+      cursor: pointer;
+      letter-spacing: 0.01em;
+    }
+
+    .badge {
+      font-family: 'Fira Code', monospace;
+      font-weight: 400;
+      font-size: 11px;
+      color: var(--teal);
+      border: 1px solid rgba(13, 124, 110, 0.2);
+      border-radius: 9999px;
+      padding: 5px 14px;
+      background: transparent;
+      letter-spacing: 0.02em;
+    }
+
+    .input-text {
+      font-family: 'Switzer', sans-serif;
+      font-weight: 300;
+      font-size: 15px;
+      border: 1px solid rgba(26, 26, 31, 0.1);
+      border-radius: var(--radius);
+      padding: 12px 20px;
+      background: transparent;
+      color: var(--near-black);
+      outline: none;
+      width: 220px;
+    }
+
+    .input-text::placeholder {
+      color: var(--warm-gray);
+      opacity: 0.6;
+    }
+
+    .input-text:focus {
+      border-color: rgba(26, 26, 31, 0.25);
+    }
+
+    /* ——— FOOTER ——— */
+    .footer {
+      padding: 48px 0 64px;
+      text-align: center;
+    }
+
+    .footer-text {
+      font-family: 'Fira Code', monospace;
+      font-weight: 400;
+      font-size: 11px;
+      color: rgba(26, 26, 31, 0.2);
+    }
+
+    /* ——— RESPONSIVE ——— */
+    @media (max-width: 680px) {
+      .page {
+        padding: 0 24px;
+      }
+
+      .hero {
+        padding: 80px 0 56px;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .palette-row {
+        gap: 28px;
+      }
+
+      .component-row {
+        gap: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <!-- HERO -->
+    <section class="hero">
+      <img src="dxn_logo_black.png" alt="DXN logomark" class="hero-logo">
+      <h1 class="hero-title">
+        <span>Dixon</span>
+        <span>Strategic</span>
+        <span>Labs</span>
+      </h1>
+      <p class="hero-tagline">Process design for credit unions, nonprofits, and civic organizations navigating their most complex challenges.</p>
+      <a href="#" class="hero-link">Start a conversation &rarr;</a>
+    </section>
+
+    <!-- DIVIDER -->
+    <div class="divider"></div>
+
+    <!-- TYPE SPECIMEN -->
+    <section class="type-specimen">
+      <p class="type-row-display">Twenty years of synthesis.</p>
+      <div class="divider-subtle"></div>
+      <p class="type-row-subhead">From uncertainty to tested roadmap</p>
+      <div class="divider-subtle"></div>
+      <p class="type-row-body">Your team has the expertise. The challenge is designing the process that accesses everyone's best thinking and converts it into decisions you can execute with confidence.</p>
+      <div class="divider-subtle"></div>
+      <p class="type-row-quote">&ldquo;He made sense of what we were all struggling to articulate.&rdquo;</p>
+      <div class="divider-subtle"></div>
+      <p class="type-row-mono">discovery &rarr; synthesis &rarr; testing &rarr; roadmap</p>
+    </section>
+
+    <!-- DIVIDER -->
+    <div class="divider"></div>
+
+    <!-- PALETTE -->
+    <section class="palette">
+      <div class="palette-row">
+        <div class="swatch">
+          <div class="swatch-circle swatch-circle--off-white"></div>
+          <span class="swatch-name">Off-White</span>
+          <span class="swatch-hex">#f5f0e8</span>
+        </div>
+        <div class="swatch">
+          <div class="swatch-circle swatch-circle--near-black"></div>
+          <span class="swatch-name">Near-Black</span>
+          <span class="swatch-hex">#1a1a1f</span>
+        </div>
+        <div class="swatch">
+          <div class="swatch-circle swatch-circle--teal"></div>
+          <span class="swatch-name">Teal</span>
+          <span class="swatch-hex">#0d7c6e</span>
+        </div>
+        <div class="swatch">
+          <div class="swatch-circle swatch-circle--warm-gray"></div>
+          <span class="swatch-name">Warm Gray</span>
+          <span class="swatch-hex">#8a857a</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIVIDER -->
+    <div class="divider"></div>
+
+    <!-- SERVICE PATTERN -->
+    <section class="services">
+      <div class="services-grid">
+        <div class="service-card">
+          <span class="service-number">01</span>
+          <h3 class="service-title">Strategic Transitions</h3>
+          <p class="service-desc">CEO succession. Merger integration. Charter evolution. The 2-6 month journey from competing perspectives to aligned action.</p>
+          <div class="service-meta-rule"></div>
+          <span class="service-meta">Typical duration: 2-6 months</span>
+        </div>
+        <div class="service-card">
+          <span class="service-number">02</span>
+          <h3 class="service-title">Capability Transfer</h3>
+          <p class="service-desc">Board governance. Leadership alignment. Strategic thinking transfer. Build your team's capacity so you don't need me next time.</p>
+          <div class="service-meta-rule"></div>
+          <span class="service-meta">Typical duration: 1-3 months</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIVIDER -->
+    <div class="divider"></div>
+
+    <!-- PULL QUOTE -->
+    <section class="pull-quote-section">
+      <div class="divider"></div>
+      <p class="pull-quote-text">The meetings aren&rsquo;t the problem. The process design is.</p>
+      <p class="pull-quote-attr">&mdash; from 20 years designing collaborative processes</p>
+      <div style="margin-top: 40px;"></div>
+      <div class="divider"></div>
+    </section>
+
+    <!-- DIVIDER -->
+    <div class="divider"></div>
+
+    <!-- COMPONENT STRIP -->
+    <section class="components">
+      <div class="component-row">
+        <button class="btn-primary">Start a conversation</button>
+        <button class="btn-ghost">View case studies</button>
+        <span class="badge">Credit Unions</span>
+        <input type="text" class="input-text" placeholder="Search engagements...">
+      </div>
+    </section>
+
+    <!-- DIVIDER -->
+    <div class="divider"></div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <span class="footer-text">Direction C &middot; Warm Ground</span>
+    </footer>
+
+  </div>
+</body>
+</html>

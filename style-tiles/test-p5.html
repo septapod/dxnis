@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head><title>p5 test</title></head>
+<body style="margin:0;background:#141417;">
+<div id="hero-canvas-container" style="width:100vw;height:100vh;"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+<script>
+console.log('p5 type:', typeof p5);
+const sketch = (p) => {
+  p.setup = () => {
+    console.log('setup called');
+    const c = document.getElementById('hero-canvas-container');
+    const canvas = p.createCanvas(c.offsetWidth, c.offsetHeight);
+    canvas.parent('hero-canvas-container');
+  };
+  p.draw = () => {
+    p.background(20, 20, 23);
+    p.fill(212, 160, 66);
+    p.noStroke();
+    p.circle(p.mouseX, p.mouseY, 20);
+    p.fill(212, 160, 66, 80);
+    for (let i = 0; i < 50; i++) {
+      p.circle(p.random(p.width), p.random(p.height), p.random(2, 5));
+    }
+  };
+};
+new p5(sketch);
+</script>
+</body>
+</html>
