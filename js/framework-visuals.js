@@ -216,47 +216,34 @@
           var isChosen = tile.activateAt < 0.06;
           var fadeOutAt = isChosen ? 999 : p.map(tile.activateAt, 0.06, 0.85, 0.15, 0.85);
 
-          if (t < fadeOutAt || isChosen) {
-            var fadeT = isChosen ? 1 : p.constrain(p.map(t, Math.max(0, fadeOutAt - 0.2), fadeOutAt, 1, 0), 0, 1);
-            var alpha = p.lerp(30, 160, fadeT);
+          // All tiles start equally bright. Non-chosen fade out. Chosen stay same size, get brighter.
+          p.noStroke();
+          if (isChosen) {
+            // Chosen tiles stay the same size, just get brighter and gain a glow
+            var chosenAlpha = t > 0.5 ? p.lerp(140, 220, p.constrain(p.map(t, 0.5, 0.8, 0, 1), 0, 1)) : 140;
+            p.fill(cc[0], cc[1], cc[2], chosenAlpha);
+            p.rect(tx, ty, tileW, tileH, 3);
 
-            p.noStroke();
-            p.fill(cc[0], cc[1], cc[2], alpha);
-
-            if (isChosen && t > 0.4) {
-              // Chosen tiles scale up and separate from the grid
-              var growT = p.constrain(p.map(t, 0.4, 0.8, 0, 1), 0, 1);
-              var scale = p.lerp(1, 1.6, growT);
-              var chosenW = tileW * scale;
-              var chosenH = tileH * scale;
-              var offsetX = (chosenW - tileW) / 2;
-              var offsetY = (chosenH - tileH) / 2;
-
-              p.fill(cc[0], cc[1], cc[2], p.lerp(160, 220, growT));
-              p.rect(tx - offsetX, ty - offsetY, chosenW, chosenH, 4);
-
-              // Glow
-              p.fill(cc[0], cc[1], cc[2], 35 * growT);
-              p.rect(tx - offsetX - 5, ty - offsetY - 5, chosenW + 10, chosenH + 10, 6);
+            if (t > 0.5) {
+              var glowT = p.constrain(p.map(t, 0.5, 0.8, 0, 1), 0, 1);
+              p.fill(cc[0], cc[1], cc[2], 30 * glowT);
+              p.rect(tx - 4, ty - 4, tileW + 8, tileH + 8, 5);
               p.noFill();
-              p.stroke(cc[0], cc[1], cc[2], 160 * growT);
+              p.stroke(cc[0], cc[1], cc[2], 140 * glowT);
               p.strokeWeight(1.5);
-              p.rect(tx - offsetX, ty - offsetY, chosenW, chosenH, 4);
-            } else {
               p.rect(tx, ty, tileW, tileH, 3);
             }
+          } else if (t < fadeOutAt) {
+            var preAlpha = p.lerp(140, 80, p.constrain(t / Math.max(fadeOutAt, 0.01), 0, 1));
+            p.fill(cc[0], cc[1], cc[2], preAlpha);
+            p.rect(tx, ty, tileW, tileH, 3);
           } else {
-            // Faded out: dim outline, shrinks slightly
-            var shrinkT = p.constrain(p.map(t, fadeOutAt, fadeOutAt + 0.15, 0, 1), 0, 1);
-            var shrink = p.lerp(1, 0.6, shrinkT);
-            var sW = tileW * shrink;
-            var sH = tileH * shrink;
-            var sOffX = (tileW - sW) / 2;
-            var sOffY = (tileH - sH) / 2;
+            // Faded out: dim outline only
+            var fadeAge = p.constrain(p.map(t, fadeOutAt, fadeOutAt + 0.12, 0, 1), 0, 1);
             p.noFill();
-            p.stroke(dc[0], dc[1], dc[2], p.lerp(30, 12, shrinkT));
+            p.stroke(dc[0], dc[1], dc[2], p.lerp(40, 12, fadeAge));
             p.strokeWeight(0.5);
-            p.rect(tx + sOffX, ty + sOffY, sW, sH, 2);
+            p.rect(tx, ty, tileW, tileH, 2);
           }
         }
       };
