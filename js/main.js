@@ -883,11 +883,12 @@ document.querySelectorAll('.section').forEach(el => {
   const imageContainer = document.getElementById('newsletter-card-image');
   if (!link || !titleEl) return;
 
-  // Local fallback for file:// preview (updated periodically)
+  // Generic fallback that never goes stale. Sends readers to the
+  // newsletter home where they'll see the actual latest issue.
   const LOCAL_FALLBACK = {
-    title: 'The Claude Mythos Red Team Report: What Credit Union Leaders Need to Know',
-    url: 'https://ai4fis.beehiiv.com/p/claude-mythos-report',
-    image: 'https://media.beehiiv.com/cdn-cgi/image/fit=scale-down,format=auto,onerror=redirect,quality=80/uploads/asset/file/3f997d91-fc7b-4b35-9dd1-89a8d278e071/capybara-hero-16d.png'
+    title: 'Read the latest issue of AI for FIs',
+    url: 'https://ai4fis.beehiiv.com',
+    image: null
   };
 
   function applyData(data) {
