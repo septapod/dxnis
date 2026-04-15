@@ -1209,26 +1209,17 @@ a:focus, button:focus {
   border-top: 1px solid var(--color-border);
 }
 
-/* Mobile: stack, remove spine, reduce watermark */
+/* Mobile: stack, hide sketches, simplify layout */
 @media (max-width: 768px) {
-  .framework-spine { display: none; }
   .framework-item {
     grid-template-columns: 1fr;
     min-height: auto;
-    padding: var(--space-8) 0;
+    padding: var(--space-6) 0;
   }
   .framework-visual {
-    order: 1 !important;
-    aspect-ratio: 16 / 9;
-    max-height: 220px;
+    display: none;
   }
-  .framework-text-block { order: 2 !important; }
-  .framework-watermark {
-    font-size: clamp(5rem, 15vw, 8rem);
-    opacity: 0.04;
-    right: 0 !important;
-    left: auto !important;
-  }
+  .framework-text-block { order: 1 !important; }
   .framework-content { max-width: 100%; }
 }
 
@@ -2045,7 +2036,7 @@ a:focus, button:focus {
   }
 
   .service-visual {
-    min-height: 200px;
+    display: none;
   }
 
   .services-counter {

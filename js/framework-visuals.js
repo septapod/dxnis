@@ -170,22 +170,22 @@
         p.createCanvas(w, h).style('display', 'block');
         p.frameRate(24);
 
+        // Fixed chosen positions so it's consistent across loads
+        var chosenCells = [[1, 2], [4, 1], [6, 4]];
         for (var row = 0; row < ROWS; row++) {
           for (var col = 0; col < COLS; col++) {
+            var isFixed = false;
+            for (var c = 0; c < chosenCells.length; c++) {
+              if (chosenCells[c][0] === col && chosenCells[c][1] === row) isFixed = true;
+            }
             tiles.push({
               col: col,
               row: row,
-              activateAt: p.random(0, 0.85),
-              seed: p.random(100)
+              activateAt: isFixed ? 0 : 0.1 + (col * 7 + row * 13) % 17 / 20,
+              isChosen: isFixed
             });
           }
         }
-        // Sort so a few activate early and most activate later
-        tiles.sort(function (a, b) { return a.activateAt - b.activateAt; });
-        // Force first 2-3 to activate very early
-        tiles[0].activateAt = 0;
-        tiles[1].activateAt = 0.02;
-        tiles[2].activateAt = 0.05;
       };
 
       var _lastT2 = -1;
@@ -198,11 +198,11 @@
         var cc = coral();
         var dc = dim();
 
-        var padX = w * 0.08;
-        var padY = h * 0.08;
+        var padX = w * 0.1;
+        var padY = h * 0.1;
         var availW = w - padX * 2;
         var availH = h - padY * 2;
-        var gap = 4;
+        var gap = 6;
         var tileW = (availW - gap * (COLS - 1)) / COLS;
         var tileH = (availH - gap * (ROWS - 1)) / ROWS;
 
@@ -210,38 +210,29 @@
           var tile = tiles[i];
           var tx = padX + tile.col * (tileW + gap);
           var ty = padY + tile.row * (tileH + gap);
+          var fadeOutAt = tile.isChosen ? 999 : p.map(tile.activateAt, 0.1, 0.95, 0.15, 0.85);
 
-          // At progress=0: everything is lit (noise, no hierarchy)
-          // At progress=1: only the 3 real priorities remain, rest fades to dim outlines
-          var isChosen = tile.activateAt < 0.06;
-          var fadeOutAt = isChosen ? 999 : p.map(tile.activateAt, 0.06, 0.85, 0.15, 0.85);
-
-          // All tiles start equally bright. Non-chosen fade out. Chosen stay same size, get brighter.
           p.noStroke();
-          if (isChosen) {
-            // Chosen tiles stay the same size, just get brighter and gain a glow
+          if (tile.isChosen) {
             var chosenAlpha = t > 0.5 ? p.lerp(140, 220, p.constrain(p.map(t, 0.5, 0.8, 0, 1), 0, 1)) : 140;
             p.fill(cc[0], cc[1], cc[2], chosenAlpha);
             p.rect(tx, ty, tileW, tileH, 3);
 
-            if (t > 0.5) {
-              var glowT = p.constrain(p.map(t, 0.5, 0.8, 0, 1), 0, 1);
-              p.fill(cc[0], cc[1], cc[2], 30 * glowT);
-              p.rect(tx - 4, ty - 4, tileW + 8, tileH + 8, 5);
+            if (t > 0.6) {
+              var glowT = p.constrain(p.map(t, 0.6, 0.85, 0, 1), 0, 1);
               p.noFill();
-              p.stroke(cc[0], cc[1], cc[2], 140 * glowT);
+              p.stroke(cc[0], cc[1], cc[2], 120 * glowT);
               p.strokeWeight(1.5);
               p.rect(tx, ty, tileW, tileH, 3);
             }
           } else if (t < fadeOutAt) {
-            var preAlpha = p.lerp(140, 80, p.constrain(t / Math.max(fadeOutAt, 0.01), 0, 1));
+            var preAlpha = p.lerp(130, 60, p.constrain(t / Math.max(fadeOutAt, 0.01), 0, 1));
             p.fill(cc[0], cc[1], cc[2], preAlpha);
             p.rect(tx, ty, tileW, tileH, 3);
           } else {
-            // Faded out: dim outline only
             var fadeAge = p.constrain(p.map(t, fadeOutAt, fadeOutAt + 0.12, 0, 1), 0, 1);
             p.noFill();
-            p.stroke(dc[0], dc[1], dc[2], p.lerp(40, 12, fadeAge));
+            p.stroke(dc[0], dc[1], dc[2], p.lerp(35, 10, fadeAge));
             p.strokeWeight(0.5);
             p.rect(tx, ty, tileW, tileH, 2);
           }
