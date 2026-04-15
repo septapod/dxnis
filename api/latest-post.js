@@ -37,7 +37,7 @@ export default async function handler(req, res) {
       }
     }
 
-    res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=86400');
+    res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=3600');
     return res.status(200).json({ title, url, image });
   } catch (err) {
     console.error('latest-post error:', err);
