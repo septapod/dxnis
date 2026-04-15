@@ -59,9 +59,11 @@
   // divergent directions as you scroll. The false consensus dissolves.
   function hiddenMisalignment(container, index) {
     return new p5(function (p) {
-      var ARROW_COUNT = 12;
+      var ARROW_COUNT;
+      var COLS;
       var arrows = [];
       var w, h;
+      var arrowLenMin, arrowLenMax, arrowWeightMin, arrowWeightMax, arrowHeadLen;
 
       p.setup = function () {
         w = container.offsetWidth;
@@ -69,17 +71,32 @@
         p.createCanvas(w, h).style('display', 'block');
         p.frameRate(24);
 
+        var isMobile = w < 600;
+        ARROW_COUNT = isMobile ? 6 : 12;
+        COLS = isMobile ? 3 : 4;
+        arrowLenMin = isMobile ? 22 : 28;
+        arrowLenMax = isMobile ? 32 : 42;
+        arrowWeightMin = isMobile ? 2.0 : 1.8;
+        arrowWeightMax = isMobile ? 3.0 : 2.8;
+        arrowHeadLen = isMobile ? 8 : 10;
+
+        var rows = Math.ceil(ARROW_COUNT / COLS);
+        var padX = isMobile ? 0.18 : 0.2;
+        var padY = isMobile ? 0.22 : 0.2;
+        var stepX = (1 - padX * 2) / Math.max(COLS - 1, 1);
+        var stepY = rows > 1 ? (1 - padY * 2) / (rows - 1) : 0;
+
         var baseAngle = -p.HALF_PI;
         for (var i = 0; i < ARROW_COUNT; i++) {
-          var col = i % 4;
-          var row = Math.floor(i / 4);
+          var col = i % COLS;
+          var row = Math.floor(i / COLS);
           arrows.push({
-            x: w * 0.2 + col * (w * 0.2),
-            y: h * 0.2 + row * (h * 0.25),
+            x: w * (padX + col * stepX),
+            y: h * (padY + row * stepY),
             alignedAngle: baseAngle + p.random(-0.08, 0.08),
             trueAngle: baseAngle + p.random(-p.PI * 0.6, p.PI * 0.6),
-            len: p.random(28, 42),
-            weight: p.random(1.8, 2.8)
+            len: p.random(arrowLenMin, arrowLenMax),
+            weight: p.random(arrowWeightMin, arrowWeightMax)
           });
         }
       };
@@ -121,7 +138,7 @@
           p.push();
           p.translate(x2, y2);
           p.rotate(angle);
-          p.triangle(0, 0, -10, -4, -10, 4);
+          p.triangle(0, 0, -arrowHeadLen, -arrowHeadLen * 0.4, -arrowHeadLen, arrowHeadLen * 0.4);
           p.pop();
 
           // Connection lines emerge between aligned arrows
@@ -159,8 +176,8 @@
   // is "high priority" — visual noise where nothing stands out.
   function plansWithoutChoices(container, index) {
     return new p5(function (p) {
-      var COLS = 8;
-      var ROWS = 6;
+      var COLS;
+      var ROWS;
       var tiles = [];
       var w, h;
 
@@ -170,8 +187,14 @@
         p.createCanvas(w, h).style('display', 'block');
         p.frameRate(24);
 
+        var isMobile = w < 600;
+        COLS = isMobile ? 5 : 8;
+        ROWS = isMobile ? 4 : 6;
+
         // Fixed chosen positions so it's consistent across loads
-        var chosenCells = [[1, 2], [4, 1], [6, 4]];
+        var chosenCells = isMobile
+          ? [[1, 1], [3, 0], [2, 3]]
+          : [[1, 2], [4, 1], [6, 4]];
         for (var row = 0; row < ROWS; row++) {
           for (var col = 0; col < COLS; col++) {
             var isFixed = false;
@@ -198,11 +221,12 @@
         var cc = coral();
         var dc = dim();
 
-        var padX = w * 0.1;
-        var padY = h * 0.1;
+        var isMobileDraw = w < 600;
+        var padX = w * (isMobileDraw ? 0.08 : 0.1);
+        var padY = h * (isMobileDraw ? 0.12 : 0.1);
         var availW = w - padX * 2;
         var availH = h - padY * 2;
-        var gap = 6;
+        var gap = isMobileDraw ? 5 : 6;
         var tileW = (availW - gap * (COLS - 1)) / COLS;
         var tileH = (availH - gap * (ROWS - 1)) / ROWS;
 
@@ -264,10 +288,11 @@
         p.createCanvas(w, h).style('display', 'block');
         p.frameRate(24);
 
+        var isMobile = w < 600;
         // Dense trunk points for smooth organic curve (Perlin noise)
-        var pts = 80;
-        var startX = w * 0.06;
-        var endX = w * 0.94;
+        var pts = isMobile ? 50 : 80;
+        var startX = w * (isMobile ? 0.08 : 0.06);
+        var endX = w * (isMobile ? 0.92 : 0.94);
         var cy = h * 0.5;
         var nOff = p.random(1000);
         trunk = [];
@@ -275,22 +300,22 @@
           var frac = i / pts;
           trunk.push({
             x: p.lerp(startX, endX, frac),
-            y: cy + (p.noise(nOff + frac * 2.5) - 0.5) * h * 0.15
+            y: cy + (p.noise(nOff + frac * 2.5) - 0.5) * h * (isMobile ? 0.18 : 0.15)
           });
         }
 
-        // 4 fork points with visible dead-end branches
-        var forkIdxs = [
-          Math.floor(pts * 0.2),
-          Math.floor(pts * 0.4),
-          Math.floor(pts * 0.6),
-          Math.floor(pts * 0.8)
-        ];
-        var dirs = [-1, 1, -1, 1];
-        var lengths = [h * 0.3, h * 0.25, h * 0.2, h * 0.16];
+        // 3-4 fork points with visible dead-end branches
+        var forkIdxs = isMobile
+          ? [Math.floor(pts * 0.25), Math.floor(pts * 0.5), Math.floor(pts * 0.75)]
+          : [Math.floor(pts * 0.2), Math.floor(pts * 0.4), Math.floor(pts * 0.6), Math.floor(pts * 0.8)];
+        var dirs = isMobile ? [-1, 1, -1] : [-1, 1, -1, 1];
+        var lengths = isMobile
+          ? [h * 0.32, h * 0.26, h * 0.2]
+          : [h * 0.3, h * 0.25, h * 0.2, h * 0.16];
+        var forkCount = forkIdxs.length;
 
         forks = [];
-        for (var f = 0; f < 4; f++) {
+        for (var f = 0; f < forkCount; f++) {
           var idx = forkIdxs[f];
           var origin = trunk[idx];
           // Get trunk direction at fork for natural branching angle

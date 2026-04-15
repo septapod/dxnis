@@ -2028,16 +2028,13 @@ a:focus, button:focus {
   .service-panel {
     position: relative;
     grid-template-columns: 1fr;
+    grid-auto-rows: auto;
     opacity: 1;
     pointer-events: auto;
-    min-height: 80vh;
+    min-height: auto;
   }
 
   .service-progress {
-    display: none;
-  }
-
-  .service-visual {
     display: none;
   }
 
@@ -2050,18 +2047,28 @@ a:focus, button:focus {
   }
 
   .service-text {
-    padding: var(--space-8) var(--site-gutter);
+    padding: var(--space-6) var(--site-gutter) var(--space-8);
     max-width: 100%;
     margin-left: 0;
+    order: 2;
   }
 
   .service-visual {
-    min-height: 200px;
-    padding: var(--space-4);
+    display: flex;
+    position: relative;
+    order: 1;
+    width: 100%;
+    aspect-ratio: 16 / 11;
+    max-height: 260px;
+    margin-top: var(--space-6);
+    border-radius: var(--radius-md);
+    overflow: hidden;
   }
 
-  .services-dots {
-    display: none;
+  .service-visual canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
   }
 }
 

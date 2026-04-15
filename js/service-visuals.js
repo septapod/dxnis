@@ -14,7 +14,19 @@
   function coral() { return isDarkMode() ? [207, 90, 90] : [184, 69, 69]; }
   function teal() { return isDarkMode() ? [82, 144, 153] : [45, 90, 102]; }
 
+  function isMobile() { return window.innerWidth < 768; }
+
   function getProgress(panelIndex) {
+    if (isMobile()) {
+      // Stacked layout: scroll-driven by the panel's own viewport position
+      var panel = document.querySelectorAll('.service-panel')[panelIndex];
+      if (!panel) return 0;
+      var rect = panel.getBoundingClientRect();
+      var viewH = window.innerHeight;
+      var center = rect.top + rect.height * 0.5;
+      var p = 1 - (center / viewH);
+      return Math.max(0, Math.min(1, p * 1.6));
+    }
     const state = window.__serviceScrollState;
     if (!state) return 0;
     if (state.activeIndex > panelIndex) return 1;
@@ -26,6 +38,23 @@
     if (!container) return;
     let instance = null;
     let isActive = false;
+
+    // Mobile path: per-container intersection, no dependency on pin state
+    if (isMobile()) {
+      var mobileObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting && !instance) {
+            instance = sketchFn(container, panelIndex);
+          } else if (!e.isIntersecting && instance) {
+            instance.remove();
+            instance = null;
+            container.querySelectorAll('canvas').forEach(function (c) { c.remove(); });
+          }
+        });
+      }, { threshold: 0.1 });
+      mobileObserver.observe(container);
+      return;
+    }
 
     function checkActive() {
       var state = window.__serviceScrollState;
@@ -69,7 +98,7 @@
   // Every frame is a pure lerp. No physics.
   function alignmentNetwork(container, panelIndex) {
     return new p5(function (p) {
-      const NODE_COUNT = 14;
+      let NODE_COUNT;
       let startPositions = [];
       let targetPositions = [];
       let sizes = [];
@@ -80,6 +109,7 @@
         h = container.offsetHeight;
         p.createCanvas(w, h).style('display', 'block');
         p.frameRate(30);
+        NODE_COUNT = w < 600 ? 9 : 14;
 
         for (let i = 0; i < NODE_COUNT; i++) {
           startPositions.push({
@@ -159,6 +189,7 @@
       p.windowResized = function () {
         w = container.offsetWidth; h = container.offsetHeight;
         p.resizeCanvas(w, h);
+        NODE_COUNT = w < 600 ? 9 : 14;
         let gridR = p.min(w, h) * 0.32;
         for (let i = 0; i < NODE_COUNT; i++) {
           let angle = (p.TWO_PI / NODE_COUNT) * i;
@@ -185,25 +216,28 @@
         p.createCanvas(w, h).style('display', 'block');
         p.frameRate(30);
         let cx = w / 2, cy = h / 2;
+        let isMobile = w < 600;
+        let innerCount = isMobile ? 5 : 6;
+        let outerCount = isMobile ? 7 : 10;
 
-        for (let i = 0; i < 6; i++) {
-          let angle = (p.TWO_PI / 6) * i + p.random(-0.12, 0.12);
-          let r = p.min(w, h) * 0.15;
+        for (let i = 0; i < innerCount; i++) {
+          let angle = (p.TWO_PI / innerCount) * i + p.random(-0.12, 0.12);
+          let r = p.min(w, h) * (isMobile ? 0.18 : 0.15);
           innerNodes.push({
             angle: angle, radius: r,
             x: cx + p.cos(angle) * r,
             y: cy + p.sin(angle) * r,
-            size: p.random(5, 7)
+            size: p.random(isMobile ? 6 : 5, isMobile ? 8 : 7)
           });
         }
-        for (let i = 0; i < 10; i++) {
-          let angle = (p.TWO_PI / 10) * i + p.random(-0.08, 0.08);
-          let r = p.min(w, h) * 0.32;
+        for (let i = 0; i < outerCount; i++) {
+          let angle = (p.TWO_PI / outerCount) * i + p.random(-0.08, 0.08);
+          let r = p.min(w, h) * (isMobile ? 0.36 : 0.32);
           outerNodes.push({
             angle: angle, radius: r,
             x: cx + p.cos(angle) * r,
             y: cy + p.sin(angle) * r,
-            size: p.random(4, 6)
+            size: p.random(isMobile ? 5 : 4, isMobile ? 7 : 6)
           });
         }
       };
