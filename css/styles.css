@@ -1209,7 +1209,7 @@ a:focus, button:focus {
   border-top: 1px solid var(--color-border);
 }
 
-/* Mobile: stack, hide sketches, simplify layout */
+/* Mobile: stack, show sketches above text */
 @media (max-width: 768px) {
   .framework-item {
     grid-template-columns: 1fr;
@@ -1217,9 +1217,11 @@ a:focus, button:focus {
     padding: var(--space-6) 0;
   }
   .framework-visual {
-    display: none;
+    order: 1 !important;
+    aspect-ratio: 16 / 10;
+    max-height: 200px;
   }
-  .framework-text-block { order: 1 !important; }
+  .framework-text-block { order: 2 !important; }
   .framework-content { max-width: 100%; }
 }
 
