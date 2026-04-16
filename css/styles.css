@@ -8,6 +8,21 @@
   varied column spans WITHIN the grid structure, never by breaking it.
 */
 
+/* Register custom properties used in scroll-progress transitions so CSS
+   interpolates them as numbers rather than discrete values. Without this,
+   transform: scaleX(var(--scroll-progress)) would snap between frames. */
+@property --scroll-progress {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --service-progress {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
 /* Site-specific tokens (brand tokens in dsl-tokens.css) */
 :root {
   /* Grid System */
@@ -78,7 +93,7 @@
 [data-theme="light"] .btn:hover {
   background: var(--color-cta);
   border-color: var(--color-cta);
-  color: #FFFFFF;
+  color: var(--color-on-cta);
   box-shadow: 0 8px 24px rgba(184, 69, 69, 0.25);
   transform: translateY(-1px);
 }
@@ -86,13 +101,13 @@
 [data-theme="light"] .btn-primary {
   background: var(--color-cta);
   border-color: var(--color-cta);
-  color: #FFFFFF;
+  color: var(--color-on-cta);
 }
 
 [data-theme="light"] .btn-primary:hover {
   background: var(--color-cta-hover);
   border-color: var(--color-cta-hover);
-  color: #FFFFFF;
+  color: var(--color-on-cta);
   box-shadow: 0 8px 24px rgba(184, 69, 69, 0.3);
   transform: translateY(-1px) scale(1.02);
 }
@@ -104,13 +119,13 @@
 
 
 [data-theme="light"] .carousel-btn {
-  background: rgba(125, 100, 0, 0.08);
+  background: var(--tint-gold-soft);
   border: 1px solid rgba(125, 100, 0, 0.25);
   box-shadow: 0 0 0 4px rgba(184, 69, 69, 0.06);
 }
 
 [data-theme="light"] .carousel-btn:hover {
-  background: rgba(125, 100, 0, 0.15);
+  background: var(--tint-gold-strong);
   border-color: var(--color-accent);
   box-shadow: 0 0 0 6px rgba(184, 69, 69, 0.1);
 }
@@ -124,7 +139,7 @@
 /* Old [data-theme="light"] #services::before gradient removed */
 
 [data-theme="light"] .contact::before {
-  background: radial-gradient(circle at 20% 50%, rgba(58, 99, 112, 0.1) 0%, transparent 50%);
+  background: radial-gradient(circle at 20% 50%, var(--tint-teal-soft) 0%, transparent 50%);
 }
 
 [data-theme="light"] .contact-form-container,
@@ -150,7 +165,7 @@
 [data-theme="light"] .form-group input:focus,
 [data-theme="light"] .form-group textarea:focus {
   border-color: var(--color-accent-teal);
-  box-shadow: 0 0 0 3px rgba(58, 99, 112, 0.1);
+  box-shadow: 0 0 0 3px var(--tint-teal-soft);
 }
 
 [data-theme="light"] .btn-calendly {
@@ -160,7 +175,7 @@
 
 [data-theme="light"] .btn-calendly:hover {
   background: var(--color-accent-teal);
-  color: #FFFFFF;
+  color: var(--color-on-cta);
   border-color: var(--color-accent-teal);
 }
 
@@ -629,6 +644,7 @@ button:focus:not(:focus-visible) {
 
 /* Grainy multi-stop gradient bloom behind the particle canvas */
 /* Reference: Pinterest board of saturated grainy gradients shared 2026-04-12 */
+/* Signature rgba values — leave inline (do not tokenize). See DESIGN.md §1. */
 .hero::before {
   content: '';
   position: absolute;
@@ -1020,9 +1036,11 @@ button:focus:not(:focus-visible) {
 
 .scroll-progress-bar {
   height: 100%;
-  width: 0%;
+  width: 100%;
   background: linear-gradient(90deg, var(--brand-gold), var(--brand-coral), var(--brand-teal));
-  transition: width 0.1s linear;
+  transform: scaleX(var(--scroll-progress, 0));
+  transform-origin: left;
+  transition: transform 0.1s linear;
 }
 
 /* ========== Section Kicker (small label above section headings) ========== */
@@ -1819,8 +1837,10 @@ button:focus:not(:focus-visible) {
   top: 0;
   left: 0;
   width: 100%;
-  height: 0%;
-  transition: height 0.1s linear;
+  height: 100%;
+  transform: scaleY(var(--service-progress, 0));
+  transform-origin: top;
+  transition: transform 0.1s linear;
 }
 
 [data-service="planning"] .service-progress-fill { background: var(--color-accent); }
@@ -2860,7 +2880,7 @@ button:focus:not(:focus-visible) {
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at 20% 50%, rgba(67, 116, 129, 0.1) 0%, transparent 50%);
+  background: radial-gradient(circle at 20% 50%, var(--tint-teal-soft) 0%, transparent 50%);
   pointer-events: none;
 }
 
@@ -2880,7 +2900,7 @@ button:focus:not(:focus-visible) {
   grid-column: 2 / 8; /* 6 columns, left side */
   background: var(--color-surface);
   padding: var(--space-6);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--alpha-border-subtle);
   transition: border-color var(--transition-smooth);
 }
 
@@ -2986,7 +3006,7 @@ button:focus:not(:focus-visible) {
   grid-column: 8 / 12; /* 4 columns, right side */
   background: var(--color-surface);
   padding: var(--space-6);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--alpha-border-subtle);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -3033,7 +3053,7 @@ button:focus:not(:focus-visible) {
 /* Footer */
 .site-footer {
   padding: var(--space-8) var(--site-gutter);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--alpha-border-subtle);
   background: var(--color-bg);
   position: relative;
 }

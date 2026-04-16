@@ -1,4 +1,9 @@
-/* DSL Font Stack — Satoshi (display) self-hosted from Fontshare */
+/* DSL Font Stack — Legacy. Self-hosted Satoshi faces for agents/index.html
+   and sketch-gallery.html only. The main site (dxn.is index.html) has moved
+   to Google-Fonts-delivered Plus Jakarta Sans / Inter / Fraunces as of
+   v3.0. Do not load this file from the main site. Retained so the agents
+   page and sketch gallery keep their existing typography until they are
+   migrated. */
 
 @font-face {
   font-family: 'Satoshi';

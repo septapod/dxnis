@@ -224,9 +224,13 @@
   }
   </script>
 
-  <!-- Font Loading -->
+  <!-- Font Loading — Google Fonts delivery. Preload primes the CSS download
+       so the hero paints closer to its final typography. No crossorigin on
+       the preload: the stylesheet link fetches no-CORS, and the preload's
+       CORS mode must match or the browser double-fetches. -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Fraunces:opsz,ital,wght@9..144,0,300;9..144,0,400;9..144,0,500;9..144,0,600;9..144,0,700;9..144,1,400;9..144,1,500&display=swap" as="style">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Fraunces:opsz,ital,wght@9..144,0,300;9..144,0,400;9..144,0,500;9..144,0,600;9..144,0,700;9..144,1,400;9..144,1,500&display=swap" rel="stylesheet">
 
   <!-- Design Tokens + Stylesheet -->
@@ -367,7 +371,7 @@
           <div class="service-text">
             <div class="service-kicker service-kicker-coral">For boards, staff, and industry audiences</div>
             <h3>Workshops & Speaking</h3>
-            <p>I take topics that feel out of reach and make them something your team can work with. You walk out with tools and ideas you can use the next morning.</p>
+            <p>I take the topics that feel out of reach and turn them into something your team can use the next morning.</p>
             <a href="#contact" class="service-link">Book a session &rarr;</a>
           </div>
           <div class="service-visual" aria-hidden="true">
@@ -490,7 +494,7 @@
       <div class="testimonial-carousel">
         <div class="testimonial-track">
           <div class="testimonial-slide active">
-            <img src="assets/rebekah.jpg" alt="Rebekah Henry" class="testimonial-image" width="150" height="150">
+            <img src="assets/rebekah.jpg" alt="Rebekah Henry" class="testimonial-image" width="150" height="150" loading="lazy" decoding="async">
             <blockquote class="testimonial">
               <p>"Brent was fantastic! I really appreciate how he tailored his presentation for our event, and our audience truly enjoyed it."</p>
               <footer class="testimonial-author">
@@ -501,7 +505,7 @@
           </div>
 
           <div class="testimonial-slide">
-            <img src="assets/mb.png" alt="Mary Beth Spuck" class="testimonial-image" width="150" height="150">
+            <img src="assets/mb.png" alt="Mary Beth Spuck" class="testimonial-image" width="150" height="150" loading="lazy" decoding="async">
             <blockquote class="testimonial">
               <p>"That was the best strategic planning discussion we've ever had."</p>
               <footer class="testimonial-author">
@@ -513,7 +517,7 @@
           </div>
 
           <div class="testimonial-slide">
-            <img src="assets/ronaldo.jpg" alt="Ronaldo Hardy" class="testimonial-image" width="150" height="150">
+            <img src="assets/ronaldo.jpg" alt="Ronaldo Hardy" class="testimonial-image" width="150" height="150" loading="lazy" decoding="async">
             <blockquote class="testimonial">
               <p>"Brent is an innovative, forward thinking leader, who inspires the next wave of leadership. I credit Brent as one of the reasons I have found success at such an early age."</p>
               <footer class="testimonial-author">
@@ -524,7 +528,7 @@
           </div>
 
           <div class="testimonial-slide">
-            <img src="assets/george.jpg" alt="George Hofheimer" class="testimonial-image" width="150" height="150">
+            <img src="assets/george.jpg" alt="George Hofheimer" class="testimonial-image" width="150" height="150" loading="lazy" decoding="async">
             <blockquote class="testimonial">
               <p>"I would unequivocally recommend him as a facilitator and guide for your strategic discussions."</p>
               <footer class="testimonial-author">
@@ -633,7 +637,7 @@
       <!-- Subscribe side -->
       <div class="newsletter-subscribe">
         <div class="newsletter-subscribe-header">
-          <img src="assets/ai4fis-logo.png" alt="" class="newsletter-logo">
+          <img src="assets/ai4fis-logo.png" alt="" class="newsletter-logo" loading="lazy" decoding="async">
           <div>
             <span class="newsletter-title">AI for FIs</span>
             <span class="newsletter-tagline">The weekly agentic AI brief for credit union leaders</span>

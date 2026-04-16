@@ -54,7 +54,7 @@ Retired: indigo (`#6366f1`). Teal replaced it across the system. Do not reintrod
 |-------|-----|-------|
 | `--color-bg` | `#09090B` | Page background |
 | `--color-surface` | `#111114` | Cards, panels |
-| `--color-surface-elevated` | `#1A1A1F` | Modals, dropdowns, framework section bg |
+| `--color-surface-elevated` | `#1A1A1F` | Modals, dropdowns |
 | `--color-surface-hover` | `#242429` | Hover states on surfaces |
 | `--color-border` | `#2A2A32` | Default borders |
 | `--color-border-hover` | `#3A3A44` | Hover and focus borders |
@@ -62,25 +62,17 @@ Retired: indigo (`#6366f1`). Teal replaced it across the system. Do not reintrod
 | `--color-text-body` | `#E8E8ED` | Body paragraphs |
 | `--color-text-dim` | `#8A8A96` | Captions, secondary text |
 | `--color-text-muted` | `#78787F` | Tertiary, timestamps, disabled |
-| `--color-primary` | `#529099` | Primary interactive (teal) |
-| `--color-primary-hover` | `#3A7A87` | Primary hover state |
-| `--color-cta` | `#529099` | CTA button fill (teal in dark mode) |
-| `--color-cta-hover` | `#3A7A87` | CTA button hover |
-| `--color-accent` | `#FBE248` | Accent highlight (gold) |
+| `--color-primary` | `#529099` | Primary interactive |
+| `--color-accent` | `#FBE248` | Accent highlight |
 | `--color-accent-coral` | `#CF5A5A` | Coral accent |
 | `--color-accent-teal` | `#529099` | Teal accent |
 | `--color-alert` | `#CF5A5A` | Alerts and errors |
-| `--color-success` | `#22c55e` | Form success states |
-| `--color-danger` | `#ef4444` | Form error states |
-| `--color-surface-gold` | `rgba(251,226,72,0.04)` | Testimonials section tint |
-| `--color-surface-coral` | `rgba(207,90,90,0.04)` | Newsletter section tint |
-| `--color-surface-teal` | `rgba(67,116,129,0.04)` | Footer / how-i-work tint |
 
 ### Light theme
 
 | Token | Hex | Usage |
 |-------|-----|-------|
-| `--color-bg` | `#FAFAF8` | Page background (warm off-white) |
+| `--color-bg` | `#FAFAF8` | Page background |
 | `--color-surface` | `#FFFFFF` | Cards, panels |
 | `--color-surface-elevated` | `#F4F4F2` | Modals, dropdowns |
 | `--color-surface-hover` | `#EBEBEA` | Hover states on surfaces |
@@ -90,21 +82,13 @@ Retired: indigo (`#6366f1`). Teal replaced it across the system. Do not reintrod
 | `--color-text-body` | `#2D2D2D` | Body paragraphs |
 | `--color-text-dim` | `#6B6B6B` | Captions, secondary text |
 | `--color-text-muted` | `#6E6E6E` | Tertiary, timestamps, disabled |
-| `--color-primary` | `#2D5A66` | Primary interactive (teal, for links and non-CTA elements) |
-| `--color-primary-hover` | `#1E4650` | Primary hover state |
-| `--color-cta` | `#B84545` | CTA button fill (coral in light mode) |
-| `--color-cta-hover` | `#9A3838` | CTA button hover (darker coral) |
-| `--color-accent` | `#7D6400` | Accent highlight (darkened gold for WCAG) |
+| `--color-primary` | `#2D5A66` | Primary interactive |
+| `--color-accent` | `#7D6400` | Accent highlight |
 | `--color-accent-coral` | `#B84545` | Coral accent |
 | `--color-accent-teal` | `#3A6370` | Teal accent |
 | `--color-alert` | `#B84545` | Alerts and errors |
-| `--color-success` | `#16a34a` | Form success states |
-| `--color-danger` | `#dc2626` | Form error states |
-| `--color-surface-gold` | `#F6F4EC` | Testimonials section tint |
-| `--color-surface-coral` | `#F5EDEA` | Newsletter / framework section tint |
-| `--color-surface-teal` | `#ECF3F6` | Footer tint |
 
-Light theme brand colors are darkened from their universal values to maintain WCAG contrast ratios. CTA buttons use coral in light mode (warmer, higher conversion performance in B2B) while teal remains the primary interactive color for links and non-button elements.
+Light theme brand colors are darkened from their universal values to maintain WCAG contrast ratios on a light background. Dark theme uses the pure brand values.
 
 <!-- DSL:COLORS:END -->
 
@@ -124,11 +108,11 @@ Light theme brand colors are darkened from their universal values to maintain WC
 
 | Role | Family | Weights | Hosting | Usage |
 |------|--------|---------|---------|-------|
-| Display | Plus Jakarta Sans | 400, 500, 600, 700, 800 | Self-hosted woff2 | Headings, hero text, nav, framework headlines |
-| Body | Inter | 300, 400, 500, 600, 700 | Self-hosted woff2 | Paragraphs, UI text, labels, buttons |
-| Serif accent | Fraunces | 400, 500, 600, 400i | Self-hosted woff2 | Outcome quote, editorial moments |
+| Display | Plus Jakarta Sans | 400, 500, 600, 700, 800 | Google Fonts | Headings, hero text, nav, framework headlines |
+| Body | Inter | 300, 400, 500, 600, 700 | Google Fonts | Paragraphs, UI text, labels, buttons |
+| Serif accent | Fraunces | 400, 500, 600, 400i | Google Fonts | Outcome quote, editorial moments |
 
-All three are self-hosted in `fonts/` with `@font-face` declarations in `fonts/dsl-fonts.css`.
+All three are delivered via Google Fonts (see `index.html`). A `<link rel="preload" as="style">` primes the stylesheet download so the hero paints closer to its final typography. The legacy `fonts/dsl-fonts.css` still ships Satoshi for `agents/index.html` and `sketch-gallery.html`; the main site does not use it. Offline or availability-hardened builds would self-host from Fontshare or Google Fonts Helper.
 
 **Why this pairing.** Plus Jakarta Sans has warm geometric character that signals personal approachability without sacrificing professional seriousness. Inter is the most readable UI body font available. Fraunces adds warmth and personality for pull quotes. Previous pairing (Satoshi/Karla/Lora) was replaced 2026-04-12.
 
@@ -419,13 +403,13 @@ Serif: 'Fraunces', Georgia, serif (pull quotes only)
 ### Ready-to-use prompts
 
 **Prompt: new landing page section.**
-"Build a new section for dxn.is following DESIGN.md. Use `.grid-12` wrapper, `var(--space-12)` section padding, h2 in the section-label treatment (uppercase, letter-spacing 0.1em), body copy in Karla at 1.125rem with 70ch max-width, and at least one `.btn` or `.btn-primary` CTA. Dark theme default. No arbitrary spacing values."
+"Build a new section for dxn.is following DESIGN.md. Use `.grid-12` wrapper, `var(--space-12)` section padding, h2 in the section-label treatment (uppercase, letter-spacing 0.1em), body copy in Inter at 1.125rem with 70ch max-width, and at least one `.btn` or `.btn-primary` CTA. Dark theme default. No arbitrary spacing values."
 
 **Prompt: new card component.**
-"Build a card component for dxn.is following DESIGN.md. Use `var(--color-surface)` background, 1px border in `var(--color-border)`, `var(--radius-md)` corner radius, 24px internal padding, and `var(--shadow-md)` on hover with `translateY(-2px)` transform. Title in Satoshi weight 600, body in Karla weight 400."
+"Build a card component for dxn.is following DESIGN.md. Use `var(--color-surface)` background, 1px border in `var(--color-border)`, `var(--radius-md)` corner radius, 24px internal padding, and `var(--shadow-md)` on hover with `translateY(-2px)` transform. Title in Plus Jakarta Sans weight 600, body in Inter weight 400."
 
 **Prompt: new button variant.**
-"Build a new button variant for dxn.is following DESIGN.md. Start from `.btn` base (square corners, 14px 32px padding, 1px border in current color, 0.95rem Karla weight 500, 0.02em letter-spacing). Follow the signature hover pattern: gold fill, translateY(-2px), gradient underline sweep from coral to teal via `::before` pseudo-element."
+"Build a new button variant for dxn.is following DESIGN.md. Start from `.btn` base (square corners, 14px 32px padding, 1px border in current color, 0.95rem Inter weight 500, 0.02em letter-spacing). Follow the signature hover pattern: gold fill, translateY(-2px), gradient underline sweep from coral to teal via `::before` pseudo-element."
 
 ---
 

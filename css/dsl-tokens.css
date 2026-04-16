@@ -68,6 +68,22 @@
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
   --shadow-glow: 0 0 20px rgba(67, 116, 129, 0.15);
+
+  /* === Alpha tokens (dark) ===
+     Semantic wrappers for border, shadow, and tint rgba values previously
+     scattered as literals across styles.css. Dark-theme alphas are 2-5x
+     their light-theme counterparts because dark shadows over dark surfaces
+     need more alpha to read at perceptual parity. */
+  --alpha-border-subtle: rgba(255, 255, 255, 0.08);
+  --alpha-border-soft: rgba(255, 255, 255, 0.15);
+  --alpha-border-hover: rgba(255, 255, 255, 0.2);
+  --alpha-shadow-soft: rgba(0, 0, 0, 0.3);
+  --alpha-shadow-lift: rgba(0, 0, 0, 0.4);
+  --tint-gold-soft: rgba(251, 226, 72, 0.1);
+  --tint-gold-strong: rgba(251, 226, 72, 0.2);
+  --tint-coral-soft: rgba(207, 90, 90, 0.1);
+  --tint-teal-soft: rgba(67, 116, 129, 0.1);
+  --color-on-cta: #FFFFFF;
 }
 
 /* === Light Theme === */
@@ -101,4 +117,19 @@
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
   --shadow-glow: none;
+
+  /* === Alpha tokens (light) ===
+     Lower alpha values than the dark theme because dark shadows and tints
+     read darker on light surfaces at smaller numeric alphas. See the dark
+     theme block for the naming rationale. */
+  --alpha-border-subtle: rgba(0, 0, 0, 0.08);
+  --alpha-border-soft: rgba(0, 0, 0, 0.15);
+  --alpha-border-hover: rgba(0, 0, 0, 0.2);
+  --alpha-shadow-soft: rgba(0, 0, 0, 0.06);
+  --alpha-shadow-lift: rgba(0, 0, 0, 0.12);
+  --tint-gold-soft: rgba(125, 100, 0, 0.08);
+  --tint-gold-strong: rgba(125, 100, 0, 0.15);
+  --tint-coral-soft: rgba(184, 69, 69, 0.08);
+  --tint-teal-soft: rgba(58, 99, 112, 0.1);
+  --color-on-cta: #FFFFFF;
 }
