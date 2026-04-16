@@ -156,16 +156,19 @@ document.querySelectorAll('.section').forEach(el => {
       current = idx;
     }
 
-    // Update progress fill
+    // Update progress fill via CSS custom property so the transform
+    // transition stays compositor-only. Preserve the tri-state write:
+    // past panels fully filled, current panel tracking scroll, future
+    // panels empty.
     const panelProgress = (progress * panels.length) - idx;
     const fills = document.querySelectorAll('.service-progress-fill');
     fills.forEach((fill, i) => {
       if (i < idx) {
-        fill.style.height = '100%';
+        fill.style.setProperty('--service-progress', '1');
       } else if (i === idx) {
-        fill.style.height = (panelProgress * 100) + '%';
+        fill.style.setProperty('--service-progress', panelProgress);
       } else {
-        fill.style.height = '0%';
+        fill.style.setProperty('--service-progress', '0');
       }
     });
 
@@ -245,8 +248,8 @@ document.querySelectorAll('.section').forEach(el => {
   function update() {
     const scrolled = window.scrollY;
     const total = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = total > 0 ? (scrolled / total) * 100 : 0;
-    bar.style.width = progress + '%';
+    const progress = total > 0 ? scrolled / total : 0;
+    bar.style.setProperty('--scroll-progress', progress);
   }
 
   window.addEventListener('scroll', () => requestAnimationFrame(update), { passive: true });
