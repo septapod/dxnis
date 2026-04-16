@@ -133,9 +133,12 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-[data-theme="light"] .contact-form-container:hover,
+[data-theme="light"] .contact-form-container:hover {
+  border-color: var(--color-accent-teal);
+}
+
 [data-theme="light"] .calendly-container:hover {
-  border-color: rgba(125, 100, 0, 0.25);
+  border-color: var(--color-accent-coral);
 }
 
 [data-theme="light"] .form-group input,
@@ -2868,13 +2871,11 @@ a:focus, button:focus {
   background: var(--color-surface);
   padding: var(--space-6);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-left: 3px solid transparent;
-  transition: all var(--transition-smooth);
+  transition: border-color var(--transition-smooth);
 }
 
 .contact-form-container:hover {
-  border-color: rgba(251, 226, 72, 0.2);
-  border-left-color: var(--color-accent-teal);
+  border-color: var(--color-accent-teal);
 }
 
 .contact-form-container h3 {
@@ -2976,18 +2977,16 @@ a:focus, button:focus {
   background: var(--color-surface);
   padding: var(--space-6);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-right: 3px solid transparent;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   text-align: center;
-  transition: all var(--transition-smooth);
+  transition: border-color var(--transition-smooth);
 }
 
 .calendly-container:hover {
-  border-color: rgba(251, 226, 72, 0.2);
-  border-right-color: var(--color-accent-coral);
+  border-color: var(--color-accent-coral);
 }
 
 .calendly-container h3 {
