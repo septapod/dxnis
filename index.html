@@ -419,13 +419,14 @@
       </div>
     </div>
 
-    <!-- Scroll progress dots + panel counter -->
+    <!-- Scroll progress dots (visual only — JS toggles .active based on scroll position) -->
     <div class="services-dots" aria-hidden="true">
-      <button class="services-dot active" data-index="0"></button>
-      <button class="services-dot" data-index="1"></button>
-      <button class="services-dot" data-index="2"></button>
+      <span class="services-dot active" data-index="0"></span>
+      <span class="services-dot" data-index="1"></span>
+      <span class="services-dot" data-index="2"></span>
     </div>
-    <div class="services-counter" aria-hidden="true">
+    <!-- Panel counter announced to assistive tech so screen-reader users know their position in the pinned services section -->
+    <div class="services-counter" role="status" aria-live="polite" aria-atomic="true" aria-label="Current service panel">
       <span class="services-counter-current" id="services-counter-num">1</span>
       <span class="services-counter-sep">/</span>
       <span class="services-counter-total">3</span>
@@ -679,7 +680,7 @@
           <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
 
           <!-- Success/Error Messages -->
-          <div id="form-message" class="form-message" role="alert" aria-live="polite"></div>
+          <div id="form-message" class="form-message" role="alert"></div>
 
           <!-- Name Field -->
           <div class="form-group">
