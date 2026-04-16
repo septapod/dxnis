@@ -822,11 +822,12 @@ button:focus:not(:focus-visible) {
   color: var(--color-text);
 }
 
-/* ========== Gold Underline on "facilitation" ========== */
+/* ========== Gold Underline on "facilitation" — sits behind the letters ========== */
 .hero-underlined {
   position: relative;
   display: inline-block;
   white-space: nowrap;
+  isolation: isolate;
 }
 
 .hero-underlined::after {
@@ -841,6 +842,7 @@ button:focus:not(:focus-visible) {
   opacity: 0.85;
   transform: scaleX(0);
   transform-origin: left;
+  z-index: -1;
   animation: hero-underline-draw 0.8s cubic-bezier(0.65, 0, 0.35, 1) 0.9s forwards;
 }
 
