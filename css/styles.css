@@ -130,7 +130,7 @@
   box-shadow: 0 0 0 6px rgba(184, 69, 69, 0.1);
 }
 
-[data-theme="light"] .indicator-dot.active {
+[data-theme="light"] .indicator-dot.active::before {
   background: var(--color-accent);
   border-color: var(--color-accent);
   box-shadow: 0 0 0 3px rgba(184, 69, 69, 0.12);
@@ -406,8 +406,8 @@ button:focus:not(:focus-visible) {
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   align-items: center;
   justify-content: center;
   cursor: pointer;
@@ -524,8 +524,8 @@ button:focus:not(:focus-visible) {
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2326,28 +2326,45 @@ button:focus:not(:focus-visible) {
 .carousel-indicators {
   display: flex;
   justify-content: center; /* Centered dots */
-  gap: var(--space-1);
+  gap: 0; /* Dots live inside 44x44 invisible tap targets; the visible
+             spacing comes from the targets, not the gap. */
   margin-top: var(--space-6);
 }
 
+/* Indicator dot: 44x44 invisible tap target wrapping a 12x12 visual
+   disc. The button fills WCAG 2.5.5 Target Size minimum; the visible
+   disc stays compact. .testimonial-carousel has overflow: hidden, so
+   a pseudo-element tap-area expansion would clip — this inner-visual
+   pattern is the only clean option. */
 .indicator-dot {
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.indicator-dot::before {
+  content: '';
   width: 12px;
   height: 12px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.3);
-  cursor: pointer;
   transition: all 0.3s ease;
-  padding: 0;
 }
 
-.indicator-dot:hover {
+.indicator-dot:hover::before {
   background: rgba(251, 226, 72, 0.5);
   border-color: var(--color-accent);
   transform: scale(1.2);
 }
 
-.indicator-dot.active {
+.indicator-dot.active::before {
   background: var(--color-accent);
   border-color: var(--color-accent);
   width: 32px;
@@ -2360,8 +2377,8 @@ button:focus:not(:focus-visible) {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   margin: var(--space-3) auto 0;
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -3190,8 +3207,8 @@ body.custom-cursor-active button {
   }
 
   .carousel-btn {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
   }
 
   .carousel-btn-prev {
@@ -3334,8 +3351,8 @@ body.custom-cursor-active button {
   }
 
   .carousel-btn {
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
   }
 
   .carousel-btn svg {
