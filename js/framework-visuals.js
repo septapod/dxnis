@@ -1,8 +1,7 @@
 /**
- * Framework visuals — scroll-driven sketches for "What I See" section.
+ * Framework visuals — scroll-driven sketches for the three framework conditions.
  *
- * Three failure modes, three distinct visual metaphors:
- * 1. Hidden Misalignment — arrows that reveal divergence
+ * 1. Group Alignment — arrows drift from divergent (cardinal bias) toward consensus
  * 2. Plans Without Choices — grid that floods with false priority
  * 3. Untested Assumptions — path that fractures into unexamined branches
  *
@@ -54,16 +53,31 @@
     observer.observe(container);
   }
 
-  // ========== 1. HIDDEN MISALIGNMENT ==========
-  // Arrows that appear aligned at progress=0 but reveal their true
-  // divergent directions as you scroll. The false consensus dissolves.
-  function hiddenMisalignment(container, index) {
+  // ========== 1. GROUP ALIGNMENT ==========
+  // Arrows start pointing in different directions (cardinal-biased seed
+  // with gaussian jitter — four camps, not pure noise). As the reader
+  // scrolls, they rotate toward a single consensus direction via
+  // shortest-path angle lerp. End state: all arrows aligned, connection
+  // network forming. Pass 2 (neighbor feedback) and pass 3 (connection
+  // evolution) layer on top in a follow-up commit.
+  function groupAlignment(container, index) {
     return new p5(function (p) {
       var ARROW_COUNT;
       var COLS;
       var arrows = [];
       var w, h;
       var arrowLenMin, arrowLenMax, arrowWeightMin, arrowWeightMax, arrowHeadLen;
+      var consensusAngle;
+
+      // Shortest-path angle lerp. Without this, an arrow at PI lerping
+      // to -HALF_PI would rotate through 0 (east) via linear
+      // interpolation instead of taking the shortest route.
+      function lerpAngle(from, to, t) {
+        var d = to - from;
+        while (d > p.PI) d -= p.TWO_PI;
+        while (d < -p.PI) d += p.TWO_PI;
+        return from + d * t;
+      }
 
       p.setup = function () {
         w = container.offsetWidth;
@@ -72,29 +86,37 @@
         p.frameRate(24);
 
         var isMobile = w < 600;
-        ARROW_COUNT = isMobile ? 6 : 12;
-        COLS = isMobile ? 3 : 4;
+        ARROW_COUNT = isMobile ? 12 : 20;
+        COLS = isMobile ? 4 : 5;
         arrowLenMin = isMobile ? 22 : 28;
-        arrowLenMax = isMobile ? 32 : 42;
+        arrowLenMax = isMobile ? 28 : 42;
         arrowWeightMin = isMobile ? 2.0 : 1.8;
         arrowWeightMax = isMobile ? 3.0 : 2.8;
         arrowHeadLen = isMobile ? 8 : 10;
 
         var rows = Math.ceil(ARROW_COUNT / COLS);
-        var padX = isMobile ? 0.18 : 0.2;
-        var padY = isMobile ? 0.22 : 0.2;
+        var padX = isMobile ? 0.12 : 0.14;
+        var padY = isMobile ? 0.18 : 0.16;
         var stepX = (1 - padX * 2) / Math.max(COLS - 1, 1);
         var stepY = rows > 1 ? (1 - padY * 2) / (rows - 1) : 0;
 
-        var baseAngle = -p.HALF_PI;
+        consensusAngle = -p.HALF_PI;
+        // Four cardinal seeds: N, E, S, W. Each arrow picks one and
+        // adds gaussian jitter (~23° std dev) so the initial field
+        // reads as four camps facing different directions, not pure
+        // random noise.
+        var cardinals = [-p.HALF_PI, 0, p.HALF_PI, p.PI];
         for (var i = 0; i < ARROW_COUNT; i++) {
           var col = i % COLS;
           var row = Math.floor(i / COLS);
+          var cardinal = cardinals[i % cardinals.length];
+          var seed = cardinal + p.randomGaussian(0, 0.4);
           arrows.push({
             x: w * (padX + col * stepX),
             y: h * (padY + row * stepY),
-            alignedAngle: baseAngle + p.random(-0.08, 0.08),
-            trueAngle: baseAngle + p.random(-p.PI * 0.6, p.PI * 0.6),
+            col: col,
+            row: row,
+            seedAngle: seed,
             len: p.random(arrowLenMin, arrowLenMax),
             weight: p.random(arrowWeightMin, arrowWeightMax)
           });
@@ -113,11 +135,18 @@
 
         for (var i = 0; i < arrows.length; i++) {
           var a = arrows[i];
-          var angle = p.lerp(a.trueAngle, a.alignedAngle, t);
-          var divergence = Math.abs(a.trueAngle - a.alignedAngle);
-          var normalizedDiv = divergence / (p.PI * 0.6);
+          var angle = lerpAngle(a.seedAngle, consensusAngle, t);
 
-          // Color shifts from dim (scattered) toward gold (aligned) as measurement reveals
+          // Normalized divergence: how far the seed was from consensus
+          // initially. Shortest-path distance (0 to PI).
+          var rawDiff = a.seedAngle - consensusAngle;
+          while (rawDiff > p.PI) rawDiff -= p.TWO_PI;
+          while (rawDiff < -p.PI) rawDiff += p.TWO_PI;
+          var normalizedDiv = Math.abs(rawDiff) / p.PI;
+
+          // Color shifts from dim toward gold as alignment forms.
+          // Arrows with higher initial divergence take longer to "heat
+          // up" — they lag their neighbors in the color transition.
           var cohesion = t * (1 - normalizedDiv * (1 - t));
           var r = p.lerp(dc[0], gc[0], cohesion);
           var g = p.lerp(dc[1], gc[1], cohesion);
@@ -141,25 +170,22 @@
           p.triangle(0, 0, -arrowHeadLen, -arrowHeadLen * 0.4, -arrowHeadLen, arrowHeadLen * 0.4);
           p.pop();
 
-          // Connection lines emerge between aligned arrows
-          if (t > 0.5) {
+          // Sequential connection line to the next arrow — preserves
+          // pass-1 behavior from the prior version. Pass 3 will replace
+          // this with a neighbor-aware connection network.
+          if (t > 0.5 && i < arrows.length - 1) {
             var connAlpha = (t - 0.5) * 2 * 40 * (1 - normalizedDiv * 0.5);
             if (connAlpha > 2) {
+              var next = arrows[i + 1];
+              var nextAngle = lerpAngle(next.seedAngle, consensusAngle, t);
+              var nx2 = next.x + p.cos(nextAngle) * next.len;
+              var ny2 = next.y + p.sin(nextAngle) * next.len;
               p.stroke(gc[0], gc[1], gc[2], connAlpha);
               p.strokeWeight(0.5);
-              var x2 = a.x + p.cos(angle) * a.len;
-              var y2 = a.y + p.sin(angle) * a.len;
-              if (i < arrows.length - 1) {
-                var next = arrows[i + 1];
-                var nextAngle = p.lerp(next.trueAngle, next.alignedAngle, t);
-                var nx2 = next.x + p.cos(nextAngle) * next.len;
-                var ny2 = next.y + p.sin(nextAngle) * next.len;
-                p.line(x2, y2, nx2, ny2);
-              }
+              p.line(x2, y2, nx2, ny2);
             }
           }
         }
-
       };
 
       p.windowResized = function () {
@@ -494,7 +520,7 @@
   // ========== INIT ==========
   document.addEventListener('DOMContentLoaded', function () {
     var items = document.querySelectorAll('.framework-item');
-    var sketches = [hiddenMisalignment, plansWithoutChoices, testedAssumptions];
+    var sketches = [groupAlignment, plansWithoutChoices, testedAssumptions];
     items.forEach(function (item, i) {
       var visual = item.querySelector('.framework-visual');
       if (visual && sketches[i]) {
