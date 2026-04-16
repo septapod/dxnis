@@ -54,7 +54,7 @@ Retired: indigo (`#6366f1`). Teal replaced it across the system. Do not reintrod
 |-------|-----|-------|
 | `--color-bg` | `#09090B` | Page background |
 | `--color-surface` | `#111114` | Cards, panels |
-| `--color-surface-elevated` | `#1A1A1F` | Modals, dropdowns, framework section bg |
+| `--color-surface-elevated` | `#1A1A1F` | Modals, dropdowns |
 | `--color-surface-hover` | `#242429` | Hover states on surfaces |
 | `--color-border` | `#2A2A32` | Default borders |
 | `--color-border-hover` | `#3A3A44` | Hover and focus borders |
@@ -62,25 +62,17 @@ Retired: indigo (`#6366f1`). Teal replaced it across the system. Do not reintrod
 | `--color-text-body` | `#E8E8ED` | Body paragraphs |
 | `--color-text-dim` | `#8A8A96` | Captions, secondary text |
 | `--color-text-muted` | `#78787F` | Tertiary, timestamps, disabled |
-| `--color-primary` | `#529099` | Primary interactive (teal) |
-| `--color-primary-hover` | `#3A7A87` | Primary hover state |
-| `--color-cta` | `#529099` | CTA button fill (teal in dark mode) |
-| `--color-cta-hover` | `#3A7A87` | CTA button hover |
-| `--color-accent` | `#FBE248` | Accent highlight (gold) |
+| `--color-primary` | `#529099` | Primary interactive |
+| `--color-accent` | `#FBE248` | Accent highlight |
 | `--color-accent-coral` | `#CF5A5A` | Coral accent |
 | `--color-accent-teal` | `#529099` | Teal accent |
 | `--color-alert` | `#CF5A5A` | Alerts and errors |
-| `--color-success` | `#22c55e` | Form success states |
-| `--color-danger` | `#ef4444` | Form error states |
-| `--color-surface-gold` | `rgba(251,226,72,0.04)` | Testimonials section tint |
-| `--color-surface-coral` | `rgba(207,90,90,0.04)` | Newsletter section tint |
-| `--color-surface-teal` | `rgba(67,116,129,0.04)` | Footer / how-i-work tint |
 
 ### Light theme
 
 | Token | Hex | Usage |
 |-------|-----|-------|
-| `--color-bg` | `#FAFAF8` | Page background (warm off-white) |
+| `--color-bg` | `#FAFAF8` | Page background |
 | `--color-surface` | `#FFFFFF` | Cards, panels |
 | `--color-surface-elevated` | `#F4F4F2` | Modals, dropdowns |
 | `--color-surface-hover` | `#EBEBEA` | Hover states on surfaces |
@@ -90,21 +82,13 @@ Retired: indigo (`#6366f1`). Teal replaced it across the system. Do not reintrod
 | `--color-text-body` | `#2D2D2D` | Body paragraphs |
 | `--color-text-dim` | `#6B6B6B` | Captions, secondary text |
 | `--color-text-muted` | `#6E6E6E` | Tertiary, timestamps, disabled |
-| `--color-primary` | `#2D5A66` | Primary interactive (teal, for links and non-CTA elements) |
-| `--color-primary-hover` | `#1E4650` | Primary hover state |
-| `--color-cta` | `#B84545` | CTA button fill (coral in light mode) |
-| `--color-cta-hover` | `#9A3838` | CTA button hover (darker coral) |
-| `--color-accent` | `#7D6400` | Accent highlight (darkened gold for WCAG) |
+| `--color-primary` | `#2D5A66` | Primary interactive |
+| `--color-accent` | `#7D6400` | Accent highlight |
 | `--color-accent-coral` | `#B84545` | Coral accent |
 | `--color-accent-teal` | `#3A6370` | Teal accent |
 | `--color-alert` | `#B84545` | Alerts and errors |
-| `--color-success` | `#16a34a` | Form success states |
-| `--color-danger` | `#dc2626` | Form error states |
-| `--color-surface-gold` | `#F6F4EC` | Testimonials section tint |
-| `--color-surface-coral` | `#F5EDEA` | Newsletter / framework section tint |
-| `--color-surface-teal` | `#ECF3F6` | Footer tint |
 
-Light theme brand colors are darkened from their universal values to maintain WCAG contrast ratios. CTA buttons use coral in light mode (warmer, higher conversion performance in B2B) while teal remains the primary interactive color for links and non-button elements.
+Light theme brand colors are darkened from their universal values to maintain WCAG contrast ratios on a light background. Dark theme uses the pure brand values.
 
 <!-- DSL:COLORS:END -->
 
