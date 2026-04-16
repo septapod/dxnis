@@ -124,11 +124,11 @@ Light theme brand colors are darkened from their universal values to maintain WC
 
 | Role | Family | Weights | Hosting | Usage |
 |------|--------|---------|---------|-------|
-| Display | Plus Jakarta Sans | 400, 500, 600, 700, 800 | Self-hosted woff2 | Headings, hero text, nav, framework headlines |
-| Body | Inter | 300, 400, 500, 600, 700 | Self-hosted woff2 | Paragraphs, UI text, labels, buttons |
-| Serif accent | Fraunces | 400, 500, 600, 400i | Self-hosted woff2 | Outcome quote, editorial moments |
+| Display | Plus Jakarta Sans | 400, 500, 600, 700, 800 | Google Fonts | Headings, hero text, nav, framework headlines |
+| Body | Inter | 300, 400, 500, 600, 700 | Google Fonts | Paragraphs, UI text, labels, buttons |
+| Serif accent | Fraunces | 400, 500, 600, 400i | Google Fonts | Outcome quote, editorial moments |
 
-All three are self-hosted in `fonts/` with `@font-face` declarations in `fonts/dsl-fonts.css`.
+All three are delivered via Google Fonts (see `index.html`). A `<link rel="preload" as="style">` primes the stylesheet download so the hero paints closer to its final typography. The legacy `fonts/dsl-fonts.css` still ships Satoshi for `agents/index.html` and `sketch-gallery.html`; the main site does not use it. Offline or availability-hardened builds would self-host from Fontshare or Google Fonts Helper.
 
 **Why this pairing.** Plus Jakarta Sans has warm geometric character that signals personal approachability without sacrificing professional seriousness. Inter is the most readable UI body font available. Fraunces adds warmth and personality for pull quotes. Previous pairing (Satoshi/Karla/Lora) was replaced 2026-04-12.
 
@@ -419,13 +419,13 @@ Serif: 'Fraunces', Georgia, serif (pull quotes only)
 ### Ready-to-use prompts
 
 **Prompt: new landing page section.**
-"Build a new section for dxn.is following DESIGN.md. Use `.grid-12` wrapper, `var(--space-12)` section padding, h2 in the section-label treatment (uppercase, letter-spacing 0.1em), body copy in Karla at 1.125rem with 70ch max-width, and at least one `.btn` or `.btn-primary` CTA. Dark theme default. No arbitrary spacing values."
+"Build a new section for dxn.is following DESIGN.md. Use `.grid-12` wrapper, `var(--space-12)` section padding, h2 in the section-label treatment (uppercase, letter-spacing 0.1em), body copy in Inter at 1.125rem with 70ch max-width, and at least one `.btn` or `.btn-primary` CTA. Dark theme default. No arbitrary spacing values."
 
 **Prompt: new card component.**
-"Build a card component for dxn.is following DESIGN.md. Use `var(--color-surface)` background, 1px border in `var(--color-border)`, `var(--radius-md)` corner radius, 24px internal padding, and `var(--shadow-md)` on hover with `translateY(-2px)` transform. Title in Satoshi weight 600, body in Karla weight 400."
+"Build a card component for dxn.is following DESIGN.md. Use `var(--color-surface)` background, 1px border in `var(--color-border)`, `var(--radius-md)` corner radius, 24px internal padding, and `var(--shadow-md)` on hover with `translateY(-2px)` transform. Title in Plus Jakarta Sans weight 600, body in Inter weight 400."
 
 **Prompt: new button variant.**
-"Build a new button variant for dxn.is following DESIGN.md. Start from `.btn` base (square corners, 14px 32px padding, 1px border in current color, 0.95rem Karla weight 500, 0.02em letter-spacing). Follow the signature hover pattern: gold fill, translateY(-2px), gradient underline sweep from coral to teal via `::before` pseudo-element."
+"Build a new button variant for dxn.is following DESIGN.md. Start from `.btn` base (square corners, 14px 32px padding, 1px border in current color, 0.95rem Inter weight 500, 0.02em letter-spacing). Follow the signature hover pattern: gold fill, translateY(-2px), gradient underline sweep from coral to teal via `::before` pseudo-element."
 
 ---
 

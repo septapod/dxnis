@@ -224,9 +224,13 @@
   }
   </script>
 
-  <!-- Font Loading -->
+  <!-- Font Loading — Google Fonts delivery. Preload primes the CSS download
+       so the hero paints closer to its final typography. No crossorigin on
+       the preload: the stylesheet link fetches no-CORS, and the preload's
+       CORS mode must match or the browser double-fetches. -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Fraunces:opsz,ital,wght@9..144,0,300;9..144,0,400;9..144,0,500;9..144,0,600;9..144,0,700;9..144,1,400;9..144,1,500&display=swap" as="style">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Fraunces:opsz,ital,wght@9..144,0,300;9..144,0,400;9..144,0,500;9..144,0,600;9..144,0,700;9..144,1,400;9..144,1,500&display=swap" rel="stylesheet">
 
   <!-- Design Tokens + Stylesheet -->
