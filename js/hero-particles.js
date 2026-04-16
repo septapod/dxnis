@@ -239,7 +239,7 @@ const heroParticles = (p) => {
         : (this.isTeal ? tealLight : goldLight);
 
       // Base alpha with age fade
-      let baseAlpha = isDarkMode ? 95 : 110;
+      let baseAlpha = isDarkMode ? 140 : 110;
       const fadeIn = 30;
       const fadeOut = 60;
 
@@ -396,19 +396,10 @@ const heroParticles = (p) => {
     isMouseInHero = p.mouseX >= 0 && p.mouseX <= p.width &&
                     p.mouseY >= 0 && p.mouseY <= p.height;
 
-    // Blend mode for organic glow in dark mode
-    if (isDarkMode) {
-      p.blendMode(p.ADD);
-    }
-
     // Update and draw cells
     for (let cell of cells) {
       cell.update(isMouseInHero, p.mouseX, p.mouseY);
       cell.show(isDarkMode);
-    }
-
-    if (isDarkMode) {
-      p.blendMode(p.BLEND);
     }
   };
 

@@ -633,8 +633,9 @@ a:focus, button:focus {
   filter: blur(45px) saturate(1.5);
   pointer-events: none;
   z-index: -2;
-  will-change: transform, filter;
+  will-change: transform;
   animation: hero-bloom-drift 36s ease-in-out infinite alternate;
+  contain: strict;
 }
 
 @keyframes hero-bloom-drift {
@@ -651,8 +652,7 @@ a:focus, button:focus {
   background-size: 300px 300px;
   pointer-events: none;
   z-index: -1;
-  mix-blend-mode: overlay;
-  opacity: 0.5;
+  opacity: 0.25;
 }
 
 /* Light mode hero: deeper, warmer, less pastel */
@@ -3085,7 +3085,6 @@ body.custom-cursor-active button {
   transition: transform 0.15s ease-out, opacity 0.15s ease-out;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  mix-blend-mode: difference;
 }
 
 .cursor-follower {

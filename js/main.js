@@ -180,48 +180,12 @@ document.querySelectorAll('.section').forEach(el => {
   update();
 })();
 
-// Hero bloom: mouse-reactive gradient positions (throttled, not continuous)
-(function() {
-  const hero = document.querySelector('.hero');
-  if (!hero) return;
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-  let rafId = null;
-
-  function applyPosition(x, y) {
-    const style = hero.style;
-    style.setProperty('--bloom-x1', (15 + (x - 50) * 0.12) + '%');
-    style.setProperty('--bloom-y1', (30 + (y - 50) * 0.10) + '%');
-    style.setProperty('--bloom-x2', (85 + (x - 50) * 0.08) + '%');
-    style.setProperty('--bloom-y2', (25 + (y - 50) * 0.12) + '%');
-    style.setProperty('--bloom-x3', (50 + (x - 50) * 0.10) + '%');
-    style.setProperty('--bloom-y3', (85 + (y - 50) * 0.06) + '%');
-    style.setProperty('--bloom-x4', (72 + (x - 50) * 0.06) + '%');
-    style.setProperty('--bloom-y4', (68 + (y - 50) * 0.08) + '%');
-    rafId = null;
-  }
-
-  hero.addEventListener('mousemove', function(e) {
-    if (rafId) return;
-    const rect = hero.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-    rafId = requestAnimationFrame(function() { applyPosition(x, y); });
-  }, { passive: true });
-
-  hero.addEventListener('mouseleave', function() {
-    if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
-    requestAnimationFrame(function() { applyPosition(50, 50); });
-  });
-
-  hero.addEventListener('touchmove', function(e) {
-    if (rafId || !e.touches.length) return;
-    const rect = hero.getBoundingClientRect();
-    const x = ((e.touches[0].clientX - rect.left) / rect.width) * 100;
-    const y = ((e.touches[0].clientY - rect.top) / rect.height) * 100;
-    rafId = requestAnimationFrame(function() { applyPosition(x, y); });
-  }, { passive: true });
-})();
+// Hero bloom: mouse-reactive gradient positions DISABLED for performance.
+// The particle canvas already handles mouse interaction. Moving the blurred
+// bloom gradients on every mousemove forced the browser to re-composite a
+// full-viewport blur(45px) element continuously, which was the primary
+// cause of system-level slowdown (mouse lag, UI freeze).
+// The slow CSS animation (hero-bloom-drift) still provides subtle movement.
 
 // Mobile Navigation Toggle
 (function() {
