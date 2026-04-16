@@ -114,6 +114,8 @@ Light theme brand colors are darkened from their universal values to maintain WC
 
 All three are delivered via Google Fonts (see `index.html`). A `<link rel="preload" as="style">` primes the stylesheet download so the hero paints closer to its final typography. The legacy `fonts/dsl-fonts.css` still ships Satoshi for `agents/index.html` and `sketch-gallery.html`; the main site does not use it. Offline or availability-hardened builds would self-host from Fontshare or Google Fonts Helper.
 
+**Semantic token: `--font-quote`.** In `css/styles.css` a semantic alias `--font-quote: var(--font-serif);` exposes Fraunces under a role-named token. Use it at testimonial paragraphs and the Wheatley statement quote. Reserved for pull-quote-style copy where the italic serif treatment is the whole point. Do not use `--font-quote` as general body text.
+
 **Why this pairing.** Plus Jakarta Sans has warm geometric character that signals personal approachability without sacrificing professional seriousness. Inter is the most readable UI body font available. Fraunces adds warmth and personality for pull quotes. Previous pairing (Satoshi/Karla/Lora) was replaced 2026-04-12.
 
 ### Full hierarchy table
