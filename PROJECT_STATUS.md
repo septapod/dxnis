@@ -1,9 +1,21 @@
 # dxn.is: Project Status
 
 ## Current State
-**Launched to production as dxn.is on 2026-04-14.** New site replaces the prior design at the root. Vanilla HTML/CSS/JS with p5.js animations, Vercel deploy from `septapod/dxnis` (main branch). Old site archived in git history. `feat/site-transformation` branch kept locally as the full source of truth but not pushed to origin.
+**Launched to production as dxn.is on 2026-04-14.** Phase A of the impeccable audit + clarify refactor shipped 2026-04-16.
 
 ## Recent Changes
+
+### Impeccable Audit + Clarify Refactor, Phase A (2026-04-16): COMPLETE
+
+Addressed 14 findings across 6 implementation units from `/impeccable audit` + `/clarify` on the live site. Full plan at `docs/plans/2026-04-16-001-refactor-impeccable-audit-fixes-plan.md`; origin requirements at `docs/brainstorms/2026-04-16-impeccable-audit-fixes-requirements.md`.
+
+- **Unit 1: BAN 1 removal.** Dropped `border-left: 3px solid transparent` reveal on `.contact-form-container` and `border-right` on `.calendly-container`. Replaced with full 1px border-color shifts (teal for contact, coral for calendly) in both themes.
+- **Unit 2: A11y foundations.** Migrated global `a:focus` / `button:focus` to `:focus-visible` with `:focus:not(:focus-visible) { outline: none }` fallback. Dropped conflicting `aria-live="polite"` from the form-message's `role="alert"` element. Converted `.services-dot` buttons to aria-hidden spans (they had no click handler); exposed `.services-counter` with `role="status"` + `aria-live="polite"` so screen-reader users retain position in the pinned services section.
+- **Unit 3: Layout-safe progress animations.** Converted `.scroll-progress-bar` and `.service-progress-fill` from `width`/`height` transitions to `transform: scaleX/scaleY` with `@property` registration of `--scroll-progress` and `--service-progress`. Added `loading="lazy" decoding="async"` to four testimonial images and the newsletter logo.
+- **Unit 4: Font loading aligned to reality.** Added `<link rel="preload" as="style">` (no crossorigin — matches the stylesheet's no-CORS fetch). Updated DESIGN.md §3 to describe Google Fonts delivery. Updated §9 agent prompts to use Plus Jakarta Sans and Inter instead of retired Satoshi and Karla. Annotated `fonts/dsl-fonts.css` as legacy for `agents/` and `sketch-gallery.html`.
+- **Unit 5: Theming token sweep.** Introduced 8 new tokens: `--alpha-border-subtle`, `--alpha-border-soft`, `--alpha-border-hover`, `--alpha-shadow-soft`, `--alpha-shadow-lift`, `--tint-gold-soft`, `--tint-gold-strong`, `--tint-coral-soft`, `--tint-teal-soft`, `--color-on-cta`. Replaced 13 orphan literals. Hero bloom rgba values preserved inline with a signature comment. `scripts/sync-design-md.mjs` re-ran to refresh DESIGN.md color tables.
+- **Unit 6: Copy primary.** Updated `llms.txt` CTA hierarchy to match the hero (primary = contact form, secondary = newsletter). Collapsed redundant Service 2 body sentence to one line.
+- **Bonus: facilitation underline.** Sent the gold underline behind the word via `z-index: -1` + `isolation: isolate`.
 
 ### Launch Day (2026-04-14 through 2026-04-15): COMPLETE
 
@@ -57,11 +69,14 @@ Site was causing severe browser/system slowdown (mouse lag, unresponsive UI). Ro
 
 ## What's Left
 
+- Phase B of the impeccable refactor (Units 7-11): touch target normalization, state-aware labels, scrolled-header token, font-accent → font-quote rename, hero min-height for landscape mobile, motion-gated scroll, drop carousel backdrop blur and ring shadows, newsletter/form copy polish, kicker rewrites, footer tagline, optional hero h1 flip.
+- Phase A → Phase B checkpoint: re-run `/impeccable audit` and `/clarify` against the live site. Target 15-16/20 (Good band) after Phase A; decide whether Phase B is worth shipping at that point.
 - Beliefs section content (commented out in index.html, waiting on interview answers Q14-20).
 - About/bio refinement pass (waiting on interview answers Q26-30).
 - "How I work" section phases 2 and 3 (phase 1 drafted only).
 - Browser smoke test on iOS Safari and Android Chrome. Mobile sketches and stacked service panels should be verified in real devices before claiming done.
 - Confirm link preview regeneration in WhatsApp/Telegram/iMessage (previews are cached; may need to paste the link in a fresh chat or use a cache buster).
+- Visual QA on the new "facilitation" underline across viewports, including the behind-the-text z-index behavior landed in Phase A.
 
 ## Operational Notes
 
