@@ -121,19 +121,16 @@
 [data-theme="light"] .carousel-btn {
   background: var(--tint-gold-soft);
   border: 1px solid rgba(125, 100, 0, 0.25);
-  box-shadow: 0 0 0 4px rgba(184, 69, 69, 0.06);
 }
 
 [data-theme="light"] .carousel-btn:hover {
   background: var(--tint-gold-strong);
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 6px rgba(184, 69, 69, 0.1);
 }
 
 [data-theme="light"] .indicator-dot.active::before {
   background: var(--color-accent);
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(184, 69, 69, 0.12);
 }
 
 /* Old [data-theme="light"] #services::before gradient removed */
@@ -2298,15 +2295,12 @@ button:focus:not(:focus-visible) {
   cursor: pointer;
   transition: all 0.3s ease;
   z-index: 10;
-  backdrop-filter: blur(8px);
-  box-shadow: 0 0 0 4px rgba(207, 90, 90, 0.08);
 }
 
 .carousel-btn:hover {
   background: rgba(251, 226, 72, 0.2);
   border-color: var(--color-accent);
   transform: translateY(-50%) scale(1.1);
-  box-shadow: 0 0 0 6px rgba(207, 90, 90, 0.12);
 }
 
 .carousel-btn-prev {
@@ -2369,7 +2363,6 @@ button:focus:not(:focus-visible) {
   border-color: var(--color-accent);
   width: 32px;
   border-radius: 6px;
-  box-shadow: 0 0 0 3px rgba(207, 90, 90, 0.15);
 }
 
 /* Carousel Pause/Play Button */
