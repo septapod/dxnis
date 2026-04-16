@@ -811,42 +811,30 @@ a:focus, button:focus {
   color: var(--color-text);
 }
 
-/* ========== Hand-drawn Gold Underline under "aligned" ========== */
+/* ========== Gold Underline on "facilitation" ========== */
 .hero-underlined {
   position: relative;
   display: inline-block;
   white-space: nowrap;
 }
 
-.hero-underline {
+.hero-underlined::after {
+  content: '';
   position: absolute;
   left: 0;
   right: 0;
-  bottom: -0.08em;
-  width: 100%;
-  height: auto;
-  overflow: visible;
-  pointer-events: none;
-}
-
-.hero-underline-main {
-  color: var(--color-accent);
-  stroke-dasharray: 260;
-  stroke-dashoffset: 260;
-  animation: hero-underline-draw 1.1s cubic-bezier(0.65, 0, 0.35, 1) 0.9s forwards;
-}
-
-.hero-underline-ghost {
-  color: var(--brand-coral);
-  opacity: 0.55;
-  transform: translate(2px, 1.5px);
-  stroke-dasharray: 260;
-  stroke-dashoffset: 260;
-  animation: hero-underline-draw 1.1s cubic-bezier(0.65, 0, 0.35, 1) 1.0s forwards;
+  bottom: 0.04em;
+  height: 0.12em;
+  background: var(--color-accent);
+  border-radius: 0.06em;
+  opacity: 0.85;
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: hero-underline-draw 0.8s cubic-bezier(0.65, 0, 0.35, 1) 0.9s forwards;
 }
 
 @keyframes hero-underline-draw {
-  to { stroke-dashoffset: 0; }
+  to { transform: scaleX(1); }
 }
 
 /* ========== Hero CTA Group (Primary Newsletter + Secondary Contact) ========== */
@@ -917,8 +905,7 @@ a:focus, button:focus {
 /* ========== Motion Preferences ========== */
 @media (prefers-reduced-motion: reduce) {
   .hero-eyebrow { animation: none; opacity: 1; }
-  .hero-underline-main,
-  .hero-underline-ghost { animation: none; stroke-dashoffset: 0; }
+  .hero-underlined::after { animation: none; transform: scaleX(1); }
   .hero-kinetic { transition: none; }
 }
 
