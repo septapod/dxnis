@@ -630,9 +630,10 @@ a:focus, button:focus {
     radial-gradient(ellipse 55% 55% at var(--bloom-x2, 85%) var(--bloom-y2, 25%), rgba(207, 90, 90, 0.30), transparent 58%),
     radial-gradient(ellipse 65% 55% at var(--bloom-x3, 50%) var(--bloom-y3, 85%), rgba(67, 116, 129, 0.45), transparent 60%),
     var(--color-bg);
-  filter: blur(65px) saturate(1.5);
+  filter: blur(45px) saturate(1.5);
   pointer-events: none;
   z-index: -2;
+  will-change: transform, filter;
   animation: hero-bloom-drift 36s ease-in-out infinite alternate;
 }
 
@@ -661,7 +662,7 @@ a:focus, button:focus {
     radial-gradient(ellipse 55% 55% at var(--bloom-x2, 85%) var(--bloom-y2, 25%), rgba(207, 90, 90, 0.22), transparent 58%),
     radial-gradient(ellipse 65% 55% at var(--bloom-x3, 50%) var(--bloom-y3, 85%), rgba(67, 116, 129, 0.32), transparent 60%),
     var(--color-bg);
-  filter: blur(70px) saturate(1.2);
+  filter: blur(45px) saturate(1.2);
 }
 
 [data-theme="light"] .hero::after {
@@ -2551,7 +2552,8 @@ a:focus, button:focus {
     radial-gradient(ellipse 60% 50% at 35% 45%, rgba(251, 226, 72, 0.15), transparent 65%),
     radial-gradient(ellipse 55% 55% at 65% 55%, rgba(207, 90, 90, 0.18), transparent 60%),
     radial-gradient(ellipse 50% 45% at 50% 50%, rgba(67, 116, 129, 0.12), transparent 55%);
-  filter: blur(40px);
+  filter: blur(30px);
+  will-change: transform;
   animation: quote-bloom-breathe 8s ease-in-out infinite alternate;
   pointer-events: none;
 }

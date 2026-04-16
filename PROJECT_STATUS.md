@@ -36,6 +36,25 @@ Full rebuild shipped. The work was split across two commits on main: one to prom
 - Global MEMORY.md "Evenings are not work time" rule removed. It had been accidentally captured from an offhand comment.
 - New SessionStart hook at `~/.claude/hooks/session-time-context.sh`, wired into `~/.claude/settings.json`. Injects local date, day of week, time, and timezone into every new Claude Code session so agents always know what time it is.
 
+### Performance Optimization (2026-04-15): COMPLETE
+
+Site was causing severe browser/system slowdown (mouse lag, unresponsive UI). Root cause: compounding GPU/CPU load from multiple simultaneous animation layers.
+
+**hero-particles.js**
+- Added IntersectionObserver to pause the p5 sketch when hero is scrolled out of view (was running 500-particle draw loop at ~60fps continuously, even when invisible)
+- Reduced particle count: 500→300 desktop, 350→225 tablet, 200→150 mobile
+- Capped framerate to 30fps (was uncapped at browser default ~60fps)
+- Resize handler counts adjusted to match
+
+**service-visuals.js**
+- Added scroll-idle skip to all three sketches (alignmentNetwork, radialPulse, gravitationalPair). Previously redrawed every frame at 30fps even when scroll position hadn't changed. Now only redraws when progress value actually changes.
+
+**css/styles.css**
+- Hero bloom blur reduced from 65px to 45px (visually similar, lower compositing cost)
+- Light mode hero bloom blur reduced from 70px to 45px
+- Added `will-change: transform, filter` to hero bloom pseudo-element for proper GPU layer promotion
+- Quote section bloom blur reduced from 40px to 30px with `will-change: transform`
+
 ## What's Left
 
 - Beliefs section content (commented out in index.html, waiting on interview answers Q14-20).

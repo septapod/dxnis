@@ -16,6 +16,9 @@
 
   function isMobile() { return window.innerWidth < 768; }
 
+  // Track scroll changes so sketches skip redraws when idle
+  var _lastProgress = [-1, -1, -1];
+
   function getProgress(panelIndex) {
     if (isMobile()) {
       // Stacked layout: scroll-driven by the panel's own viewport position
@@ -127,8 +130,12 @@
       };
 
       p.draw = function () {
-        p.clear();
         let prog = getProgress(panelIndex);
+        // Skip redraw if scroll position hasn't changed
+        if (Math.abs(prog - _lastProgress[panelIndex]) < 0.001) return;
+        _lastProgress[panelIndex] = prog;
+
+        p.clear();
         // Ease the progress for smoother visual
         let t = prog * prog * (3 - 2 * prog); // smoothstep
 
@@ -243,9 +250,13 @@
       };
 
       p.draw = function () {
+        let prog = getProgress(panelIndex);
+        // Skip redraw if scroll position hasn't changed
+        if (Math.abs(prog - _lastProgress[panelIndex]) < 0.001) return;
+        _lastProgress[panelIndex] = prog;
+
         p.clear();
         let cx = w / 2, cy = h / 2;
-        let prog = getProgress(panelIndex);
         let cc = coral();
         let gc = gold();
 
@@ -366,10 +377,14 @@
       };
 
       p.draw = function () {
+        let prog = getProgress(panelIndex);
+        // Skip redraw if scroll position hasn't changed
+        if (Math.abs(prog - _lastProgress[panelIndex]) < 0.001) return;
+        _lastProgress[panelIndex] = prog;
+
         p.clear();
         let cx = w / 2, cy = h / 2;
         let tc = teal();
-        let prog = getProgress(panelIndex);
 
         // Orbit: wider range, bolder presence
         let orbitRadius = p.lerp(p.min(w, h) * 0.35, p.min(w, h) * 0.1, prog);

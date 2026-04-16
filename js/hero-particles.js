@@ -14,12 +14,13 @@
 
 const heroParticles = (p) => {
   let cells = [];
-  let cellCount = 500;
+  let cellCount = 300;
   let canvas;
   let heroSection;
   let canvasContainer;
   let isMouseInHero = false;
   let prefersReducedMotion = false;
+  let isHeroVisible = true;
 
   // Firefly flash chance — set in setup() based on device
   let flashChance = 0.002;
@@ -32,7 +33,7 @@ const heroParticles = (p) => {
   const FLASH_COOLDOWN_MAX = 180;
 
   // Adaptive quality settings
-  let targetCellCount = 500;
+  let targetCellCount = 300;
   let lastFrameTime = 0;
   let fpsHistory = [];
   const FPS_SAMPLE_SIZE = 30;
@@ -323,15 +324,18 @@ const heroParticles = (p) => {
     canvas = p.createCanvas(width, height);
     canvas.parent('hero-canvas-container');
 
+    // Cap at 30fps (was uncapped ~60fps)
+    p.frameRate(30);
+
     // Adjust cell count based on screen size
     if (p.width < 768) {
-      cellCount = 200;
+      cellCount = 150;
       flashChance = 0.012;
     } else if (p.width < 1024) {
-      cellCount = 350;
+      cellCount = 225;
       flashChance = 0.009;
     } else {
-      cellCount = 500;
+      cellCount = 300;
       flashChance = 0.006;
     }
 
@@ -347,6 +351,19 @@ const heroParticles = (p) => {
     for (let i = 0; i < cellCount; i++) {
       cells.push(new Cell());
     }
+
+    // Pause the sketch when hero is scrolled out of view
+    const heroObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        isHeroVisible = entry.isIntersecting;
+        if (isHeroVisible) {
+          p.loop();
+        } else {
+          p.noLoop();
+        }
+      });
+    }, { threshold: 0.05 });
+    heroObserver.observe(heroSection);
 
     p.background(0);
   };
@@ -404,7 +421,7 @@ const heroParticles = (p) => {
       const height = heroSection.offsetHeight || window.innerHeight;
       p.resizeCanvas(width, height);
 
-      let targetCount = p.width < 768 ? 150 : (p.width < 1024 ? 250 : 400);
+      let targetCount = p.width < 768 ? 120 : (p.width < 1024 ? 180 : 250);
       if (prefersReducedMotion) {
         targetCount = Math.floor(targetCount * 0.3);
       }
