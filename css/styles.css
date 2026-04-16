@@ -133,9 +133,12 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-[data-theme="light"] .contact-form-container:hover,
+[data-theme="light"] .contact-form-container:hover {
+  border-color: var(--color-accent-teal);
+}
+
 [data-theme="light"] .calendly-container:hover {
-  border-color: rgba(125, 100, 0, 0.25);
+  border-color: var(--color-accent-coral);
 }
 
 [data-theme="light"] .form-group input,
@@ -286,10 +289,18 @@ p {
   font-weight: 400;
 }
 
-/* Focus Styles (Accessibility) */
-a:focus, button:focus {
+/* Focus Styles (Accessibility) — keyboard-only via :focus-visible.
+   :focus:not(:focus-visible) suppresses the ring on mouse clicks. Browsers
+   without :focus-visible support fall through both rules and surface the UA
+   default outline, preserving WCAG 2.4.7. */
+a:focus-visible, button:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
+}
+
+a:focus:not(:focus-visible),
+button:focus:not(:focus-visible) {
+  outline: none;
 }
 
 /* 12-Column Grid Container */
@@ -811,11 +822,12 @@ a:focus, button:focus {
   color: var(--color-text);
 }
 
-/* ========== Gold Underline on "facilitation" ========== */
+/* ========== Gold Underline on "facilitation" — sits behind the letters ========== */
 .hero-underlined {
   position: relative;
   display: inline-block;
   white-space: nowrap;
+  isolation: isolate;
 }
 
 .hero-underlined::after {
@@ -830,6 +842,7 @@ a:focus, button:focus {
   opacity: 0.85;
   transform: scaleX(0);
   transform-origin: left;
+  z-index: -1;
   animation: hero-underline-draw 0.8s cubic-bezier(0.65, 0, 0.35, 1) 0.9s forwards;
 }
 
@@ -1961,9 +1974,9 @@ a:focus, button:focus {
   border-radius: 50%;
   border: 1px solid var(--color-text-dim);
   background: transparent;
-  cursor: pointer;
   transition: all var(--transition-quick);
   padding: 0;
+  display: block;
 }
 
 .services-dot.active {
@@ -2868,13 +2881,11 @@ a:focus, button:focus {
   background: var(--color-surface);
   padding: var(--space-6);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-left: 3px solid transparent;
-  transition: all var(--transition-smooth);
+  transition: border-color var(--transition-smooth);
 }
 
 .contact-form-container:hover {
-  border-color: rgba(251, 226, 72, 0.2);
-  border-left-color: var(--color-accent-teal);
+  border-color: var(--color-accent-teal);
 }
 
 .contact-form-container h3 {
@@ -2976,18 +2987,16 @@ a:focus, button:focus {
   background: var(--color-surface);
   padding: var(--space-6);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-right: 3px solid transparent;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   text-align: center;
-  transition: all var(--transition-smooth);
+  transition: border-color var(--transition-smooth);
 }
 
 .calendly-container:hover {
-  border-color: rgba(251, 226, 72, 0.2);
-  border-right-color: var(--color-accent-coral);
+  border-color: var(--color-accent-coral);
 }
 
 .calendly-container h3 {
