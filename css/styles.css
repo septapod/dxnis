@@ -626,7 +626,10 @@ button:focus:not(:focus-visible) {
 
 /* Hero Section - 12-Column Grid */
 .hero {
-  min-height: 60vh;
+  /* clamp keeps the hero tall enough on large screens without
+     clipping content on small landscape (iPhone SE ~375x667). 60vh
+     would shrink below 400px there and squeeze ghost text + CTAs. */
+  min-height: clamp(520px, 70vh, 900px);
   display: flex;
   flex-direction: column;
   justify-content: center;
