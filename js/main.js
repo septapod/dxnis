@@ -457,12 +457,12 @@ document.querySelectorAll('.section').forEach(el => {
         stopAutoRotate();
         pauseIcon.style.display = 'none';
         playIcon.style.display = 'block';
-        pauseBtn.setAttribute('aria-label', 'Resume auto-rotation');
+        pauseBtn.setAttribute('aria-label', 'Resume testimonial rotation');
       } else {
         startAutoRotate();
         pauseIcon.style.display = 'block';
         playIcon.style.display = 'none';
-        pauseBtn.setAttribute('aria-label', 'Pause auto-rotation');
+        pauseBtn.setAttribute('aria-label', 'Pause testimonial rotation');
       }
     });
 

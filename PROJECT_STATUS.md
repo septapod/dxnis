@@ -1,9 +1,23 @@
 # dxn.is: Project Status
 
 ## Current State
-**Launched to production as dxn.is on 2026-04-14.** Phase A of the impeccable audit + clarify refactor shipped 2026-04-16.
+**Launched to production as dxn.is on 2026-04-14.** Group Alignment animation rework + Phase B audit polish shipped 2026-04-16.
 
 ## Recent Changes
+
+### Group Alignment animation rework + Phase B audit polish (2026-04-16): COMPLETE
+
+Second plan on the audit refactor track: `docs/plans/2026-04-16-002-feat-group-alignment-rework-plan.md`.
+
+- **Unit 1: Group Alignment p5.js sketch rework (pass 1).** Renamed `hiddenMisalignment` → `groupAlignment` in `js/framework-visuals.js`. Bumped arrow count (20 desktop / 12 mobile, up from 12/6), widened initial divergence from ±108° uniform to cardinal-biased seeds (N/E/S/W with ~23° gaussian jitter) so the top of the animation reads as four camps facing different ways. Added shortest-path angle lerp so arrows rotate the short way toward consensus instead of interpolating through east. Preserved signature-move properties (stroke weight, arrowhead, dim→gold color transition). Passes 2 and 3 (neighbor-feedback mechanic, connection-network evolution) pending Brent's preview sign-off.
+- **Unit 2: Touch targets to 44x44.** `.indicator-dot` refactored to a 44x44 invisible button wrapping a 12x12 `::before` visual disc (the `::after { inset: -16px }` pattern would have been clipped by `.testimonial-carousel`'s `overflow: hidden`). `.carousel-indicators` gap dropped to 0 since dots now carry their own tap-area footprint. `.carousel-pause` (36 → 44), `.nav-toggle` (40 → 44), `.theme-toggle` (40 → 44), `.carousel-btn` mobile/tablet (36/40 → 44) all bumped.
+- **Unit 3: Drop ring shadows + backdrop-filter from carousel controls.** Removed six `box-shadow: 0 0 0 Npx rgba(...)` ring declarations on `.carousel-btn` and `.indicator-dot.active` (dark + light variants). Removed `backdrop-filter: blur(8px)` from `.carousel-btn`. Form input focus rings stay (functional).
+- **Unit 4: Motion-gated smooth scroll + carousel-pause state-aware label.** `html { scroll-behavior: smooth }` now wrapped in `@media (prefers-reduced-motion: no-preference)`. Carousel pause button `aria-label` updated from "auto-rotation" to "testimonial rotation" in both initial attribute and the JS state toggle.
+- **Unit 5: Scrolled-header background as theme token.** Introduced `--color-header-scrolled` per theme in `css/dsl-tokens.css`. The default rule now references the token; the light-theme override keeps only its `border-bottom` declaration.
+- **Unit 6: `--font-accent` → `--font-quote`.** Renamed at declaration site and two use sites in `css/styles.css`. DESIGN.md §3 now documents the semantic role.
+- **Unit 7: Hero min-height for landscape mobile.** Replaced `min-height: 60vh` with `clamp(520px, 70vh, 900px)` so the hero doesn't squeeze ghost text + CTAs on iPhone SE landscape.
+- **Unit 8: Copy polish.** Newsletter tagline/description de-duplicated. Contact form labels softened to first-person register ("Your name", "Your email", "Where you work"). Contact submit button "Send Message" → "Send it". Calendly intro + button verb aligned to "Book a Call". Theme-toggle `title="Toggle theme"` dropped. Footer tagline "Built with ❤️..." → "A site for humans and agents."
+- **Unit 9: Service kicker rewrites.** Skipped pending Brent's source text for moment-specific copy. Existing kickers remain.
 
 ### Impeccable Audit + Clarify Refactor, Phase A (2026-04-16): COMPLETE
 
@@ -69,8 +83,11 @@ Site was causing severe browser/system slowdown (mouse lag, unresponsive UI). Ro
 
 ## What's Left
 
-- Phase B of the impeccable refactor (Units 7-11): touch target normalization, state-aware labels, scrolled-header token, font-accent → font-quote rename, hero min-height for landscape mobile, motion-gated scroll, drop carousel backdrop blur and ring shadows, newsletter/form copy polish, kicker rewrites, footer tagline, optional hero h1 flip.
-- Phase A → Phase B checkpoint: re-run `/impeccable audit` and `/clarify` against the live site. Target 15-16/20 (Good band) after Phase A; decide whether Phase B is worth shipping at that point.
+- **R-PAUSED-01 flag.** When the paused `.phase-card` and `.belief-full` CSS blocks are resurrected, they must not ship with the colored `border-left: 3px` reveal pattern retired from the active site. See R-PAUSED-01 in [docs/plans/2026-04-16-001-refactor-impeccable-audit-fixes-plan.md](docs/plans/2026-04-16-001-refactor-impeccable-audit-fixes-plan.md) for the replacement mechanic (full 1px border-color shift instead).
+- Group Alignment sketch pass 2 + 3 (neighbor feedback + connection-network evolution) pending Brent's sign-off on pass 1.
+- Service kicker rewrites (R-COPY-11) pending Brent's source text for moment-specific copy.
+- Optional hero h1 first-person flip (R-COPY-13) — decision deferred; no pressure.
+- Re-run `/impeccable audit` against the live site to confirm the 18-19/20 Excellent target after Phase B.
 - Beliefs section content (commented out in index.html, waiting on interview answers Q14-20).
 - About/bio refinement pass (waiting on interview answers Q26-30).
 - "How I work" section phases 2 and 3 (phase 1 drafted only).
