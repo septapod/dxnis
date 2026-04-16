@@ -56,14 +56,19 @@
   // ========== 1. GROUP ALIGNMENT ==========
   // Arrows start pointing in different directions (cardinal-biased seed
   // with gaussian jitter — four camps, not pure noise). As the reader
-  // scrolls, they rotate toward a single consensus direction via
-  // shortest-path angle lerp. End state: all arrows aligned, connection
-  // network forming. Pass 2 (neighbor feedback) and pass 3 (connection
-  // evolution) layer on top in a follow-up commit.
+  // scrolls, each arrow is pulled by two forces: (1) its own path
+  // toward the consensus direction, and (2) the average angle of its
+  // grid neighbors. The neighbor pull peaks mid-scroll (t≈0.5),
+  // producing visible cluster formation — arrows near already-aligning
+  // peers turn faster than isolated ones. Connection lines appear
+  // between near-aligned grid neighbors, building up the feedback
+  // network as the scroll progresses. End state: all arrows aligned,
+  // full connection network.
   function groupAlignment(container, index) {
     return new p5(function (p) {
       var ARROW_COUNT;
       var COLS;
+      var ROWS;
       var arrows = [];
       var w, h;
       var arrowLenMin, arrowLenMax, arrowWeightMin, arrowWeightMax, arrowHeadLen;
@@ -79,6 +84,26 @@
         return from + d * t;
       }
 
+      // Circular mean of a list of angles. atan2(Σsin, Σcos) avoids
+      // wrap-around bugs that a naive arithmetic mean would introduce.
+      function circularMean(angles) {
+        var sx = 0, sy = 0;
+        for (var k = 0; k < angles.length; k++) {
+          sx += Math.cos(angles[k]);
+          sy += Math.sin(angles[k]);
+        }
+        return Math.atan2(sy, sx);
+      }
+
+      // Smallest signed angular difference between two angles,
+      // normalized to [-PI, PI].
+      function angleDelta(a, b) {
+        var d = a - b;
+        while (d > p.PI) d -= p.TWO_PI;
+        while (d < -p.PI) d += p.TWO_PI;
+        return d;
+      }
+
       p.setup = function () {
         w = container.offsetWidth;
         h = container.offsetHeight;
@@ -88,17 +113,17 @@
         var isMobile = w < 600;
         ARROW_COUNT = isMobile ? 12 : 20;
         COLS = isMobile ? 4 : 5;
+        ROWS = Math.ceil(ARROW_COUNT / COLS);
         arrowLenMin = isMobile ? 22 : 28;
         arrowLenMax = isMobile ? 28 : 42;
         arrowWeightMin = isMobile ? 2.0 : 1.8;
         arrowWeightMax = isMobile ? 3.0 : 2.8;
         arrowHeadLen = isMobile ? 8 : 10;
 
-        var rows = Math.ceil(ARROW_COUNT / COLS);
         var padX = isMobile ? 0.12 : 0.14;
         var padY = isMobile ? 0.18 : 0.16;
         var stepX = (1 - padX * 2) / Math.max(COLS - 1, 1);
-        var stepY = rows > 1 ? (1 - padY * 2) / (rows - 1) : 0;
+        var stepY = ROWS > 1 ? (1 - padY * 2) / (ROWS - 1) : 0;
 
         consensusAngle = -p.HALF_PI;
         // Four cardinal seeds: N, E, S, W. Each arrow picks one and
@@ -106,6 +131,7 @@
         // reads as four camps facing different directions, not pure
         // random noise.
         var cardinals = [-p.HALF_PI, 0, p.HALF_PI, p.PI];
+        arrows = [];
         for (var i = 0; i < ARROW_COUNT; i++) {
           var col = i % COLS;
           var row = Math.floor(i / COLS);
@@ -121,6 +147,21 @@
             weight: p.random(arrowWeightMin, arrowWeightMax)
           });
         }
+
+        // Precompute grid neighbors for each arrow. Orthogonal
+        // neighbors (up/down/left/right) — deterministic, O(1) lookup
+        // per arrow per frame. Edge arrows have 2 neighbors; interior
+        // arrows have 3-4. The asymmetry is intentional: it creates
+        // visible "edges lagging center" cluster dynamics.
+        for (var j = 0; j < arrows.length; j++) {
+          arrows[j].neighbors = [];
+          for (var k = 0; k < arrows.length; k++) {
+            if (k === j) continue;
+            var dc = Math.abs(arrows[k].col - arrows[j].col);
+            var dr = Math.abs(arrows[k].row - arrows[j].row);
+            if (dc + dr === 1) arrows[j].neighbors.push(k);
+          }
+        }
       };
 
       var _lastT1 = -1;
@@ -133,20 +174,48 @@
         var gc = gold();
         var dc = dim();
 
+        // PASS A: compute each arrow's raw angle (pass-1 pure lerp).
+        // Stored on the arrow object so pass B can reference neighbors.
+        for (var i = 0; i < arrows.length; i++) {
+          arrows[i].rawAngle = lerpAngle(arrows[i].seedAngle, consensusAngle, t);
+        }
+
+        // PASS B: compute each arrow's displayed angle by blending its
+        // raw angle toward the circular mean of its grid neighbors'
+        // raw angles. Weight peaks at t=0.5 (bell curve) so the
+        // feedback loop is visible mid-scroll, tapers to 0 at the ends
+        // where pure seed (t=0) and pure consensus (t=1) dominate.
+        var feedbackWeight = 4 * t * (1 - t) * 0.55;
         for (var i = 0; i < arrows.length; i++) {
           var a = arrows[i];
-          var angle = lerpAngle(a.seedAngle, consensusAngle, t);
+          if (a.neighbors.length === 0) {
+            a.displayAngle = a.rawAngle;
+            continue;
+          }
+          var neighborAngles = [];
+          for (var n = 0; n < a.neighbors.length; n++) {
+            neighborAngles.push(arrows[a.neighbors[n]].rawAngle);
+          }
+          var neighborAvg = circularMean(neighborAngles);
+          a.displayAngle = lerpAngle(a.rawAngle, neighborAvg, feedbackWeight);
+        }
+
+        // PASS C: render arrows + connection network.
+        // Connection threshold: wide at t=0.5 (~46°), tightens to
+        // ~9° by t=1. Lines only draw between grid neighbors whose
+        // displayed angles are within the threshold.
+        var connThreshold = p.lerp(0.8, 0.15, t);
+        var connAlphaMax = p.lerp(0, 50, t);
+
+        for (var i = 0; i < arrows.length; i++) {
+          var a = arrows[i];
+          var angle = a.displayAngle;
 
           // Normalized divergence: how far the seed was from consensus
-          // initially. Shortest-path distance (0 to PI).
-          var rawDiff = a.seedAngle - consensusAngle;
-          while (rawDiff > p.PI) rawDiff -= p.TWO_PI;
-          while (rawDiff < -p.PI) rawDiff += p.TWO_PI;
-          var normalizedDiv = Math.abs(rawDiff) / p.PI;
+          // initially. Drives color cohesion lag for visual depth.
+          var seedDiff = angleDelta(a.seedAngle, consensusAngle);
+          var normalizedDiv = Math.abs(seedDiff) / p.PI;
 
-          // Color shifts from dim toward gold as alignment forms.
-          // Arrows with higher initial divergence take longer to "heat
-          // up" — they lag their neighbors in the color transition.
           var cohesion = t * (1 - normalizedDiv * (1 - t));
           var r = p.lerp(dc[0], gc[0], cohesion);
           var g = p.lerp(dc[1], gc[1], cohesion);
@@ -170,19 +239,27 @@
           p.triangle(0, 0, -arrowHeadLen, -arrowHeadLen * 0.4, -arrowHeadLen, arrowHeadLen * 0.4);
           p.pop();
 
-          // Sequential connection line to the next arrow — preserves
-          // pass-1 behavior from the prior version. Pass 3 will replace
-          // this with a neighbor-aware connection network.
-          if (t > 0.5 && i < arrows.length - 1) {
-            var connAlpha = (t - 0.5) * 2 * 40 * (1 - normalizedDiv * 0.5);
-            if (connAlpha > 2) {
-              var next = arrows[i + 1];
-              var nextAngle = lerpAngle(next.seedAngle, consensusAngle, t);
-              var nx2 = next.x + p.cos(nextAngle) * next.len;
-              var ny2 = next.y + p.sin(nextAngle) * next.len;
-              p.stroke(gc[0], gc[1], gc[2], connAlpha);
-              p.strokeWeight(0.5);
-              p.line(x2, y2, nx2, ny2);
+          // Connection lines: draw between grid neighbors only when
+          // their displayed angles fall within the t-modulated
+          // threshold. Only draw when j > i to avoid double-rendering
+          // each pair.
+          if (connAlphaMax > 2) {
+            for (var n = 0; n < a.neighbors.length; n++) {
+              var j = a.neighbors[n];
+              if (j <= i) continue;
+              var b2 = arrows[j];
+              var diff = Math.abs(angleDelta(angle, b2.displayAngle));
+              if (diff < connThreshold) {
+                // Fade connection by how cleanly-aligned the pair is
+                // (closer to parallel = brighter line).
+                var strength = 1 - diff / connThreshold;
+                var lineAlpha = connAlphaMax * strength;
+                var nx2 = b2.x + p.cos(b2.displayAngle) * b2.len;
+                var ny2 = b2.y + p.sin(b2.displayAngle) * b2.len;
+                p.stroke(gc[0], gc[1], gc[2], lineAlpha);
+                p.strokeWeight(0.6);
+                p.line(x2, y2, nx2, ny2);
+              }
             }
           }
         }
