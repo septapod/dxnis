@@ -848,6 +848,11 @@ document.querySelectorAll('.section').forEach(el => {
   const link = document.getElementById('newsletter-latest-link');
   const titleEl = document.getElementById('newsletter-latest-title');
   const imageContainer = document.getElementById('newsletter-card-image');
+
+  const peekLink = document.getElementById('newsletter-peek-link');
+  const peekTitle = document.getElementById('newsletter-peek-title');
+  const peekThumb = document.getElementById('newsletter-peek-thumb');
+
   if (!link || !titleEl) return;
 
   // Generic fallback that never goes stale. Sends readers to the
@@ -859,14 +864,29 @@ document.querySelectorAll('.section').forEach(el => {
   };
 
   function applyData(data) {
-    if (data.title) titleEl.textContent = data.title;
-    if (data.url) link.href = data.url;
-    if (data.image && imageContainer) {
-      imageContainer.style.backgroundImage = `url(${data.image})`;
-      imageContainer.style.backgroundSize = 'cover';
-      imageContainer.style.backgroundPosition = 'center';
-      const placeholder = imageContainer.querySelector('.newsletter-card-image-placeholder');
-      if (placeholder) placeholder.style.display = 'none';
+    if (data.title) {
+      titleEl.textContent = data.title;
+      if (peekTitle) peekTitle.textContent = data.title;
+    }
+    if (data.url) {
+      link.href = data.url;
+      if (peekLink) peekLink.href = data.url;
+    }
+    if (data.image) {
+      if (imageContainer) {
+        imageContainer.style.backgroundImage = `url(${data.image})`;
+        imageContainer.style.backgroundSize = 'cover';
+        imageContainer.style.backgroundPosition = 'center';
+        const placeholder = imageContainer.querySelector('.newsletter-card-image-placeholder');
+        if (placeholder) placeholder.style.display = 'none';
+      }
+      if (peekThumb) {
+        peekThumb.style.backgroundImage = `url(${data.image})`;
+        peekThumb.style.backgroundSize = 'cover';
+        peekThumb.style.backgroundPosition = 'center';
+        const placeholder = peekThumb.querySelector('.newsletter-peek-thumb-placeholder');
+        if (placeholder) placeholder.style.display = 'none';
+      }
     }
   }
 
