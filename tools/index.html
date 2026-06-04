@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<!--
+  Tools and Methods — index / landing page (lives inside the dxn.is site).
+
+  TO ADD A METHOD:
+    1. Copy evals.html to your-method.html and fill the content.
+    2. Add one <a class="tm-card"> in the card grid below.
+  See README.md for detail. The collection NAME + TAGLINE live in ONE
+  place: the TM object at the top of tools.js.
+-->
+<html lang="en" data-tm-title="{name} · Dixon Strategic Labs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tools and Methods · Dixon Strategic Labs</title>
+  <meta name="description" content="A growing library of AI-strategy methods for credit union and community bank leaders. Each one rewritten in plain language as a usable tool, credited to its original author.">
+  <meta name="author" content="Dixon Strategic Labs">
+  <meta name="theme-color" content="#09090B" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#FAFAF8" media="(prefers-color-scheme: light)">
+
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('theme-preference') || 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); }
+      document.documentElement.className += ' js-loaded';
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,500;9..144,0,600;9..144,0,700;9..144,1,400;9..144,1,500;9..144,1,600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/dsl-tokens.css">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../tools/tools.css">
+</head>
+<body>
+
+<a class="skip-nav" href="#main">Skip to content</a>
+
+<header class="site-header" role="banner">
+  <nav class="main-nav" role="navigation" aria-label="Main navigation">
+    <a href="../index.html" class="logo" aria-label="Dixon Strategic Labs - homepage">
+      <img src="../assets/dxnlogo.png" alt="Dixon Strategic Labs">
+    </a>
+    <div class="nav-links" id="nav-links">
+      <a href="../index.html#services">Services</a>
+      <a href="../index.html#about-brent">About</a>
+      <a href="../index.html#contact">Contact</a>
+      <a href="../tools/index.html">Tools</a>
+      <a href="../index.html#contact" class="btn nav-cta-mobile">Book a call</a>
+    </div>
+    <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+    <button class="theme-toggle" aria-label="Toggle dark/light mode">
+      <svg class="theme-icon-sun" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+      </svg>
+      <svg class="theme-icon-moon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+      </svg>
+    </button>
+    <a href="../index.html#contact" class="btn nav-cta">Book a call</a>
+  </nav>
+</header>
+
+<main id="main" class="tm-wrap tm-wrap--wide">
+
+  <section class="tm-index-hero tm-section">
+    <h1 data-tm-name>Tools and Methods</h1>
+    <p class="tm-lede" data-tm-tagline>Practical AI-strategy methods for credit union and community bank leaders.</p>
+    <p class="tm-index-intro">Each method here comes from a working practitioner and becomes a tool a non-technical leadership team can use, not just read. Every entry credits the person whose idea it is and links to the original. New ones land alongside the weekly "AI for FIs" newsletter.</p>
+  </section>
+
+  <section class="tm-section" style="border-top:none;padding-top:0">
+    <h2 class="visually-hidden">Methods</h2>
+    <div class="tm-card-grid">
+
+      <a class="tm-card" href="../tools/evals.html">
+        <h3>Your AI product needs evals</h3>
+        <p>How to tell whether an AI tool works for your members, in three levels you can run yourself.</p>
+        <div class="tm-card-formats">
+          <span class="tm-card-format">Vendor scorecard</span>
+          <span class="tm-card-format">Worksheet</span>
+        </div>
+        <span class="tm-card-source">Adapted from Hamel Husain</span>
+        <svg class="tm-card-arrow" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+
+      <!-- Single-entry stopgap. Delete this placeholder card once there are
+           two or more real methods; the grid stands on its own then. -->
+      <div class="tm-card is-placeholder" aria-hidden="true">
+        <span class="tm-card-tag soon">Next up</span>
+        <h3>More methods are on the way</h3>
+        <p>Each one rebuilt as a tool you can fill in, with credit to its author.</p>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-container">
+    <p>&copy; 2026 Dixon Strategic Labs LLC</p>
+    <p class="footer-meta">A site for <a href="../agents/index.html">humans and agents</a>.</p>
+  </div>
+</footer>
+
+<script src="../tools/tools.js"></script>
+</body>
+</html>

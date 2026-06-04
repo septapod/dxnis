@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<!--
+  Tools and Methods · entry: AI Evals
+  A usable tool, not just an article: a tight explainer, then a fillable
+  vendor scorecard and an eval-cases worksheet (save / print / email).
+  Lives inside the dxn.is site and reuses the site chrome + brand tokens.
+
+  Source framework: Hamel Husain, "Your AI Product Needs Evals" (2024-03-29).
+  https://hamel.dev/blog/posts/evals/  Attribution preserved in the hero
+  and the footer. The credit union examples are illustrative.
+-->
+<html lang="en" data-tm-title="Your AI Product Needs Evals · {name}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your AI Product Needs Evals</title>
+  <meta name="description" content="An adaptation of Hamel Husain's 'Your AI Product Needs Evals' for credit union and community bank leaders, with a fillable vendor scorecard and an eval-cases worksheet.">
+  <meta name="author" content="Dixon Strategic Labs">
+  <meta name="theme-color" content="#09090B" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#FAFAF8" media="(prefers-color-scheme: light)">
+
+  <!-- Set theme before paint (shared key with the rest of dxn.is), and
+       flag js-loaded so the site's nav chrome behaves. -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('theme-preference') || 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); }
+      document.documentElement.className += ' js-loaded';
+    })();
+  </script>
+
+  <!-- Brand fonts (same three the site uses) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,500;9..144,0,600;9..144,0,700;9..144,1,400;9..144,1,500;9..144,1,600&display=swap" rel="stylesheet">
+
+  <!-- Brand tokens + site chrome, then section styles -->
+  <link rel="stylesheet" href="../css/dsl-tokens.css">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../tools/tools.css">
+</head>
+<body>
+
+<a class="skip-nav" href="#main">Skip to content</a>
+
+<!-- ===== Site chrome (your real header) ===== -->
+<header class="site-header" role="banner">
+  <nav class="main-nav" role="navigation" aria-label="Main navigation">
+    <a href="../index.html" class="logo" aria-label="Dixon Strategic Labs - homepage">
+      <img src="../assets/dxnlogo.png" alt="Dixon Strategic Labs">
+    </a>
+    <div class="nav-links" id="nav-links">
+      <a href="../index.html#services">Services</a>
+      <a href="../index.html#about-brent">About</a>
+      <a href="../index.html#contact">Contact</a>
+      <a href="../tools/index.html">Tools</a>
+      <a href="../index.html#contact" class="btn nav-cta-mobile">Book a call</a>
+    </div>
+    <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+    <button class="theme-toggle" aria-label="Toggle dark/light mode">
+      <svg class="theme-icon-sun" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+      </svg>
+      <svg class="theme-icon-moon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+      </svg>
+    </button>
+    <a href="../index.html#contact" class="btn nav-cta">Book a call</a>
+  </nav>
+</header>
+
+<main id="main" class="tm-wrap">
+
+  <!-- ===== HERO ===== -->
+  <section class="tm-hero tm-section">
+    <h1>Your AI product needs <em>evals</em>.</h1>
+    <p class="tm-lede">This is the method engineers use to make AI products good, with a scorecard and a worksheet you can print.</p>
+    <div class="tm-source">
+      Adapted from <strong>"Your AI Product Needs Evals"</strong> by Hamel Husain (March 2024). The framework and ideas are his. Read the full original at <a href="https://hamel.dev/blog/posts/evals/" target="_blank" rel="noopener">hamel.dev/blog/posts/evals</a>.
+    </div>
+    <div class="tm-takeaway-chips">
+      <span class="tm-chip">A 3-minute explainer</span>
+      <span class="tm-chip">A vendor scorecard you print</span>
+      <span class="tm-chip">Your first eval cases, written down</span>
+    </div>
+  </section>
+
+  <!-- ===== WHAT IS AN EVAL ===== -->
+  <section class="tm-section">
+    <span class="tm-eyebrow">The basics</span>
+    <h2>What is an eval?</h2>
+    <p class="tm-big">An eval is a test that measures whether your AI did a good job.</p>
+    <p>An eval is just an evaluation. If you have ever run a performance review, you already know how it works. You decide what good looks like, then you check the work against it. The only new part is that the work was done by software, not a person.</p>
+    <p>You give the AI a task. You check the answer against what a good answer looks like. You score it. You do this over and over, on purpose, instead of reading a few replies and hoping. (An <b>LLM</b> is a large language model, the kind of AI behind chat assistants.)</p>
+    <p>Good AI products are the ones that keep getting better. Evals measure whether the AI is good, so every change is a decision instead of a guess.</p>
+  </section>
+
+  <!-- ===== THREE LEVELS ===== -->
+  <section class="tm-section" id="levels">
+    <span class="tm-eyebrow">The heart of the method</span>
+    <h2>Three levels of evaluation.</h2>
+    <p>Hamel sorts evals into three levels. They get more expensive and slower as you climb, so you run the cheap ones constantly and the costly ones rarely. Build the bottom level first. Open each one to read it.</p>
+
+    <div class="tm-levels">
+
+      <div class="tm-level lv-1">
+        <button class="tm-level-head" aria-expanded="false">
+          <span class="tm-badge lv1">1</span>
+          <span class="tm-level-meta">
+            <span class="tm-level-name">Automatic checks</span>
+            <span class="tm-level-sub">Fast, cheap pass or fail tests. Run them on every change.</span>
+          </span>
+          <span class="tm-level-cost">Lowest cost</span>
+          <svg class="tm-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+        <div class="tm-level-body">
+          <div class="tm-level-body-inner">
+            <p class="tm-plain"><b>In plain terms:</b> a simple rule that the AI's answer either passes or fails, checked by a computer in a fraction of a second. You write a lot of them and run them every time you change anything. You know they are strong when the AI struggles to pass them.</p>
+            <p>For financial institutions, the reply must never show a full account number or a Social Security number, even though that data sits in the system behind the scenes. One automatic check scans every answer for those patterns and fails it if they appear.</p>
+            <div class="tm-when">
+              <span class="tm-pill"><b>How often:</b> every change</span>
+              <span class="tm-pill"><b>Who:</b> automated</span>
+              <span class="tm-pill"><b>Cost:</b> very low</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tm-level lv-2">
+        <button class="tm-level-head" aria-expanded="false">
+          <span class="tm-badge lv2">2</span>
+          <span class="tm-level-meta">
+            <span class="tm-level-name">People review, then AI grades at scale</span>
+            <span class="tm-level-sub">For quality a simple pass or fail check cannot judge.</span>
+          </span>
+          <span class="tm-level-cost">Moderate cost</span>
+          <svg class="tm-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+        <div class="tm-level-body">
+          <div class="tm-level-body-inner">
+            <p class="tm-plain"><b>In plain terms:</b> some quality is a judgment call. Was the answer clear? Was the tone right? Did it help? A person reads real conversations and labels them good or bad. Then you train a second AI to grade at scale, and you keep it honest by checking it against the people.</p>
+            <p>Start simple. Label each conversation just good or bad. Skip one-to-ten scores at first. A spreadsheet is enough to line up your AI grader with a human reviewer. If almost all your conversations are fine, "the AI agrees with the human ninety percent of the time" can fool you. Track how well it catches the bad ones, not just overall agreement.</p>
+            <div class="tm-when">
+              <span class="tm-pill"><b>How often:</b> a regular cadence</span>
+              <span class="tm-pill"><b>Who:</b> people, then AI</span>
+              <span class="tm-pill"><b>Cost:</b> moderate</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tm-level lv-3">
+        <button class="tm-level-head" aria-expanded="false">
+          <span class="tm-badge lv3">3</span>
+          <span class="tm-level-meta">
+            <span class="tm-level-name">Real-world testing with members</span>
+            <span class="tm-level-sub">Prove the AI changes outcomes for the better.</span>
+          </span>
+          <span class="tm-level-cost">Highest cost</span>
+          <svg class="tm-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+        <div class="tm-level-body">
+          <div class="tm-level-body-inner">
+            <p class="tm-plain"><b>In plain terms:</b> show two versions to real members and measure which one produces better results. This is called <b>A/B testing</b>. You split people into two groups, give each a different version, and compare what happens.</p>
+            <p>This is the most expensive level because it uses real members and real time. Save it for when the product is mature and you are confident enough to put it in front of people.</p>
+            <div class="tm-when">
+              <span class="tm-pill"><b>How often:</b> after big changes</span>
+              <span class="tm-pill"><b>Who:</b> real members</span>
+              <span class="tm-pill"><b>Cost:</b> highest</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== THE ONE RULE ===== -->
+  <section class="tm-section">
+    <div class="tm-rule">
+      <span class="tm-eyebrow">If you remember one thing</span>
+      <h2>Look at your data.</h2>
+      <p>The AI products that get good are the ones whose teams read their own conversations, a lot of them, all the time.</p>
+      <p class="tm-punch">"You are doing it wrong if you aren't looking at lots of data."</p>
+      <p class="tm-punch-cite">Hamel Husain</p>
+      <p>When you start, read everything. Over time you can read a sample. Keep reading until you stop learning anything new. No software reads the data for you.</p>
+    </div>
+  </section>
+
+  <!-- ===== VENDOR SCORECARD (read on screen, print to fill in) ===== -->
+  <section class="tm-section" id="scorecard">
+    <div class="tm-tool">
+      <span class="tm-tool-tag">Vendor scorecard</span>
+      <h2>Score a vendor or partner before you commit.</h2>
+      <p class="tm-tool-intro">Hamel's method teaches teams how to build evals. These eight questions put it to work when you are buying, not building. A vendor that runs evals can answer all eight without flinching. Each one shows what a good answer and a dodge sound like.</p>
+      <p class="tm-legend tm-screen-only"><strong class="lg-strong">Strong</strong> means clear and specific, with something you can see. <strong class="lg-vague">Vague</strong> means they talked around it. <strong class="lg-dodged">Dodged</strong> means they changed the subject.</p>
+      <p class="tm-print-cue tm-screen-only">Print this page, or save it as a PDF, to get a worksheet you can write on in the meeting.</p>
+
+      <!-- shows only on the printout -->
+      <div class="tm-print-head tm-print-only">
+        <div class="tm-print-title">AI vendor evals worksheet</div>
+        <div class="tm-print-sub">Adapted from "Your AI Product Needs Evals" by Hamel Husain.</div>
+        <div class="tm-print-fields"><span>Vendor: ______________________________</span><span>Date: __________________</span></div>
+      </div>
+
+      <div class="tm-scorecard">
+
+        <div class="tm-score-row">
+          <div class="tm-score-q"><span class="tm-score-n">1</span><span class="tm-score-q-text">A demo shows the AI at its best. How do you check it holds up on the messy questions real members ask?</span></div>
+          <p class="tm-score-hint"><span class="good">A good answer:</span> they test it against lots of real member questions, including the hard ones, and show how often it gets them right. <span class="dodge">A dodge:</span> they re-run the demo or talk up the technology.</p>
+          <div class="tm-q-mark tm-print-only"><span class="tm-mark-box">Strong</span><span class="tm-mark-box">Vague</span><span class="tm-mark-box">Dodged</span></div>
+          <div class="tm-q-notes tm-print-only"></div>
+        </div>
+
+        <div class="tm-score-row">
+          <div class="tm-score-q"><span class="tm-score-n">2</span><span class="tm-score-q-text">What kinds of mistakes do you automatically check for before anything reaches a member?</span></div>
+          <p class="tm-score-hint"><span class="good">A good answer:</span> a specific list, like wrong information, a rude tone, or leaked data, checked every time they change the AI. <span class="dodge">A dodge:</span> they call it accurate without naming what they check.</p>
+          <div class="tm-q-mark tm-print-only"><span class="tm-mark-box">Strong</span><span class="tm-mark-box">Vague</span><span class="tm-mark-box">Dodged</span></div>
+          <div class="tm-q-notes tm-print-only"></div>
+        </div>
+
+        <div class="tm-score-row">
+          <div class="tm-score-q"><span class="tm-score-n">3</span><span class="tm-score-q-text">How often does someone on your team read real member conversations?</span></div>
+          <p class="tm-score-hint"><span class="good">A good answer:</span> on a set schedule, and they can name a number. <span class="dodge">A dodge:</span> they say the system flags problems on its own, or that they look as needed.</p>
+          <div class="tm-q-mark tm-print-only"><span class="tm-mark-box">Strong</span><span class="tm-mark-box">Vague</span><span class="tm-mark-box">Dodged</span></div>
+          <div class="tm-q-notes tm-print-only"></div>
+        </div>
+
+        <div class="tm-score-row">
+          <div class="tm-score-q"><span class="tm-score-n">4</span><span class="tm-score-q-text">If you use AI to check the AI's work, how do you make sure that checker is right?</span></div>
+          <p class="tm-score-hint"><span class="good">A good answer:</span> they compare the AI checker against real people and fix it when the two disagree. <span class="dodge">A dodge:</span> they treat the AI checking its own work as proof.</p>
+          <div class="tm-q-mark tm-print-only"><span class="tm-mark-box">Strong</span><span class="tm-mark-box">Vague</span><span class="tm-mark-box">Dodged</span></div>
+          <div class="tm-q-notes tm-print-only"></div>
+        </div>
+
+        <div class="tm-score-row">
+          <div class="tm-score-q"><span class="tm-score-n">5</span><span class="tm-score-q-text">Can you show me your error rate going down over time as you fixed things?</span></div>
+          <p class="tm-score-hint"><span class="good">A good answer:</span> real numbers or a chart with dates, heading down. <span class="dodge">A dodge:</span> a single accuracy number, or a vague claim that it keeps improving.</p>
+          <div class="tm-q-mark tm-print-only"><span class="tm-mark-box">Strong</span><span class="tm-mark-box">Vague</span><span class="tm-mark-box">Dodged</span></div>
+          <div class="tm-q-notes tm-print-only"></div>
+        </div>
+
+        <div class="tm-score-row">
+          <div class="tm-score-q"><span class="tm-score-n">6</span><span class="tm-score-q-text">When a member gets a bad answer, how do you find out what went wrong?</span></div>
+          <p class="tm-score-hint"><span class="good">A good answer:</span> they pull up that exact conversation and trace the cause quickly. <span class="dodge">A dodge:</span> they say they would look into it, but cannot say how.</p>
+          <div class="tm-q-mark tm-print-only"><span class="tm-mark-box">Strong</span><span class="tm-mark-box">Vague</span><span class="tm-mark-box">Dodged</span></div>
+          <div class="tm-q-notes tm-print-only"></div>
+        </div>
+
+        <div class="tm-score-row">
+          <div class="tm-score-q"><span class="tm-score-n">7</span><span class="tm-score-q-text">How do you keep account numbers and Social Security numbers from showing up in a reply?</span></div>
+          <p class="tm-score-hint"><span class="good">A good answer:</span> an automatic check that catches that data before a member sees it. <span class="dodge">A dodge:</span> they say the AI is trained not to, with no backstop.</p>
+          <div class="tm-q-mark tm-print-only"><span class="tm-mark-box">Strong</span><span class="tm-mark-box">Vague</span><span class="tm-mark-box">Dodged</span></div>
+          <div class="tm-q-notes tm-print-only"></div>
+        </div>
+
+        <div class="tm-score-row">
+          <div class="tm-score-q"><span class="tm-score-n">8</span><span class="tm-score-q-text">Will our data be used to train models that other companies use?</span></div>
+          <p class="tm-score-hint"><span class="good">A good answer:</span> a clear no, in writing. <span class="dodge">A dodge:</span> vague reassurance, or that it is buried in the contract.</p>
+          <div class="tm-q-mark tm-print-only"><span class="tm-mark-box">Strong</span><span class="tm-mark-box">Vague</span><span class="tm-mark-box">Dodged</span></div>
+          <div class="tm-q-notes tm-print-only"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CASES WORKSHEET (read on screen, print the blank table) ===== -->
+  <section class="tm-section" id="cases">
+    <div class="tm-tool">
+      <span class="tm-tool-tag">Worksheet</span>
+      <h2>Write down what a good answer looks like.</h2>
+      <p class="tm-tool-intro">This is your answer key. A leadership team can write its first cases in an afternoon. For each one, name a thing a member might ask, then describe what a good reply looks like. Start with the awkward cases.</p>
+      <p class="tm-print-cue tm-screen-only">Print this page, or save it as a PDF, to get a blank worksheet your team can fill in together.</p>
+
+      <div class="tm-cases-sheet">
+        <div class="tm-case-head">
+          <span></span>
+          <span>A member asks…</span>
+          <span>A good answer looks like…</span>
+        </div>
+        <div class="tm-print-cases tm-print-only">
+          <div class="tm-print-case-row"><span class="tm-print-case-n">1</span><span class="tm-print-cell"></span><span class="tm-print-cell"></span></div>
+          <div class="tm-print-case-row"><span class="tm-print-case-n">2</span><span class="tm-print-cell"></span><span class="tm-print-cell"></span></div>
+          <div class="tm-print-case-row"><span class="tm-print-case-n">3</span><span class="tm-print-cell"></span><span class="tm-print-cell"></span></div>
+          <div class="tm-print-case-row"><span class="tm-print-case-n">4</span><span class="tm-print-cell"></span><span class="tm-print-cell"></span></div>
+          <div class="tm-print-case-row"><span class="tm-print-case-n">5</span><span class="tm-print-cell"></span><span class="tm-print-cell"></span></div>
+          <div class="tm-print-case-row"><span class="tm-print-case-n">6</span><span class="tm-print-cell"></span><span class="tm-print-cell"></span></div>
+          <div class="tm-print-case-row"><span class="tm-print-case-n">7</span><span class="tm-print-cell"></span><span class="tm-print-cell"></span></div>
+          <div class="tm-print-case-row"><span class="tm-print-case-n">8</span><span class="tm-print-cell"></span><span class="tm-print-cell"></span></div>
+          <div class="tm-print-case-row"><span class="tm-print-case-n">9</span><span class="tm-print-cell"></span><span class="tm-print-cell"></span></div>
+          <div class="tm-print-case-row"><span class="tm-print-case-n">10</span><span class="tm-print-cell"></span><span class="tm-print-cell"></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="tm-section">
+    <div class="tm-cta">
+      <span class="tm-eyebrow">Work with me</span>
+      <h2>Want help building your answer key?</h2>
+      <p>If you are scoping a pilot, weighing a vendor, or working out what good looks like before you spend, tell me what is shaping your thinking.</p>
+      <a class="tm-cta-btn" href="mailto:brent@dxn.is">Email brent@dxn.is</a>
+    </div>
+  </section>
+
+  <!-- ===== ATTRIBUTION ===== -->
+  <div class="tm-attribution">
+    <div class="tm-credit">Based on the work of Hamel Husain.</div>
+    <p>This is an adaptation of <a href="https://hamel.dev/blog/posts/evals/" target="_blank" rel="noopener">"Your AI Product Needs Evals"</a> (March 29, 2024). The framework, the three levels, and the insights are his. The credit union examples here are illustrative and were written for this adaptation. For the full depth, read the original.</p>
+  </div>
+
+</main>
+
+<!-- ===== Site chrome (your real footer) ===== -->
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-container">
+    <p>&copy; 2026 Dixon Strategic Labs LLC</p>
+    <p class="footer-meta">A site for <a href="../agents/index.html">humans and agents</a>.</p>
+  </div>
+</footer>
+
+<script src="../tools/tools.js"></script>
+</body>
+</html>

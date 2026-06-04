@@ -1,0 +1,525 @@
+/* ============================================================
+   Tools and Methods — section styles
+   Lives inside the dxn.is site. Chrome (header, nav, logo, theme
+   toggle, buttons, footer) comes from ../css/styles.css and
+   ../css/dsl-tokens.css. This file styles ONLY the section content.
+
+   Brand-true to dxn.is Swiss-grid system (see .impeccable.md):
+   - Square corners (radius 0; 2px only on inputs). No pills.
+   - No side-stripe borders (>1px left/right accents are banned).
+   - No nested cards. Flatten with dividers and space.
+   - 8px spacing grid. Gold 2px focus. Solid surfaces, not gradients.
+   All values are brand tokens, so it follows the dark default + light.
+   Namespaced .tm- so it never collides with the homepage.
+   ============================================================ */
+
+/* ---- Reading container ----------------------------------- */
+.tm-wrap {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 0 var(--space-3, 24px);
+}
+.tm-wrap--wide { max-width: 1120px; }
+
+/* The site header is position:fixed (transparent until scroll).
+   Offset content so the hero clears it. */
+#main.tm-wrap { padding-top: 96px; }
+.tm-hero, .tm-index-hero { padding-top: var(--space-4, 32px); }
+
+/* Scoped type, so homepage hero sizing never leaks in */
+.tm-wrap h1, .tm-wrap h2, .tm-wrap h3 {
+  font-family: var(--font-serif);
+  color: var(--color-text);
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.5em;
+}
+.tm-wrap h1 { font-size: clamp(2.3rem, 5.5vw, 3.6rem); font-weight: 500; }
+.tm-wrap h2 { font-size: clamp(1.7rem, 4vw, 2.5rem); font-weight: 500; }
+.tm-wrap h3 { font-size: 1.35rem; font-weight: 600; }
+.tm-wrap p { margin: 0 0 1em; max-width: 68ch; }
+.tm-wrap p:last-child { margin-bottom: 0; }
+.tm-wrap strong, .tm-wrap b { color: var(--color-text); font-weight: 600; }
+.tm-big { font-size: 1.25rem; line-height: 1.5; }
+.tm-muted { color: var(--color-text-dim); }
+
+/* Section label (uppercase, 0.1em — matches the site's section labels) */
+.tm-eyebrow {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent-teal);
+  margin-bottom: var(--space-2, 16px);
+  display: block;
+}
+
+/* Section rhythm. Content always visible (no JS-gated reveal). */
+.tm-section { padding: var(--space-10, 80px) 0; border-top: 1px solid var(--color-border); }
+.tm-section:first-of-type { border-top: none; }
+
+/* ---- Hero (entry) ---------------------------------------- */
+.tm-hero { padding-bottom: var(--space-8, 64px); }
+.tm-kicker {
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: var(--space-3, 24px);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2, 16px);
+}
+.tm-kicker::before { content: ""; width: 32px; height: 2px; background: var(--brand-gold); }
+.tm-hero h1 em { font-style: italic; color: var(--color-accent); }
+.tm-lede {
+  font-size: clamp(1.2rem, 2.4vw, 1.5rem);
+  line-height: 1.5;
+  color: var(--color-text-dim);
+  max-width: 40ch;
+}
+
+/* Source / attribution box — flat tint, full 1px border (no side stripe) */
+.tm-source {
+  margin-top: var(--space-4, 32px);
+  padding: var(--space-3, 24px);
+  background: var(--color-surface-gold);
+  border: 1px solid var(--color-border);
+  font-size: 0.95rem;
+  color: var(--color-text-body);
+  max-width: 68ch;
+}
+.tm-source strong { color: var(--color-text); }
+.tm-source a { color: var(--color-accent); text-decoration: underline; text-underline-offset: 2px; }
+
+/* "What you'll walk away with" — square markers, not pills */
+.tm-takeaway-chips { display: flex; flex-wrap: wrap; gap: var(--space-1, 8px) var(--space-2, 16px); margin-top: var(--space-4, 32px); }
+.tm-chip {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-body);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1, 8px);
+}
+.tm-chip::before { content: ""; width: 8px; height: 8px; background: var(--brand-gold); }
+
+/* ---- Levels accordion (grid-rows animation, square) ------ */
+.tm-levels { display: flex; flex-direction: column; gap: var(--space-2, 16px); margin-top: var(--space-3, 24px); }
+.tm-level {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  transition: border-color 0.25s ease;
+}
+.tm-level.open { border-color: var(--brand-gold); }
+.tm-level-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2, 16px);
+  padding: var(--space-3, 24px);
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  color: var(--color-text);
+}
+.tm-badge {
+  flex: 0 0 auto;
+  width: 48px; height: 48px;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 20px;
+  color: #1a1500;          /* dark text reads on all three brand fills */
+}
+.tm-badge.lv1 { background: var(--brand-teal); }
+.tm-badge.lv2 { background: var(--brand-gold); }
+.tm-badge.lv3 { background: var(--brand-coral); }
+.tm-level-meta { flex: 1 1 auto; }
+.tm-level-name { display: block; font-family: var(--font-serif); font-size: 1.25rem; font-weight: 600; color: var(--color-text); line-height: 1.2; }
+.tm-level-sub { display: block; font-size: 0.95rem; color: var(--color-text-body); margin-top: 4px; line-height: 1.4; }
+.tm-level-cost {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-dim);
+  white-space: nowrap;
+}
+.tm-chev { flex: 0 0 auto; width: 22px; height: 22px; color: var(--color-text-dim); transition: transform 0.3s ease; }
+.tm-level.open .tm-chev { transform: rotate(90deg); }
+.tm-level-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.35s ease; }
+.tm-level.open .tm-level-body { grid-template-rows: 1fr; }
+.tm-level-body-inner { overflow: hidden; min-height: 0; box-sizing: border-box; padding: 0 var(--space-3, 24px) var(--space-3, 24px); }
+.tm-level-body p { font-size: 1rem; line-height: 1.55; }
+/* lead-in line: full border, no side stripe */
+.tm-plain {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-elevated);
+  padding: var(--space-2, 16px);
+  margin: var(--space-1, 8px) 0 var(--space-2, 16px);
+  color: var(--color-text-body);
+}
+.tm-plain b { color: var(--color-primary); }
+.tm-when { display: flex; flex-wrap: wrap; gap: var(--space-1, 8px); margin-top: var(--space-2, 16px); }
+.tm-pill {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  padding: var(--space-1, 8px) var(--space-2, 16px);
+  color: var(--color-text-dim);
+}
+.tm-pill b { color: var(--color-text); }
+
+/* ---- The "look at your data" rule (flat, no stripe/glow) -- */
+.tm-rule {
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  padding: clamp(24px, 5vw, 48px);
+}
+.tm-rule .tm-eyebrow { color: var(--color-accent); }
+.tm-punch {
+  font-family: var(--font-serif);
+  font-size: clamp(1.4rem, 3.2vw, 2.1rem);
+  font-style: italic;
+  font-weight: 500;
+  color: var(--color-accent);
+  margin: var(--space-2, 16px) 0;
+  line-height: 1.3;
+  max-width: 28ch;
+}
+.tm-punch-cite {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-dim);
+  margin: 0 0 var(--space-3, 24px);
+}
+
+/* ============================================================
+   TOOLS — flat panel, dividers not nested cards
+   ============================================================ */
+.tm-tool {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  padding: clamp(24px, 4vw, 40px);
+  margin-top: var(--space-3, 24px);
+}
+.tm-tool-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1, 8px);
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #1a1500;
+  background: var(--brand-gold);
+  padding: 6px var(--space-2, 16px);
+  margin-bottom: var(--space-3, 24px);
+}
+.tm-tool h2 { margin-top: 0; }
+.tm-tool-intro { color: var(--color-text-dim); max-width: 64ch; }
+
+/* Vendor + date header line */
+.tm-tool-meta { display: flex; flex-wrap: wrap; gap: var(--space-3, 24px); margin: var(--space-4, 32px) 0; }
+.tm-field { display: flex; flex-direction: column; gap: var(--space-1, 8px); flex: 1 1 200px; }
+.tm-field label {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-dim);
+}
+.tm-input, .tm-textarea {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  padding: var(--space-1, 8px) var(--space-2, 16px);
+  width: 100%;
+}
+.tm-input:focus, .tm-textarea:focus { outline: 2px solid var(--color-accent); outline-offset: 1px; border-color: var(--color-primary); }
+.tm-textarea { resize: vertical; min-height: 44px; line-height: 1.5; }
+
+/* ---- Scorecard: divider-separated rows (not boxes) ------- */
+.tm-scorecard { margin-top: var(--space-3, 24px); border-top: 1px solid var(--color-border); }
+.tm-score-row { padding: var(--space-3, 24px) 0; border-bottom: 1px solid var(--color-border); }
+.tm-score-q {
+  display: flex;
+  gap: var(--space-2, 16px);
+  align-items: flex-start;
+  font-size: 1.02rem;
+  color: var(--color-text);
+  font-weight: 500;
+  margin-bottom: var(--space-2, 16px);
+}
+.tm-score-n {
+  flex: 0 0 auto;
+  width: 28px; height: 28px;
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-serif);
+  font-size: 0.9rem;
+  color: var(--color-text-dim);
+}
+/* segmented rating (real radios; selected chip is the indicator) */
+.tm-rate { display: inline-flex; flex-wrap: wrap; gap: var(--space-1, 8px); }
+.tm-rate label {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid var(--color-border);
+  padding: var(--space-1, 8px) var(--space-2, 16px);
+  cursor: pointer;
+  color: var(--color-text-body);
+  background: var(--color-surface);
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  user-select: none;
+}
+.tm-rate input { position: absolute; opacity: 0; width: 0; height: 0; }
+.tm-rate input:focus-visible + label { outline: 2px solid var(--color-accent); outline-offset: 1px; }
+.tm-rate input:checked + label.r-strong { background: var(--color-success); border-color: var(--color-success); color: #1a1500; }
+.tm-rate input:checked + label.r-vague  { background: var(--brand-gold);   border-color: var(--brand-gold);   color: #1a1500; }
+.tm-rate input:checked + label.r-dodged { background: var(--brand-coral);  border-color: var(--brand-coral);  color: #1a1500; }
+.tm-score-hint { margin: var(--space-1, 8px) 0 var(--space-2, 16px); font-size: 0.92rem; color: var(--color-text-body); max-width: 72ch; line-height: 1.5; }
+.tm-score-hint .good  { color: var(--color-success); font-weight: 600; }
+.tm-score-hint .dodge { color: var(--color-accent-coral); font-weight: 600; }
+/* Print-only worksheet scaffolding (hidden on screen; revealed in @media print) */
+.tm-print-only { display: none; }
+.tm-print-cue { font-family: var(--font-display); font-size: 0.9rem; color: var(--color-text-dim); margin-top: var(--space-2, 16px); }
+.tm-cases-sheet { margin-top: var(--space-3, 24px); }
+
+/* Rating key (defines Strong / Vague / Dodged once) */
+.tm-legend { font-size: 0.95rem; color: var(--color-text-body); max-width: 70ch; }
+.tm-legend .lg-strong { color: var(--color-success); }
+.tm-legend .lg-vague  { color: var(--color-accent); }
+.tm-legend .lg-dodged { color: var(--color-accent-coral); }
+
+/* live tally — a plain rule-bounded summary line, not a box */
+.tm-tally {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1, 8px) var(--space-3, 24px);
+  align-items: center;
+  margin: var(--space-4, 32px) 0;
+  padding: var(--space-2, 16px) 0;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+}
+.tm-tally .tm-count { font-weight: 700; }
+.tm-tally .tm-count.strong { color: var(--color-success); }
+.tm-tally .tm-count.vague  { color: var(--color-accent); }
+.tm-tally .tm-count.dodged { color: var(--color-accent-coral); }
+.tm-tally .tm-flag { margin-left: auto; color: var(--color-text-dim); }
+.tm-tally .tm-flag.warn { color: var(--color-accent-coral); font-weight: 600; }
+
+/* ---- Cases worksheet ------------------------------------- */
+.tm-cases { display: grid; gap: var(--space-2, 16px); margin-top: var(--space-3, 24px); }
+.tm-case-row { display: grid; grid-template-columns: 28px 1fr 1fr; gap: var(--space-2, 16px); align-items: start; }
+.tm-case-row .tm-case-n {
+  width: 28px; height: 28px;
+  margin-top: 8px;
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-serif);
+  font-size: 0.85rem;
+  color: var(--color-text-dim);
+}
+.tm-case-head {
+  display: grid;
+  grid-template-columns: 28px 1fr 1fr;
+  gap: var(--space-2, 16px);
+  margin-bottom: var(--space-1, 8px);
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-dim);
+}
+@media (max-width: 620px) {
+  .tm-case-row { grid-template-columns: 1fr; }
+  .tm-case-row .tm-case-n { display: none; }
+  .tm-case-head { display: none; }
+}
+
+/* ---- Tool action bar ------------------------------------- */
+.tm-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2, 16px);
+  align-items: center;
+  margin-top: var(--space-4, 32px);
+  padding-top: var(--space-3, 24px);
+  border-top: 1px solid var(--color-border);
+}
+.tm-actions .tm-saved { font-family: var(--font-display); font-size: 0.85rem; color: var(--color-success); opacity: 0; transition: opacity 0.3s ease; }
+.tm-actions .tm-saved.show { opacity: 1; }
+.tm-btn-row-spacer { flex: 1 1 auto; }
+
+/* ---- CTA — solid teal, square gold button ---------------- */
+.tm-cta {
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  padding: clamp(24px, 5vw, 48px);
+}
+.tm-cta .tm-eyebrow { color: var(--color-accent); }
+.tm-cta h2 { color: var(--color-text); }
+.tm-cta p { color: var(--color-text-body); max-width: 52ch; }
+.tm-cta .tm-cta-btn {
+  display: inline-block;
+  margin-top: var(--space-3, 24px);
+  background: var(--brand-gold);
+  color: #1a1500;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  padding: 14px var(--space-4, 32px);
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+.tm-cta .tm-cta-btn:hover { background: #ffe96b; }
+
+/* ---- Attribution (above the site footer) ----------------- */
+.tm-attribution {
+  padding: var(--space-8, 64px) 0;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-dim);
+  font-size: 0.95rem;
+}
+.tm-attribution .tm-credit { font-family: var(--font-serif); font-size: 1.15rem; color: var(--color-text); margin-bottom: var(--space-1, 8px); }
+.tm-attribution a { color: var(--color-accent); text-decoration: underline; text-underline-offset: 2px; }
+
+/* ============================================================
+   INDEX — card grid (square cards, no filler)
+   ============================================================ */
+.tm-index-hero { padding-bottom: var(--space-6, 48px); }
+.tm-index-hero h1 { margin-bottom: 0.4em; }
+.tm-index-hero .tm-lede { max-width: 46ch; }
+.tm-index-intro { max-width: 60ch; margin-top: var(--space-2, 16px); color: var(--color-text-body); }
+
+.tm-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-2, 16px);
+  padding-bottom: var(--space-4, 32px);
+}
+.tm-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  padding: var(--space-4, 32px);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.18s ease, transform 0.18s ease;
+  min-height: 220px;
+}
+a.tm-card:hover { transform: translateY(-3px); border-color: var(--brand-gold); }
+.tm-card-tag {
+  align-self: flex-start;
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px var(--space-1, 8px);
+  margin-bottom: var(--space-2, 16px);
+}
+.tm-card-tag.flagship { background: var(--brand-gold); color: #1a1500; }
+.tm-card-tag.soon { background: transparent; color: var(--color-text-dim); border: 1px solid var(--color-border); }
+.tm-card h3 { font-family: var(--font-serif); font-size: 1.4rem; margin: 0 0 var(--space-1, 8px); color: var(--color-text); }
+.tm-card p { font-size: 0.96rem; color: var(--color-text-body); margin: 0; max-width: none; }
+.tm-card-formats { display: flex; flex-wrap: wrap; gap: var(--space-1, 8px); margin-top: var(--space-2, 16px); }
+.tm-card-format {
+  font-family: var(--font-display);
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--color-accent-teal);
+  border: 1px solid var(--color-border);
+  padding: 4px var(--space-1, 8px);
+}
+.tm-card-source { margin-top: auto; padding-top: var(--space-3, 24px); font-family: var(--font-display); font-size: 0.82rem; color: var(--color-text-dim); }
+.tm-card-arrow { position: absolute; top: var(--space-4, 32px); right: var(--space-4, 32px); color: var(--color-primary); opacity: 0; transform: translateX(-4px); transition: opacity 0.18s ease, transform 0.18s ease; }
+a.tm-card:hover .tm-card-arrow { opacity: 1; transform: none; }
+.tm-card.is-placeholder { background: transparent; border-style: dashed; }
+.tm-card.is-placeholder h3 { color: var(--color-text-dim); }
+
+/* upcoming line under the grid (replaces filler cards) */
+.tm-upcoming { color: var(--color-text-dim); font-size: 0.95rem; padding-bottom: var(--space-8, 64px); max-width: 60ch; }
+.tm-upcoming strong { color: var(--color-text); }
+
+/* ============================================================
+   PRINT — clean takeaway from the tools
+   ============================================================ */
+@media print {
+  /* Show only the worksheet: hide chrome, the explainer, and screen guidance. */
+  .site-header, .site-footer, .tm-attribution, .skip-nav, .theme-toggle,
+  .tm-screen-only, .tm-tool-intro, .tm-tool-tag { display: none !important; }
+  .tm-section { display: none; }
+  #scorecard, #cases { display: block; }
+  #cases { break-before: page; }
+
+  body { background: #fff; color: #000; }
+  #main.tm-wrap { padding-top: 0; max-width: 100%; padding-inline: 0; }
+  .tm-tool { border: none; box-shadow: none; padding: 0; margin: 0; }
+  .tm-wrap h2 { font-size: 1.3rem; margin: 0 0 0.4em; color: #000; }
+
+  /* Reveal the print-only scaffolding. */
+  .tm-print-head { display: block; margin-bottom: 16px; }
+  .tm-q-mark { display: flex; gap: 24px; margin-top: 8px; }
+  .tm-q-notes { display: block; }
+  .tm-print-cases { display: block; }
+
+  /* Worksheet header (title, source, vendor/date write-in lines). */
+  .tm-print-title { font-family: var(--font-serif); font-size: 1.3rem; font-weight: 600; }
+  .tm-print-sub { font-size: 0.85rem; color: #333; margin-top: 2px; }
+  .tm-print-fields { display: flex; gap: 32px; margin-top: 10px; font-size: 0.95rem; }
+
+  /* Scorecard rows. */
+  .tm-score-row { padding: 12px 0; border-bottom: 1px solid #ccc; break-inside: avoid; }
+  .tm-score-n { background: none; border: 1px solid #999; color: #000; }
+  .tm-score-q-text { font-weight: 600; color: #000; }
+  .tm-score-hint { color: #000; font-size: 0.85rem; max-width: none; margin: 4px 0 0; }
+  .tm-score-hint .good, .tm-score-hint .dodge { color: #000; }
+  .tm-mark-box { font-size: 0.9rem; }
+  .tm-mark-box::before { content: ""; display: inline-block; width: 12px; height: 12px; border: 1px solid #000; margin-right: 6px; vertical-align: -1px; }
+  .tm-q-notes { border: 1px solid #bbb; min-height: 2.2em; margin-top: 8px; }
+
+  /* Cases worksheet (column header plus 10 blank rows). */
+  .tm-case-head { color: #000; }
+  .tm-print-case-row { display: grid; grid-template-columns: 28px 1fr 1fr; break-inside: avoid; }
+  .tm-print-case-n { display: grid; place-items: center; border: 1px solid #bbb; font-size: 0.85rem; min-height: 2.4em; }
+  .tm-print-cell { border: 1px solid #bbb; min-height: 2.4em; }
+}
+
+/* ---- Responsive ------------------------------------------ */
+@media (max-width: 600px) {
+  .tm-level-head { padding: var(--space-2, 16px); gap: var(--space-1, 8px); }
+  .tm-badge { width: 44px; height: 44px; font-size: 18px; }
+  .tm-level-cost { display: none; }
+  .tm-tool-meta { flex-direction: column; }
+}
