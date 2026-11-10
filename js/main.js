@@ -870,10 +870,20 @@ document.querySelectorAll('.section').forEach(el => {
     }
   }
 
-  fetch('/api/latest-post')
-    .then(res => res.ok ? res.json() : Promise.reject())
+  function getLatest() {
+    return fetch('/api/latest-post', { cache: 'no-store' })
+      .then(res => res.ok ? res.json() : Promise.reject(new Error('HTTP ' + res.status)));
+  }
+
+  // One retry covers a slow cold start or a dropped request. The fallback
+  // also covers local previews, which have no /api route.
+  getLatest()
+    .catch(() => new Promise(r => setTimeout(r, 1500)).then(getLatest))
     .then(applyData)
-    .catch(() => applyData(LOCAL_FALLBACK)); // Use hardcoded fallback for local preview
+    .catch(err => {
+      console.warn('Latest newsletter issue unavailable:', err && err.message);
+      applyData(LOCAL_FALLBACK);
+    });
 })();
 
 // Calendly lazy-loader (loads CSS + JS on first click)

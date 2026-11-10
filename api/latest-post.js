@@ -1,3 +1,14 @@
+function decodeEntities(str) {
+  return str
+    .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Number(n)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCodePoint(parseInt(n, 16)))
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&');
+}
+
 export default async function handler(req, res) {
   try {
     const rssRes = await fetch('https://rss.beehiiv.com/feeds/R3iSBAQYmq.xml');
@@ -14,30 +25,30 @@ export default async function handler(req, res) {
 
     // Title
     const titleMatch = item.match(/<title><!\[CDATA\[(.*?)\]\]>/s) || item.match(/<title>(.*?)<\/title>/s);
-    const title = titleMatch ? titleMatch[1].trim() : 'Latest Issue';
+    const title = titleMatch ? decodeEntities(titleMatch[1].trim()) : 'Latest Issue';
 
     // Link
     const linkMatch = item.match(/<link>(.*?)<\/link>/s);
-    const url = linkMatch ? linkMatch[1].trim() : 'https://ai4fis.beehiiv.com';
+    const url = linkMatch ? decodeEntities(linkMatch[1].trim()) : 'https://ai4fis.beehiiv.com';
 
     // Image: check enclosure, media:content, or extract first img from description
     let image = null;
     const enclosureMatch = item.match(/<enclosure[^>]+url="([^"]+)"[^>]*type="image/);
     const mediaMatch = item.match(/<media:content[^>]+url="([^"]+)"/);
     if (enclosureMatch) {
-      image = enclosureMatch[1];
+      image = decodeEntities(enclosureMatch[1]);
     } else if (mediaMatch) {
-      image = mediaMatch[1];
+      image = decodeEntities(mediaMatch[1]);
     } else {
       // Try to find first img src in description CDATA
       const descMatch = item.match(/<description><!\[CDATA\[([\s\S]*?)\]\]>/);
       if (descMatch) {
         const imgMatch = descMatch[1].match(/<img[^>]+src="([^"]+)"/);
-        if (imgMatch) image = imgMatch[1];
+        if (imgMatch) image = decodeEntities(imgMatch[1]);
       }
     }
 
-    res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=3600');
+    res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=60, stale-while-revalidate=3600');
     return res.status(200).json({ title, url, image });
   } catch (err) {
     console.error('latest-post error:', err);
