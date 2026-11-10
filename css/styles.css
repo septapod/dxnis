@@ -2664,6 +2664,26 @@ button:focus:not(:focus-visible) {
   font-style: normal;
 }
 
+.statement-quote-kicker {
+  margin-bottom: var(--space-4);
+}
+
+.statement-quote-note {
+  max-width: 38rem;
+  text-wrap: balance;
+  margin: var(--space-6) 0 0;
+  font-family: var(--font-body);
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: var(--color-text);
+}
+
+@media (max-width: 768px) {
+  .statement-quote-note {
+    font-size: 1.125rem;
+  }
+}
+
 /* ======================================================================
    Newsletter Signup Section
    ====================================================================== */
