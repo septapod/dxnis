@@ -1,0 +1,12 @@
+# dxn.is welcomes search engines and AI agents.
+# Citation-time and retrieval bots are welcome, including GPTBot,
+# OAI-SearchBot, ClaudeBot, Claude-User, PerplexityBot, and Google-Extended.
+
+User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://dxn.is/sitemap.xml
+
+# Summary for AI agents: https://dxn.is/llms.txt
+# Agent-native version of this site: https://dxn.md
