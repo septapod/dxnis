@@ -941,3 +941,31 @@ if (newsletterForm) {
     window.open(`https://ai4fis.beehiiv.com/subscribe?email=${encodeURIComponent(email)}`, '_blank');
   });
 }
+
+// Deep links to a service panel (for example /#ai-strategy).
+// Desktop panels are stacked inside a pinned scroll track, so a plain anchor
+// cannot reach them; scroll to the point in the track where that panel shows.
+(function() {
+  function goToPanel() {
+    var id = decodeURIComponent(location.hash.slice(1));
+    if (!id) return;
+    var panel = document.getElementById(id);
+    if (!panel || !panel.classList.contains('service-panel')) return;
+    var panels = Array.prototype.slice.call(document.querySelectorAll('.service-panel'));
+    var idx = panels.indexOf(panel);
+    var header = document.querySelector('header');
+    var headerH = header ? header.offsetHeight : 0;
+    var y;
+    if (window.innerWidth <= 768) {
+      y = panel.getBoundingClientRect().top + window.scrollY - headerH;
+    } else {
+      var track = document.querySelector('.services-scroll-track');
+      var top = track.getBoundingClientRect().top + window.scrollY;
+      var total = track.offsetHeight - window.innerHeight;
+      y = top + total * ((idx + 0.6) / panels.length);
+    }
+    window.scrollTo({ top: Math.max(0, y), behavior: 'auto' });
+  }
+  window.addEventListener('load', function() { setTimeout(goToPanel, 50); });
+  window.addEventListener('hashchange', goToPanel);
+})();
