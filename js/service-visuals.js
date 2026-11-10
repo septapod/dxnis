@@ -17,7 +17,7 @@
   function isMobile() { return window.innerWidth < 768; }
 
   // Track scroll changes so sketches skip redraws when idle
-  var _lastProgress = [-1, -1, -1];
+  var _lastProgress = [-1, -1, -1, -1];
 
   function getProgress(panelIndex) {
     if (isMobile()) {
@@ -460,10 +460,146 @@
     }, container);
   }
 
+  // ========== 4. MAP, CHOOSE, SPREAD (AI strategy) ==========
+  // A field of dots stands for the institution's everyday work.
+  // progress 0.00-0.35: a sweep crosses the field and each dot it passes lights up (the work is mapped)
+  // progress 0.30-0.65: two small groups turn gold, draw together, and gain a ring (two pilots chosen)
+  // progress 0.60-1.00: lines reach outward from each pilot to the dots around it (what staff learn spreads)
+  // Every frame is a pure function of scroll progress.
+  function pilotField(container, panelIndex) {
+    return new p5(function (p) {
+      let w, h, nodes = [], centers = [];
+
+      function build() {
+        nodes = [];
+        let small = w < 600;
+        let cols = small ? 7 : 10, rows = small ? 7 : 9;
+        let mx = w * 0.12, my = h * 0.14;
+        let gx = (w - mx * 2) / (cols - 1), gy = (h - my * 2) / (rows - 1);
+        p.randomSeed(11);
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            nodes.push({
+              x: mx + c * gx + p.random(-gx * 0.22, gx * 0.22),
+              y: my + r * gy + p.random(-gy * 0.22, gy * 0.22),
+              size: p.random(2.6, 4.2), pilot: -1, d: 0
+            });
+          }
+        }
+        centers = [{ x: w * 0.34, y: h * 0.40 }, { x: w * 0.66, y: h * 0.61 }];
+        centers.forEach(function (ctr, ci) {
+          nodes.slice().sort(function (a, b) {
+            return p.dist(a.x, a.y, ctr.x, ctr.y) - p.dist(b.x, b.y, ctr.x, ctr.y);
+          }).slice(0, 6).forEach(function (n) { n.pilot = ci; });
+        });
+        nodes.forEach(function (n) {
+          let d0 = p.dist(n.x, n.y, centers[0].x, centers[0].y);
+          let d1 = p.dist(n.x, n.y, centers[1].x, centers[1].y);
+          n.near = d0 < d1 ? 0 : 1;
+          n.d = Math.min(d0, d1);
+        });
+      }
+
+      p.setup = function () {
+        w = container.offsetWidth; h = container.offsetHeight;
+        p.createCanvas(w, h).style('display', 'block');
+        p.frameRate(30);
+        build();
+      };
+
+      p.draw = function () {
+        let prog = getProgress(panelIndex);
+        if (Math.abs(prog - _lastProgress[panelIndex]) < 0.001) return;
+        _lastProgress[panelIndex] = prog;
+        p.clear();
+
+        let tc = teal(), gc = gold(), cc = coral();
+        let ease = function (v) { v = p.constrain(v, 0, 1); return v * v * (3 - 2 * v); };
+        let mapT = p.constrain(p.map(prog, 0, 0.35, 0, 1), 0, 1);
+        let pickT = ease(p.map(prog, 0.30, 0.65, 0, 1));
+        let spreadT = ease(p.map(prog, 0.60, 1, 0, 1));
+        let sweepX = p.lerp(-w * 0.08, w * 1.08, mapT);
+        let ringR = p.min(w, h) * 0.13;
+        let reach = p.lerp(ringR, p.max(w, h) * 0.62, spreadT);
+
+        // Sweep line
+        if (mapT > 0 && mapT < 1) {
+          p.stroke(tc[0], tc[1], tc[2], 110);
+          p.strokeWeight(1);
+          p.line(sweepX, h * 0.06, sweepX, h * 0.94);
+        }
+
+        // Current positions
+        nodes.forEach(function (n) {
+          if (n.pilot >= 0) {
+            let ctr = centers[n.pilot];
+            n.cx = p.lerp(n.x, p.lerp(n.x, ctr.x, 0.45), pickT);
+            n.cy = p.lerp(n.y, p.lerp(n.y, ctr.y, 0.45), pickT);
+          } else { n.cx = n.x; n.cy = n.y; }
+        });
+
+        // Spread lines from each pilot to the dots it has reached
+        if (spreadT > 0) {
+          nodes.forEach(function (n) {
+            if (n.pilot >= 0 || n.d > reach) return;
+            let ctr = centers[n.near];
+            let a = p.map(n.d, ringR, reach + 1, 150, 30) * spreadT;
+            p.stroke(gc[0], gc[1], gc[2], a);
+            p.strokeWeight(0.9);
+            p.line(ctr.x, ctr.y, n.cx, n.cy);
+          });
+        }
+
+        // Pilot rings, drawn as growing arcs
+        if (pickT > 0) {
+          p.noFill();
+          centers.forEach(function (ctr, ci) {
+            p.stroke(gc[0], gc[1], gc[2], 200 * pickT);
+            p.strokeWeight(1.6);
+            p.arc(ctr.x, ctr.y, ringR * 2, ringR * 2, -p.HALF_PI + ci, -p.HALF_PI + ci + p.TWO_PI * pickT);
+            p.noStroke();
+            p.fill(gc[0], gc[1], gc[2], 26 * pickT);
+            p.ellipse(ctr.x, ctr.y, ringR * 2.9);
+            p.noFill();
+          });
+        }
+
+        // Dots
+        p.noStroke();
+        nodes.forEach(function (n) {
+          let mapped = n.x < sweepX ? 1 : 0;
+          if (n.pilot >= 0) {
+            let s = n.size * p.lerp(1, 2.1, pickT);
+            let r = p.lerp(tc[0], gc[0], pickT), g = p.lerp(tc[1], gc[1], pickT), b = p.lerp(tc[2], gc[2], pickT);
+            p.fill(r, g, b, p.lerp(mapped ? 170 : 60, 255, pickT));
+            p.ellipse(n.cx, n.cy, s * 2);
+          } else {
+            let reached = spreadT > 0 && n.d <= reach ? spreadT : 0;
+            let s = n.size * (1 + 0.25 * mapped + 0.45 * reached);
+            let r = p.lerp(tc[0], cc[0], reached * 0.0), g = tc[1], b = tc[2];
+            p.fill(r, g, b, 55 + 105 * mapped + 80 * reached);
+            p.ellipse(n.cx, n.cy, s * 2);
+            if (reached > 0) {
+              p.fill(gc[0], gc[1], gc[2], 30 * reached);
+              p.ellipse(n.cx, n.cy, s * 4.2);
+            }
+          }
+        });
+      };
+
+      p.windowResized = function () {
+        w = container.offsetWidth; h = container.offsetHeight;
+        p.resizeCanvas(w, h);
+        build();
+        _lastProgress[panelIndex] = -1;
+      };
+    }, container);
+  }
+
   // ========== INIT ==========
   document.addEventListener('DOMContentLoaded', function () {
     const panels = document.querySelectorAll('.service-panel');
-    const sketches = [alignmentNetwork, radialPulse, gravitationalPair];
+    const sketches = [alignmentNetwork, pilotField, radialPulse, gravitationalPair];
     panels.forEach(function (panel, i) {
       const visual = panel.querySelector('.service-visual');
       if (visual && sketches[i]) {
