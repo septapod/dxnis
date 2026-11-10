@@ -962,7 +962,7 @@ if (newsletterForm) {
       var track = document.querySelector('.services-scroll-track');
       var top = track.getBoundingClientRect().top + window.scrollY;
       var total = track.offsetHeight - window.innerHeight;
-      y = top + total * ((idx + 0.6) / panels.length);
+      y = top + total * ((idx + 0.95) / panels.length);
     }
     window.scrollTo({ top: Math.max(0, y), behavior: 'auto' });
   }
