@@ -811,6 +811,7 @@ button:focus:not(:focus-visible) {
      Satoshi is loaded as static files (400/500/700), so browsers
      interpolate between the nearest available weights. */
   transition: font-weight 0.15s ease-out;
+  text-wrap: balance;
 }
 
 .hero-ghost {
