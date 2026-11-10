@@ -819,7 +819,7 @@ button:focus:not(:focus-visible) {
   pointer-events: none;
   z-index: 0;
   mix-blend-mode: screen;
-  font-weight: 700;
+  font-weight: 600; /* matches .hero-main so both wrap on the same words */
   opacity: 0.18;
   will-change: transform;
 }
