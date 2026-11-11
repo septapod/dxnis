@@ -13,7 +13,7 @@ Brent Dixon is a strategic facilitator based in Oakland, California. He founded 
 His career includes:
 
 - **United Nations.** Co-led the creation of the first innovation unit serving the UN Secretariat and co-chaired the UN Innovation Network. One project used machine learning to turn real-time public data into crisis response planning for humanitarian workers.
-- **Filene Research Institute.** Founded The Cooperative Trust, a community of young credit union professionals. It began in 2010, when Brent brought 25 of them to the industry's national conference, and it has connected thousands since. Later led the i3 Innovation program for senior credit union executives.
+- **Filene Research Institute.** Founded The Cooperative Trust, a community of young credit union professionals. It began in 2010, when Brent brought 25 of them to the industry's national conference, and it has [connected thousands](https://www.filene.org/blog/the-trust-connection) since. Later led the i3 Innovation program for senior credit union executives.
 - **Singularity University.** Future of Finance Teaching Fellow. Mentored and advised teams that secured six-figure funding for their technology startups, one of which was later acquired.
 - **Communitere International.** Board Chair of a humanitarian maker space network.
 - **Moeda Seeds.** Co-founder of a blockchain cooperative lending platform for Brazilian agricultural cooperatives.
