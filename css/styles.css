@@ -2687,10 +2687,6 @@ button:focus:not(:focus-visible) {
   font-style: normal;
 }
 
-.statement-quote-kicker {
-  margin-bottom: var(--space-4);
-}
-
 .statement-quote-note {
   max-width: 38rem;
   text-wrap: balance;
