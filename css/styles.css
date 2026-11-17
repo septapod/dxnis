@@ -356,7 +356,8 @@ button:focus:not(:focus-visible) {
 .main-nav {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: var(--space-3);
   padding: var(--space-3) var(--site-gutter);
   max-width: var(--max-width);
   margin: 0 auto;
@@ -366,11 +367,16 @@ button:focus:not(:focus-visible) {
   display: flex;
   align-items: center;
   text-decoration: none;
+  min-width: 0;
+  flex-shrink: 1;
+  margin-right: auto; /* pushes links, theme toggle, and CTA to the right */
 }
 
 .logo img {
   height: 32px;
   width: auto;
+  max-width: 100%;
+  object-fit: contain;
   display: block;
   transition: transform var(--transition-quick), opacity var(--transition-quick), filter var(--transition-quick);
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
@@ -396,6 +402,7 @@ button:focus:not(:focus-visible) {
 .nav-links {
   display: none;
   gap: var(--space-6);
+  margin-right: var(--space-3);
 }
 
 @media (min-width: 768px) {
@@ -419,6 +426,7 @@ button:focus:not(:focus-visible) {
   padding: 0;
   color: var(--color-text);
   z-index: 201;
+  flex-shrink: 0;
 }
 
 [data-theme="light"] .nav-toggle {
@@ -536,7 +544,7 @@ button:focus:not(:focus-visible) {
   cursor: pointer;
   transition: all var(--transition-quick);
   padding: 0;
-  margin-left: var(--space-3);
+  flex-shrink: 0;
 }
 
 [data-theme="light"] .theme-toggle {
@@ -593,6 +601,16 @@ button:focus:not(:focus-visible) {
 
 .nav-cta {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Narrow desktop windows: tighten the link spacing so the header CTA
+   stays on one line. */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .nav-links {
+    gap: var(--space-4);
+  }
 }
 
 .site-header.scrolled .nav-cta {
@@ -876,9 +894,13 @@ button:focus:not(:focus-visible) {
 
 /* ========== Hero CTA Group (Primary Newsletter + Secondary Contact) ========== */
 .hero-cta-group {
+  /* Button on top, newsletter line below at every width. As a row, the
+     button stretched to the height of the wrapped newsletter line
+     between about 640px and 1100px wide. */
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   gap: var(--space-2);
-  flex-wrap: wrap;
   margin-top: var(--space-4);
 }
 
@@ -2931,10 +2953,25 @@ button:focus:not(:focus-visible) {
   }
 
   .newsletter-form {
-    display: flex;
-    justify-content: center;
+    display: block;
   }
 
+}
+
+@media (max-width: 480px) {
+  /* Stack the email field and button so they fit inside the card. */
+  .newsletter-input-group {
+    flex-direction: column;
+  }
+
+  .newsletter-input-group input[type="email"] {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .btn-newsletter {
+    width: 100%;
+  }
 }
 
 /* Contact - 12-Column Grid */
@@ -3412,6 +3449,18 @@ body.custom-cursor-active button {
   .carousel-btn svg {
     width: 20px;
     height: 20px;
+  }
+
+  /* On a phone the slide stacks, so a mid-height arrow sat on top of the
+     name and title. Move the arrows down to the row of dots. */
+  .carousel-btn {
+    top: auto;
+    bottom: 116px;
+    transform: none;
+  }
+
+  .carousel-btn:hover {
+    transform: scale(1.1);
   }
 
   .carousel-btn-prev {
