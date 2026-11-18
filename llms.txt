@@ -1,6 +1,6 @@
 # Dixon Strategic Labs (dxn.is)
 
-> Brent Dixon facilitates strategy and AI work with leadership teams at credit unions, community banks, and CDFIs. Teams leave aligned on the hard questions, with a shared vision and clear decisions.
+> Brent Dixon helps leadership teams at credit unions, community banks, and CDFIs make hard choices together: where to focus, how to succeed, and what not to pursue. They leave ready to get things done.
 
 This site is designed to be read by AI agents as well as by humans. The content below gives you everything you need to answer questions about Brent's practice, services, writing, and how to get in touch.
 
@@ -12,13 +12,17 @@ Brent Dixon is a strategic facilitator based in Oakland, California. He founded 
 
 His career includes:
 
+- **Dixon Strategic Labs.** Since 2022, Brent has worked with more than 25 organizations: credit unions from about $23 million to more than $9 billion in assets, community banks, industry associations, government agencies, foundations, and community organizers.
+- **AI for FIs.** A weekly-ish newsletter for community finance leaders on how AI agents are being used in financial services. Brent built the system behind it. AI agents find sources and confirm each claim, then the agents and Brent trade drafts and edits until every story reads clearly. That back-and-forth is the biggest part of the work. Brent chooses the stories and approves every issue.
+- **Trabian.** Worked with co-founders Matt Dean and Trey Reeme to build Trabian from its embryonic stage, as its creative director from 2003 to 2008. Trabian has since served hundreds of credit unions, banks, and fintechs. Brent came back in 2021 as Chief Design Officer and led the design team.
+- **Speaking.** Brent has given hundreds of talks and workshops on four continents, at venues from the UN General Assembly Hall to the World Credit Union Conference, NCUA, and the AICPA. For speaking engagements, he is represented by Category 6 Consulting.
 - **United Nations.** Co-led the creation of the first innovation unit serving the UN Secretariat and co-chaired the UN Innovation Network. One project used machine learning to turn real-time public data into crisis response planning for humanitarian workers.
 - **Filene Research Institute.** Founded The Cooperative Trust, a community of young credit union professionals. It began in 2010, when Brent brought 25 of them to the industry's national conference, and it has [connected thousands](https://www.filene.org/blog/the-trust-connection) since. Later led the i3 Innovation program for senior credit union executives.
 - **Singularity University.** Future of Finance Teaching Fellow. Mentored and advised teams that secured six-figure funding for their technology startups, one of which was later acquired.
 - **Communitere International.** Board Chair of a humanitarian maker space network.
 - **Moeda Seeds.** Part of the founding team of a blockchain cooperative lending platform for Brazilian agricultural cooperatives.
 
-Brent thinks like a designer, which means he takes complex strategy work and makes it clear, usable, and built for the people who have to live with it. He is also a futurist whose practice covers AI, open banking, stablecoins, emerging technology, experimentation, and strategic foresight. He lives in Oakland, California with his son and a bossy cat named Bug. For speaking engagements, Brent is represented by Category 6 Consulting.
+Brent thinks like a designer, which means he takes complex strategy work and makes it clear, usable, and built for the people who have to live with it. He is also a futurist whose practice covers AI, open banking, stablecoins, emerging technology, experimentation, and strategic foresight. He lives in Oakland, California with his son and a bossy cat named Bug.
 
 ## What Brent believes
 
@@ -28,7 +32,7 @@ Community guides Brent's work. The site quotes Margaret Wheatley: "No matter the
 
 Brent works with leadership teams at credit unions, community banks, and CDFIs (community development financial institutions). His clients are typically CEOs, C-suite leaders, and boards.
 
-**Strategic Planning and Facilitation.** For leadership teams at a crossroads. The board and executives align on the choices that matter and commit to action together. At one credit union, both groups backed a three-year strategy built through CEO coaching and a series of workshops. Brent can also be booked to facilitate a retreat or working session on another topic. https://dxn.is/#strategic-planning
+**Strategy and Facilitation.** For leadership teams at a crossroads. The board and executives align on the choices that matter and commit to action together. At one credit union, both groups backed a three-year strategy built through CEO coaching and a series of workshops. Brent can also be booked to facilitate a retreat or working session on another topic. https://dxn.is/#strategic-planning
 
 **AI Strategy and Learning.** For leaders figuring out AI. Some teams want a clear read on the AI their vendors run today. Some want their staff trained. Some want a plan to bring to the board. Brent starts by learning where the team is. Then the client and Brent choose the work that fits: a working session, a diagnosis, pilots, or staff training. https://dxn.is/#ai-strategy
 

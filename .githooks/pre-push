@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# Keep dxn.is and dxn.md in sync (Brent, 2026-11-18: "you should always fix both
+# in sync when updates are made. always. as should any other agent.").
+#
+# A push to main that changes the reader-facing copy of index.html or llms.txt
+# is blocked unless dxn.md's origin/main already mirrors it: dxn.md's
+# DXNIS_COPY_FINGERPRINT must equal scripts/copy_fingerprint.py for the commit
+# being pushed. Order: commit here, update dxn.md canon plus its fingerprint
+# file and push dxn.md, then push here.
+set -euo pipefail
+
+root="$(git rev-parse --show-toplevel)"
+zero="0000000000000000000000000000000000000000"
+
+while read -r local_ref local_sha remote_ref remote_sha; do
+  [[ "$remote_ref" == "refs/heads/main" ]] || continue
+  [[ "$local_sha" == "$zero" ]] && continue
+
+  new_fp="$(python3 "$root/scripts/copy_fingerprint.py" --rev "$local_sha")"
+  if [[ "$remote_sha" != "$zero" ]] && git cat-file -e "$remote_sha" 2>/dev/null; then
+    old_fp="$(python3 "$root/scripts/copy_fingerprint.py" --rev "$remote_sha" 2>/dev/null || echo none)"
+    [[ "$new_fp" == "$old_fp" ]] && continue   # no copy change in this push
+  fi
+
+  if [[ "${DXN_SYNC_SKIP:-}" == "1" ]]; then
+    echo "dxn-sync: DXN_SYNC_SKIP=1 set; pushing copy change $new_fp without a dxn.md match." >&2
+    continue
+  fi
+
+  md_fp="$(gh api repos/septapod/dxn-md/contents/DXNIS_COPY_FINGERPRINT \
+            -H 'Accept: application/vnd.github.raw' 2>/dev/null | tr -d '[:space:]' || true)"
+  [[ "$md_fp" =~ ^[0-9a-f]{16}$ ]] || md_fp=""
+  if [[ "$md_fp" != "$new_fp" ]]; then
+    cat >&2 <<EOF
+dxn-sync: blocked. This push changes the copy on dxn.is (fingerprint $new_fp),
+and dxn.md's main says it mirrors ${md_fp:-<unreadable>}.
+
+  1. Update dxn.md to match: content/canon/*.yaml, plus any copy in src/pages.
+  2. Write $new_fp to dxn.md's DXNIS_COPY_FINGERPRINT, run its build and tests,
+     commit, and push dxn.md.
+  3. Push dxn.is again.
+
+Use DXN_SYNC_SKIP=1 only when the change has nothing dxn.md carries.
+EOF
+    exit 1
+  fi
+done
+exit 0

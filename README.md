@@ -45,6 +45,13 @@ This repository is set up for automatic deployment via Vercel whenever you push 
 5. Vercel automatically deploys (~30 seconds)
 6. Check live site at [dxn.is](https://dxn.is)
 
+### Keep dxn.md in sync (required for every agent and person)
+
+dxn.md (repo `septapod/dxn-md`) mirrors this site's copy for AI agents. Every copy change here gets the same change there, in the same session (Brent, 2026-11-18).
+
+- `.githooks/pre-push` blocks a push to `main` that changes the copy in `index.html` or `llms.txt` until dxn.md's `main` carries the matching fingerprint. One-time setup per clone: `git config core.hooksPath .githooks`.
+- Order: commit here; run `python3 scripts/copy_fingerprint.py --rev HEAD`; update dxn.md's `content/canon/*.yaml` (and any copy in `src/pages`), write the fingerprint to its `DXNIS_COPY_FINGERPRINT`, build, test, and push dxn.md; then push here.
+
 ### Alternative Options
 
 **Option 1: Netlify (Easiest Alternative)**
