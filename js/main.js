@@ -543,6 +543,8 @@ document.querySelectorAll('.section').forEach(el => {
         formMessage.className = 'form-message success';
         formMessage.textContent = 'Thank you! Your message has been sent. I\'ll get back to you soon.';
 
+        if (window.dxnTrack) window.dxnTrack('contact_form_sent', { form: 'contact' });
+
         // Reset form
         form.reset();
 
@@ -936,6 +938,7 @@ document.querySelectorAll('.section').forEach(el => {
       calendlyBtn.textContent = 'Schedule a Call';
       if (typeof Calendly !== 'undefined') {
         Calendly.initPopupWidget({ url: CALENDLY_URL });
+        if (window.dxnTrack) window.dxnTrack('call_booking_opened', { method: 'calendly_popup' });
       }
     });
   });
@@ -948,9 +951,47 @@ if (newsletterForm) {
     e.preventDefault();
     const email = document.getElementById('newsletter-email').value;
     // Open Beehiiv subscribe page with email pre-filled
+    if (window.dxnTrack) window.dxnTrack('newsletter_signup_started', { form: 'newsletter' });
     window.open(`https://ai4fis.beehiiv.com/subscribe?email=${encodeURIComponent(email)}`, '_blank');
   });
 }
+
+// Lead events: calls to action, the latest-issue card, and Calendly bookings.
+(function() {
+  if (!window.dxnTrack) return;
+  var ctas = [
+    ['.nav-cta', 'header'],
+    ['.nav-cta-mobile', 'mobile_menu'],
+    ['.hero-cta-group .btn-primary', 'hero'],
+    ['.service-link', 'service_panel']
+  ];
+  ctas.forEach(function(pair) {
+    document.querySelectorAll(pair[0]).forEach(function(el) {
+      el.addEventListener('click', function() {
+        var panel = el.closest('.service-panel');
+        window.dxnTrack('cta_click', {
+          cta_location: pair[1],
+          cta_text: el.textContent.trim().slice(0, 60),
+          service: panel ? panel.id : undefined
+        });
+      });
+    });
+  });
+
+  var issue = document.getElementById('newsletter-latest-link');
+  if (issue) {
+    issue.addEventListener('click', function() {
+      window.dxnTrack('newsletter_issue_click', { link_url: issue.href });
+    });
+  }
+
+  window.addEventListener('message', function(e) {
+    if (!/(^|\.)calendly\.com$/.test((e.origin || '').replace(/^https?:\/\//, ''))) return;
+    if (e.data && e.data.event === 'calendly.event_scheduled') {
+      window.dxnTrack('call_booked', { method: 'calendly' });
+    }
+  });
+})();
 
 // Deep links to a service panel (for example /#ai-strategy).
 // Desktop panels are stacked inside a pinned scroll track, so a plain anchor
